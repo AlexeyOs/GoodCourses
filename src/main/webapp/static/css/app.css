@@ -5,6 +5,20 @@
     color: #222;
 }
 
+#profileContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+   margin: 3px;
+   min-width: 250px; 
+}
+
+.card-header {
+    font-size: 1.4rem;
+}
+
 .resume .contacts {
     margin-top: 30px;
 }
