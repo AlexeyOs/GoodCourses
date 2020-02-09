@@ -55,7 +55,12 @@ public class TestDataGenerator {
 	private static final String[] CITIES = { "Kharkiv", "Kiyv", "Odessa" };
 	private static final String PASSWORD_HASH = "$2a$10$q7732w6Rj3kZGhfDYSIXI.wFp.uwTSi2inB2rYHvm1iDIAf1J1eVq";
 
-	private static final String[] PLATFORMS = { "job4j", "javaRush", "udemy", "coursera.org", "sso.openedu.ru"};
+	private static final String[] PLATFORMS = { "job4j", "javaRush", "udemy", "coursera.org", "sso.openedu.ru", "stepik.org", "codecademy.com"};
+	private static List<String> platforms = new ArrayList<>(Arrays.asList(PLATFORMS));
+	private static final String[] AUTHORS = { "Superman","Бэтмен","Человек Паук", "Шакро Молодой", "Япончик", "Хасан", "Хотабыч"};
+	private static List<String> authors = new ArrayList<>(Arrays.asList(AUTHORS));
+	private static final String[] SUBJECTOFSTUDY = {"Java", "Java", "Java Spring", "Machine Learning","C#","Kotlin", "SQL"};
+	private static List<String> subjectOfStudy = new ArrayList<>(Arrays.asList(SUBJECTOFSTUDY));
 
 	private static final String[] HOBBIES = { "Cycling", "Handball", "Football", "Basketball", "Bowling", "Boxing", "Volleyball", "Baseball", "Skating", "Skiing", "Table tennis", "Tennis",
 			"Weightlifting", "Automobiles", "Book reading", "Cricket", "Photo", "Shopping", "Cooking", "Codding", "Animals", "Traveling", "Movie", "Painting", "Darts", "Fishing", "Kayak slalom",
@@ -265,21 +270,22 @@ public class TestDataGenerator {
 
 	private static void insertCourses(Connection c) throws SQLException {
 		if (r.nextBoolean()) {
-			PreparedStatement ps = c.prepareStatement("insert into course values (nextval('course_seq'),?,?,?)");
-			List<String> platforms = new ArrayList<>(Arrays.asList(PLATFORMS));
-			Collections.shuffle(platforms);
-			//			ps.setLong(1, idProfile);
-			ps.setString(1, "Java");
+			if(!platforms.isEmpty() &&  !authors.isEmpty() && !subjectOfStudy.isEmpty()) {
+			PreparedStatement ps = c.prepareStatement("insert into course values (nextval('course_seq'),?,?,?,?)");
 			//TODO переделать обработку массива с списком платформ
-			ps.setString(2, platforms.remove(0));
-			Date finish = randomFinishEducation();
-			if (finish.getTime() > System.currentTimeMillis()) {
-				ps.setNull(3, Types.DATE);
-			} else {
-				ps.setDate(3, finish);
+				ps.setString(1, platforms.remove(0));
+				ps.setString(2, authors.remove(0));
+				ps.setString(3, subjectOfStudy.remove(0));
+				Date finish = randomFinishEducation();
+				if (finish.getTime() > System.currentTimeMillis()) {
+					ps.setNull(4, Types.DATE);
+				} else {
+					ps.setDate(4, finish);
+				}
+
+				ps.executeUpdate();
+				ps.close();
 			}
-			ps.executeUpdate();
-			ps.close();
 		}
 	}
 

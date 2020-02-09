@@ -17,14 +17,14 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 --COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -54,11 +54,11 @@ ALTER TABLE public.certificate OWNER TO resume;
 --
 
 CREATE SEQUENCE public.certificate_seq
-START WITH 1
-INCREMENT BY 1
-NO MINVALUE
-NO MAXVALUE
-CACHE 1;
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
 ALTER TABLE public.certificate_seq OWNER TO resume;
@@ -69,8 +69,9 @@ ALTER TABLE public.certificate_seq OWNER TO resume;
 
 CREATE TABLE public.course (
     id bigint NOT NULL,
-    name character varying(60) NOT NULL,
-    school character varying(60) NOT NULL,
+    platform character varying(60),
+    author character varying(60),
+    subject_of_study character varying(120),
     finish_date date
 );
 
@@ -95,11 +96,11 @@ ALTER TABLE public.course_profile OWNER TO resume;
 --
 
 CREATE SEQUENCE public.course_seq
-START WITH 1
-INCREMENT BY 1
-NO MINVALUE
-NO MAXVALUE
-CACHE 1;
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
 ALTER TABLE public.course_seq OWNER TO resume;
@@ -126,11 +127,11 @@ ALTER TABLE public.education OWNER TO resume;
 --
 
 CREATE SEQUENCE public.education_seq
-START WITH 1
-INCREMENT BY 1
-NO MINVALUE
-NO MAXVALUE
-CACHE 1;
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
 ALTER TABLE public.education_seq OWNER TO resume;
@@ -157,11 +158,11 @@ ALTER TABLE public.feedback OWNER TO resume;
 --
 
 CREATE SEQUENCE public.feedback_seq
-START WITH 1
-INCREMENT BY 1
-NO MINVALUE
-NO MAXVALUE
-CACHE 1;
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
 ALTER TABLE public.feedback_seq OWNER TO resume;
@@ -184,11 +185,11 @@ ALTER TABLE public.hobby OWNER TO resume;
 --
 
 CREATE SEQUENCE public.hobby_seq
-START WITH 1
-INCREMENT BY 1
-NO MINVALUE
-NO MAXVALUE
-CACHE 1;
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
 ALTER TABLE public.hobby_seq OWNER TO resume;
@@ -198,11 +199,11 @@ ALTER TABLE public.hobby_seq OWNER TO resume;
 --
 
 CREATE SEQUENCE public.language_seq
-START WITH 1
-INCREMENT BY 1
-NO MINVALUE
-NO MAXVALUE
-CACHE 1;
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
 ALTER TABLE public.language_seq OWNER TO resume;
@@ -226,11 +227,11 @@ ALTER TABLE public.persistent_logins OWNER TO resume;
 --
 
 CREATE SEQUENCE public.practic_seq
-START WITH 1
-INCREMENT BY 1
-NO MINVALUE
-NO MAXVALUE
-CACHE 1;
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
 ALTER TABLE public.practic_seq OWNER TO resume;
@@ -285,11 +286,11 @@ ALTER TABLE public.profile_restore OWNER TO resume;
 --
 
 CREATE SEQUENCE public.profile_seq
-START WITH 1
-INCREMENT BY 1
-NO MINVALUE
-NO MAXVALUE
-CACHE 1;
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
 ALTER TABLE public.profile_seq OWNER TO resume;
@@ -325,11 +326,11 @@ ALTER TABLE public.skill_category OWNER TO resume;
 --
 
 CREATE SEQUENCE public.skill_seq
-START WITH 1
-INCREMENT BY 1
-NO MINVALUE
-NO MAXVALUE
-CACHE 1;
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
 ALTER TABLE public.skill_seq OWNER TO resume;
@@ -353,7 +354,7 @@ SELECT pg_catalog.setval('public.certificate_seq', 1, false);
 -- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: resume
 --
 
-COPY public.course (id, name, school, finish_date) FROM stdin;
+COPY public.course (id, platform, author, subject_of_study, finish_date) FROM stdin;
 \.
 
 

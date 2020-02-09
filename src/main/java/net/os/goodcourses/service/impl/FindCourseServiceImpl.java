@@ -27,11 +27,4 @@ public class FindCourseServiceImpl implements FindCourseService {
         return courseRepository.findAll(pageable);
     }
 
-    private Course findCertificate(String anyUnigueId) {
-        Course course = courseRepository.findById(Long.parseLong(anyUnigueId));
-        if (course == null) {
-            course = courseRepository.findByName(anyUnigueId);
-        }
-        return course;
-    }
 }

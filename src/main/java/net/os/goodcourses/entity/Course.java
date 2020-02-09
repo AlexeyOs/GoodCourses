@@ -22,10 +22,13 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 	private Long id;
 
 	@Column(length=60)
-	private String name;
+	private String platform;
 
 	@Column(length=60)
-	private String school;
+	private String author;
+
+	@Column(name = "subject_of_study", length =120)
+	private String subjectOfStudy;
 
 
     @ManyToMany
@@ -49,30 +52,15 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getSchool() {
-		return school;
-	}
-
-	public void setSchool(String school) {
-		this.school = school;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((getFinishDate() == null) ? 0 : getFinishDate().hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((school == null) ? 0 : school.hashCode());
+		result = prime * result + ((platform == null) ? 0 : platform.hashCode());
+		result = prime * result + ((author == null) ? 0 : author.hashCode());
+		result = prime * result + ((subjectOfStudy == null) ? 0 : subjectOfStudy.hashCode());
 		return result;
 	}
 
@@ -95,16 +83,22 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (name == null) {
-			if (other.name != null)
+		if (platform == null) {
+			if (other.platform != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!platform.equals(other.platform))
 			return false;
-		if (school == null) {
-			if (other.school != null)
+		if (author == null) {
+			if (other.author != null)
 				return false;
-		} else if (!school.equals(other.school))
+		} else if (!author.equals(other.author))
 			return false;
+		if (subjectOfStudy == null) {
+			if (other.subjectOfStudy != null)
+				return false;
+		} else if (!subjectOfStudy.equals(other.subjectOfStudy))
+			return false;
+
 		return true;
 	}
 
@@ -116,5 +110,29 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 		this.feedbacks = feedbacks;
 		//TODO возможно нужен будет метод для обновления отзывов
 		//updateListSetFeedBacks(this.feedbacks);
+	}
+
+	public String getPlatform() {
+		return platform;
+	}
+
+	public void setPlatform(String platform) {
+		this.platform = platform;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getSubjectOfStudy() {
+		return subjectOfStudy;
+	}
+
+	public void setSubjectOfStudy(String subjectOfStudy) {
+		this.subjectOfStudy = subjectOfStudy;
 	}
 }

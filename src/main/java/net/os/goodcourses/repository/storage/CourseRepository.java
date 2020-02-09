@@ -8,8 +8,10 @@ public interface CourseRepository extends PagingAndSortingRepository<Course, Lon
 
     Course findById(long id);
 
-    Course findByName(String name);
+    Course findByPlatform(String platform);
 
-    Course findBySchool(String school);
+    Course findByAuthor(String author);
+
+    Course findBySubjectOfStudy(String subjectOfStudy);
 
 }
