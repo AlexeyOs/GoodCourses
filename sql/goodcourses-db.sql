@@ -72,6 +72,7 @@ CREATE TABLE public.course (
     platform character varying(60),
     author character varying(60),
     subject_of_study character varying(120),
+    link character varying,
     finish_date date
 );
 
@@ -354,7 +355,7 @@ SELECT pg_catalog.setval('public.certificate_seq', 1, false);
 -- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: resume
 --
 
-COPY public.course (id, platform, author, subject_of_study, finish_date) FROM stdin;
+COPY public.course (id, platform, author, subject_of_study, link, finish_date) FROM stdin;
 \.
 
 

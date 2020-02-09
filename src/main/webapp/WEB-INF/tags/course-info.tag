@@ -19,6 +19,10 @@
 					<td>Предмет, которому обучали: </td>
 					<td>${course.subjectOfStudy}</td>
 				</tr>
+				<tr>
+					<td>Сслыка на курс: </td>
+					<td><a target="_blank" href="${course.link}">${course.link}</a></td>
+				</tr>
 				</tbody>
 			</table>
 		</div>

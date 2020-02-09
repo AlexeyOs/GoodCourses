@@ -30,6 +30,9 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 	@Column(name = "subject_of_study", length =120)
 	private String subjectOfStudy;
 
+	@Column(name = "link")
+	private String link;
+
 
     @ManyToMany
     @JoinTable(name = "course_profile",
@@ -134,5 +137,13 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 
 	public void setSubjectOfStudy(String subjectOfStudy) {
 		this.subjectOfStudy = subjectOfStudy;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
 	}
 }

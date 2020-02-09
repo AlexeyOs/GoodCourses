@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-md-12 col-sm-6">
-        <course:course-school />
+        <course:course-info />
     </div>
 </div>
 <div class="row">

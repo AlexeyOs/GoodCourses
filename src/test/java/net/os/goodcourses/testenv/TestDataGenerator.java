@@ -61,6 +61,14 @@ public class TestDataGenerator {
 	private static List<String> authors = new ArrayList<>(Arrays.asList(AUTHORS));
 	private static final String[] SUBJECTOFSTUDY = {"Java", "Java", "Java Spring", "Machine Learning","C#","Kotlin", "SQL"};
 	private static List<String> subjectOfStudy = new ArrayList<>(Arrays.asList(SUBJECTOFSTUDY));
+	private static final String[] LINKS = {"https://job4j.ru/courses/java_with_zero_to_job.html",
+			"https://javarush.ru/",
+			"https://www.udemy.com/course/jee-my-resume/",
+			"https://www.coursera.org/learn/vvedenie-mashinnoe-obuchenie/home/welcome",
+			"https://openedu.ru/course/urfu/CSHARP/?session=fall_2017",
+			"https://stepik.org/course/2852/syllabus",
+			"https://www.codecademy.com/learn/learn-sql"};
+	private static List<String> links = new ArrayList<>(Arrays.asList(LINKS));
 
 	private static final String[] HOBBIES = { "Cycling", "Handball", "Football", "Basketball", "Bowling", "Boxing", "Volleyball", "Baseball", "Skating", "Skiing", "Table tennis", "Tennis",
 			"Weightlifting", "Automobiles", "Book reading", "Cricket", "Photo", "Shopping", "Cooking", "Codding", "Animals", "Traveling", "Movie", "Painting", "Darts", "Fishing", "Kayak slalom",
@@ -271,16 +279,17 @@ public class TestDataGenerator {
 	private static void insertCourses(Connection c) throws SQLException {
 		if (r.nextBoolean()) {
 			if(!platforms.isEmpty() &&  !authors.isEmpty() && !subjectOfStudy.isEmpty()) {
-			PreparedStatement ps = c.prepareStatement("insert into course values (nextval('course_seq'),?,?,?,?)");
+			PreparedStatement ps = c.prepareStatement("insert into course values (nextval('course_seq'),?,?,?,?,?)");
 			//TODO переделать обработку массива с списком платформ
 				ps.setString(1, platforms.remove(0));
 				ps.setString(2, authors.remove(0));
 				ps.setString(3, subjectOfStudy.remove(0));
+				ps.setString(4, links.remove(0));
 				Date finish = randomFinishEducation();
 				if (finish.getTime() > System.currentTimeMillis()) {
-					ps.setNull(4, Types.DATE);
+					ps.setNull(5, Types.DATE);
 				} else {
-					ps.setDate(4, finish);
+					ps.setDate(5, finish);
 				}
 
 				ps.executeUpdate();
