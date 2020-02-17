@@ -43,8 +43,8 @@ import net.coobird.thumbnailator.Thumbnails;
 public class TestDataGenerator {
 
 	// JDBC setting for database
-	private static final String JDBC_URL ="jdbc:postgresql://localhost:5432/resume";
-	private static final String JDBC_USERNAME = "resume";
+	private static final String JDBC_URL ="jdbc:postgresql://localhost:5432/goodcourses";
+	private static final String JDBC_USERNAME = "goodcourses";
 	private static final String JDBC_PASSWORD = "1234";
 
 	private static final String PHOTO_PATH = "external/test-data/photos/";
@@ -279,7 +279,7 @@ public class TestDataGenerator {
 	private static void insertCourses(Connection c) throws SQLException {
 		if (r.nextBoolean()) {
 			if(!platforms.isEmpty() &&  !authors.isEmpty() && !subjectOfStudy.isEmpty()) {
-			PreparedStatement ps = c.prepareStatement("insert into course values (nextval('course_seq'),?,?,?,?,?)");
+			PreparedStatement ps = c.prepareStatement("insert into course values (nextval('course_seq'),?,?,?,?,?,?)");
 			//TODO переделать обработку массива с списком платформ
 				ps.setString(1, platforms.remove(0));
 				ps.setString(2, authors.remove(0));
@@ -291,7 +291,7 @@ public class TestDataGenerator {
 				} else {
 					ps.setDate(5, finish);
 				}
-
+				ps.setInt(6, 1);
 				ps.executeUpdate();
 				ps.close();
 			}

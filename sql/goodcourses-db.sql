@@ -27,7 +27,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
---COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 SET default_tablespace = '';
@@ -35,7 +35,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: certificate; Type: TABLE; Schema: public; Owner: resume
+-- Name: certificate; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
 CREATE TABLE public.certificate (
@@ -47,10 +47,10 @@ CREATE TABLE public.certificate (
 );
 
 
-ALTER TABLE public.certificate OWNER TO resume;
+ALTER TABLE public.certificate OWNER TO goodcourses;
 
 --
--- Name: certificate_seq; Type: SEQUENCE; Schema: public; Owner: resume
+-- Name: certificate_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
 --
 
 CREATE SEQUENCE public.certificate_seq
@@ -61,10 +61,10 @@ CREATE SEQUENCE public.certificate_seq
     CACHE 1;
 
 
-ALTER TABLE public.certificate_seq OWNER TO resume;
+ALTER TABLE public.certificate_seq OWNER TO goodcourses;
 
 --
--- Name: course; Type: TABLE; Schema: public; Owner: resume
+-- Name: course; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
 CREATE TABLE public.course (
@@ -73,14 +73,15 @@ CREATE TABLE public.course (
     author character varying(60),
     subject_of_study character varying(120),
     link character varying,
-    finish_date date
+    finish_date date,
+    status smallint
 );
 
 
-ALTER TABLE public.course OWNER TO resume;
+ALTER TABLE public.course OWNER TO goodcourses;
 
 --
--- Name: course_profile; Type: TABLE; Schema: public; Owner: resume
+-- Name: course_profile; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
 CREATE TABLE public.course_profile (
@@ -90,10 +91,10 @@ CREATE TABLE public.course_profile (
 );
 
 
-ALTER TABLE public.course_profile OWNER TO resume;
+ALTER TABLE public.course_profile OWNER TO goodcourses;
 
 --
--- Name: course_seq; Type: SEQUENCE; Schema: public; Owner: resume
+-- Name: course_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
 --
 
 CREATE SEQUENCE public.course_seq
@@ -104,10 +105,10 @@ CREATE SEQUENCE public.course_seq
     CACHE 1;
 
 
-ALTER TABLE public.course_seq OWNER TO resume;
+ALTER TABLE public.course_seq OWNER TO goodcourses;
 
 --
--- Name: education; Type: TABLE; Schema: public; Owner: resume
+-- Name: education; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
 CREATE TABLE public.education (
@@ -121,10 +122,10 @@ CREATE TABLE public.education (
 );
 
 
-ALTER TABLE public.education OWNER TO resume;
+ALTER TABLE public.education OWNER TO goodcourses;
 
 --
--- Name: education_seq; Type: SEQUENCE; Schema: public; Owner: resume
+-- Name: education_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
 --
 
 CREATE SEQUENCE public.education_seq
@@ -135,10 +136,10 @@ CREATE SEQUENCE public.education_seq
     CACHE 1;
 
 
-ALTER TABLE public.education_seq OWNER TO resume;
+ALTER TABLE public.education_seq OWNER TO goodcourses;
 
 --
--- Name: feedback; Type: TABLE; Schema: public; Owner: resume
+-- Name: feedback; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
 CREATE TABLE public.feedback (
@@ -152,10 +153,10 @@ CREATE TABLE public.feedback (
 );
 
 
-ALTER TABLE public.feedback OWNER TO resume;
+ALTER TABLE public.feedback OWNER TO goodcourses;
 
 --
--- Name: feedback_seq; Type: SEQUENCE; Schema: public; Owner: resume
+-- Name: feedback_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
 --
 
 CREATE SEQUENCE public.feedback_seq
@@ -166,10 +167,10 @@ CREATE SEQUENCE public.feedback_seq
     CACHE 1;
 
 
-ALTER TABLE public.feedback_seq OWNER TO resume;
+ALTER TABLE public.feedback_seq OWNER TO goodcourses;
 
 --
--- Name: hobby; Type: TABLE; Schema: public; Owner: resume
+-- Name: hobby; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
 CREATE TABLE public.hobby (
@@ -179,10 +180,10 @@ CREATE TABLE public.hobby (
 );
 
 
-ALTER TABLE public.hobby OWNER TO resume;
+ALTER TABLE public.hobby OWNER TO goodcourses;
 
 --
--- Name: hobby_seq; Type: SEQUENCE; Schema: public; Owner: resume
+-- Name: hobby_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
 --
 
 CREATE SEQUENCE public.hobby_seq
@@ -193,10 +194,10 @@ CREATE SEQUENCE public.hobby_seq
     CACHE 1;
 
 
-ALTER TABLE public.hobby_seq OWNER TO resume;
+ALTER TABLE public.hobby_seq OWNER TO goodcourses;
 
 --
--- Name: language_seq; Type: SEQUENCE; Schema: public; Owner: resume
+-- Name: language_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
 --
 
 CREATE SEQUENCE public.language_seq
@@ -207,10 +208,10 @@ CREATE SEQUENCE public.language_seq
     CACHE 1;
 
 
-ALTER TABLE public.language_seq OWNER TO resume;
+ALTER TABLE public.language_seq OWNER TO goodcourses;
 
 --
--- Name: persistent_logins; Type: TABLE; Schema: public; Owner: resume
+-- Name: persistent_logins; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
 CREATE TABLE public.persistent_logins (
@@ -221,10 +222,10 @@ CREATE TABLE public.persistent_logins (
 );
 
 
-ALTER TABLE public.persistent_logins OWNER TO resume;
+ALTER TABLE public.persistent_logins OWNER TO goodcourses;
 
 --
--- Name: practic_seq; Type: SEQUENCE; Schema: public; Owner: resume
+-- Name: practic_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
 --
 
 CREATE SEQUENCE public.practic_seq
@@ -235,10 +236,10 @@ CREATE SEQUENCE public.practic_seq
     CACHE 1;
 
 
-ALTER TABLE public.practic_seq OWNER TO resume;
+ALTER TABLE public.practic_seq OWNER TO goodcourses;
 
 --
--- Name: profile; Type: TABLE; Schema: public; Owner: resume
+-- Name: profile; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
 CREATE TABLE public.profile (
@@ -268,10 +269,10 @@ CREATE TABLE public.profile (
 );
 
 
-ALTER TABLE public.profile OWNER TO resume;
+ALTER TABLE public.profile OWNER TO goodcourses;
 
 --
--- Name: profile_restore; Type: TABLE; Schema: public; Owner: resume
+-- Name: profile_restore; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
 CREATE TABLE public.profile_restore (
@@ -280,10 +281,10 @@ CREATE TABLE public.profile_restore (
 );
 
 
-ALTER TABLE public.profile_restore OWNER TO resume;
+ALTER TABLE public.profile_restore OWNER TO goodcourses;
 
 --
--- Name: profile_seq; Type: SEQUENCE; Schema: public; Owner: resume
+-- Name: profile_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
 --
 
 CREATE SEQUENCE public.profile_seq
@@ -294,10 +295,10 @@ CREATE SEQUENCE public.profile_seq
     CACHE 1;
 
 
-ALTER TABLE public.profile_seq OWNER TO resume;
+ALTER TABLE public.profile_seq OWNER TO goodcourses;
 
 --
--- Name: skill; Type: TABLE; Schema: public; Owner: resume
+-- Name: skill; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
 CREATE TABLE public.skill (
@@ -308,10 +309,10 @@ CREATE TABLE public.skill (
 );
 
 
-ALTER TABLE public.skill OWNER TO resume;
+ALTER TABLE public.skill OWNER TO goodcourses;
 
 --
--- Name: skill_category; Type: TABLE; Schema: public; Owner: resume
+-- Name: skill_category; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
 CREATE TABLE public.skill_category (
@@ -320,10 +321,10 @@ CREATE TABLE public.skill_category (
 );
 
 
-ALTER TABLE public.skill_category OWNER TO resume;
+ALTER TABLE public.skill_category OWNER TO goodcourses;
 
 --
--- Name: skill_seq; Type: SEQUENCE; Schema: public; Owner: resume
+-- Name: skill_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
 --
 
 CREATE SEQUENCE public.skill_seq
@@ -334,10 +335,10 @@ CREATE SEQUENCE public.skill_seq
     CACHE 1;
 
 
-ALTER TABLE public.skill_seq OWNER TO resume;
+ALTER TABLE public.skill_seq OWNER TO goodcourses;
 
 --
--- Data for Name: certificate; Type: TABLE DATA; Schema: public; Owner: resume
+-- Data for Name: certificate; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
 COPY public.certificate (id, id_profile, name, large_url, small_url) FROM stdin;
@@ -345,22 +346,22 @@ COPY public.certificate (id, id_profile, name, large_url, small_url) FROM stdin;
 
 
 --
--- Name: certificate_seq; Type: SEQUENCE SET; Schema: public; Owner: resume
+-- Name: certificate_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
 --
 
 SELECT pg_catalog.setval('public.certificate_seq', 1, false);
 
 
 --
--- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: resume
+-- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
-COPY public.course (id, platform, author, subject_of_study, link, finish_date) FROM stdin;
+COPY public.course (id, platform, author, subject_of_study, link, finish_date, status) FROM stdin;
 \.
 
 
 --
--- Data for Name: course_profile; Type: TABLE DATA; Schema: public; Owner: resume
+-- Data for Name: course_profile; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
 COPY public.course_profile (course_id, profile_id, amount) FROM stdin;
@@ -368,14 +369,14 @@ COPY public.course_profile (course_id, profile_id, amount) FROM stdin;
 
 
 --
--- Name: course_seq; Type: SEQUENCE SET; Schema: public; Owner: resume
+-- Name: course_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
 --
 
 SELECT pg_catalog.setval('public.course_seq', 1, false);
 
 
 --
--- Data for Name: education; Type: TABLE DATA; Schema: public; Owner: resume
+-- Data for Name: education; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
 COPY public.education (id, id_profile, summary, begin_year, finish_year, university, faculty) FROM stdin;
@@ -383,14 +384,14 @@ COPY public.education (id, id_profile, summary, begin_year, finish_year, univers
 
 
 --
--- Name: education_seq; Type: SEQUENCE SET; Schema: public; Owner: resume
+-- Name: education_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
 --
 
 SELECT pg_catalog.setval('public.education_seq', 1, false);
 
 
 --
--- Data for Name: feedback; Type: TABLE DATA; Schema: public; Owner: resume
+-- Data for Name: feedback; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
 COPY public.feedback (id, course_id, profile_id, description, rating, start_date, last_update) FROM stdin;
@@ -398,14 +399,14 @@ COPY public.feedback (id, course_id, profile_id, description, rating, start_date
 
 
 --
--- Name: feedback_seq; Type: SEQUENCE SET; Schema: public; Owner: resume
+-- Name: feedback_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
 --
 
 SELECT pg_catalog.setval('public.feedback_seq', 1, false);
 
 
 --
--- Data for Name: hobby; Type: TABLE DATA; Schema: public; Owner: resume
+-- Data for Name: hobby; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
 COPY public.hobby (id, id_profile, name) FROM stdin;
@@ -413,21 +414,21 @@ COPY public.hobby (id, id_profile, name) FROM stdin;
 
 
 --
--- Name: hobby_seq; Type: SEQUENCE SET; Schema: public; Owner: resume
+-- Name: hobby_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
 --
 
 SELECT pg_catalog.setval('public.hobby_seq', 1, false);
 
 
 --
--- Name: language_seq; Type: SEQUENCE SET; Schema: public; Owner: resume
+-- Name: language_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
 --
 
 SELECT pg_catalog.setval('public.language_seq', 1, false);
 
 
 --
--- Data for Name: persistent_logins; Type: TABLE DATA; Schema: public; Owner: resume
+-- Data for Name: persistent_logins; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
 COPY public.persistent_logins (username, series, token, last_used) FROM stdin;
@@ -435,14 +436,14 @@ COPY public.persistent_logins (username, series, token, last_used) FROM stdin;
 
 
 --
--- Name: practic_seq; Type: SEQUENCE SET; Schema: public; Owner: resume
+-- Name: practic_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
 --
 
 SELECT pg_catalog.setval('public.practic_seq', 1, false);
 
 
 --
--- Data for Name: profile; Type: TABLE DATA; Schema: public; Owner: resume
+-- Data for Name: profile; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
 COPY public.profile (id, uid, first_name, last_name, birth_day, phone, email, country, city, objective, summary, large_photo, small_photo, info, password, completed, created, skype, vkontakte, facebook, linkedin, github, stackoverflow) FROM stdin;
@@ -450,7 +451,7 @@ COPY public.profile (id, uid, first_name, last_name, birth_day, phone, email, co
 
 
 --
--- Data for Name: profile_restore; Type: TABLE DATA; Schema: public; Owner: resume
+-- Data for Name: profile_restore; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
 COPY public.profile_restore (id, token) FROM stdin;
@@ -458,14 +459,14 @@ COPY public.profile_restore (id, token) FROM stdin;
 
 
 --
--- Name: profile_seq; Type: SEQUENCE SET; Schema: public; Owner: resume
+-- Name: profile_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
 --
 
 SELECT pg_catalog.setval('public.profile_seq', 1, false);
 
 
 --
--- Data for Name: skill; Type: TABLE DATA; Schema: public; Owner: resume
+-- Data for Name: skill; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
 COPY public.skill (id, id_profile, category, value) FROM stdin;
@@ -473,7 +474,7 @@ COPY public.skill (id, id_profile, category, value) FROM stdin;
 
 
 --
--- Data for Name: skill_category; Type: TABLE DATA; Schema: public; Owner: resume
+-- Data for Name: skill_category; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
 COPY public.skill_category (id, category) FROM stdin;
@@ -481,7 +482,7 @@ COPY public.skill_category (id, category) FROM stdin;
 
 
 --
--- Name: skill_seq; Type: SEQUENCE SET; Schema: public; Owner: resume
+-- Name: skill_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
 --
 
 SELECT pg_catalog.setval('public.skill_seq', 1, false);

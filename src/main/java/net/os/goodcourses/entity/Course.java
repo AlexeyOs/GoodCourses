@@ -33,6 +33,14 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 	@Column(name = "link")
 	private String link;
 
+	/**
+	 * 0 - находится на премодерации
+	 * 1 - прошел премодерацию и доступен для оценки других пользователй
+	 * 2 - устарел и является не актуальным
+	 */
+	@Column(name = "status")
+	private int status;
+
 
     @ManyToMany
     @JoinTable(name = "course_profile",
