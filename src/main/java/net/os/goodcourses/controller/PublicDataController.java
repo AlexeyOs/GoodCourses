@@ -98,41 +98,4 @@ public class PublicDataController {
 		return "fragment/profile-items";
 	}
 
-	@RequestMapping(value = "/sign-in")
-	public String signIn() {
-		CurrentProfile currentProfile = SecurityUtil.getCurrentProfile();
-		if(currentProfile != null) {
-			return "redirect:/" + currentProfile.getUsername();
-		}
-		else{
-			return "sign-in";
-		}
-	}
-
-	@RequestMapping(value = "/sign-in-failed")
-	public String signInFailed(HttpSession session) {
-		if (session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION") == null) {
-			return "redirect:/sign-in";
-		}
-		return "sign-in";
-	}
-
-	@RequestMapping(value = "/sign-up", method = RequestMethod.GET)
-	public String signUp() {
-		CurrentProfile currentProfile = SecurityUtil.getCurrentProfile();
-		if(currentProfile != null) {
-			return "redirect:/" + currentProfile.getUsername();
-		}
-		else{
-			return "sign-up";
-		}
-	}
-
-	@RequestMapping(value = "/sign-up-failed")
-	public String signUpFailed(HttpSession session) {
-		if (session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION") == null) {
-			return "redirect:/sign-up";
-		}
-		return "sign-up";
-	}
 }

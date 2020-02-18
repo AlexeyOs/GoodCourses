@@ -1,28 +1,20 @@
 package net.os.goodcourses.controller;
 
-import net.os.goodcourses.entity.Course;
 import net.os.goodcourses.entity.Profile;
-import net.os.goodcourses.repository.storage.CourseRepository;
-import net.os.goodcourses.repository.storage.ProfileRepository;
+import net.os.goodcourses.model.CurrentProfile;
 import net.os.goodcourses.service.AddProfileService;
 import net.os.goodcourses.service.FindProfileService;
-import net.os.goodcourses.service.impl.AddFeedBackServiceImpl;
 import net.os.goodcourses.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Controller
-public class AddDataController {
-    @Autowired
-    private AddFeedBackServiceImpl addFeedBackService;
+import javax.servlet.http.HttpSession;
 
-    @Autowired
-    private CourseRepository courseRepository;
+@Controller
+public class AuthController {
 
     @Autowired
     private FindProfileService findProfileService;
@@ -30,19 +22,16 @@ public class AddDataController {
     @Autowired
     private AddProfileService addProfileService;
 
-    @Autowired
-    private ProfileRepository profileRepository;
-
-    @RequestMapping(value = "/add/feedback", method= RequestMethod.POST)
-    public ResponseEntity addFeedBack(@RequestParam("id_course") Long id_course,
-                                      @RequestParam("feedback") String feedback) {
-        Course course = courseRepository.findById(id_course);
-        long uid = SecurityUtil.getCurrentIdProfile();
-        Profile profile = profileRepository.findOne(uid);
-        addFeedBackService.createNewFeedBack(course, profile, feedback);
-        return new ResponseEntity(HttpStatus.OK);
+    @RequestMapping(value = "/sign-in")
+    public String signIn() {
+        CurrentProfile currentProfile = SecurityUtil.getCurrentProfile();
+        if(currentProfile != null) {
+            return "redirect:/" + currentProfile.getUsername();
+        }
+        else{
+            return "sign-in";
+        }
     }
-
 
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
     public String signUp(@RequestParam(value = "first_name") String firstName,
@@ -56,5 +45,31 @@ public class AddDataController {
         } else {
             return "sign-up";
         }
+    }
+
+    @RequestMapping(value = "/sign-in-failed")
+    public String signInFailed(HttpSession session) {
+        if (session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION") == null) {
+            return "redirect:/sign-in";
+        }
+        return "sign-in";
+    }
+
+    @RequestMapping(value = "/sign-up", method = RequestMethod.GET)
+    public String signUp() {
+        CurrentProfile currentProfile = SecurityUtil.getCurrentProfile();
+        if(currentProfile != null) {
+            return "redirect:/" + currentProfile.getUsername();
+        } else {
+            return "sign-up";
+        }
+    }
+
+    @RequestMapping(value = "/sign-up-failed")
+    public String signUpFailed(HttpSession session) {
+        if (session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION") == null) {
+            return "redirect:/sign-up";
+        }
+        return "sign-up";
     }
 }
