@@ -21,6 +21,8 @@ import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.service.SocialService;
 import net.os.goodcourses.util.SecurityUtil;
 
+import java.util.Optional;
+
 @Controller
 public class FacebookController {
 
@@ -61,10 +63,10 @@ public class FacebookController {
 		AccessToken accessToken = client.obtainUserAccessToken(idClient, secret, redirectUrl, code);
 		client = new DefaultFacebookClient(accessToken.getAccessToken(), Version.VERSION_2_6);
 		User user = client.fetchObject("me", User.class, Parameter.with("fields", "name,email,first_name,last_name"));
-		Profile p = facebookSocialService.loginViaSocialNetwork(user);
-		if(p != null) {
-			SecurityUtil.authentificate(p);
-			return "redirect:/"+p.getUid();
+		Optional<Profile> p = facebookSocialService.loginViaSocialNetwork(user);
+		if(p.isPresent()) {
+			SecurityUtil.authentificate(p.get());
+			return "redirect:/" + p.get().getUid();
 		} else{
 			return "redirect:/sign-in";
 		}

@@ -10,6 +10,8 @@ import com.restfb.types.User;
 import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.service.SocialService;
 
+import java.util.Optional;
+
 @Service
 public class FacebookSocialService implements SocialService<User> {
 
@@ -17,9 +19,9 @@ public class FacebookSocialService implements SocialService<User> {
 	private ProfileRepository profileRepository;
 	
 	@Override
-	public Profile loginViaSocialNetwork(User model) {
+	public Optional<Profile> loginViaSocialNetwork(User model) {
 		if(StringUtils.isNotBlank(model.getEmail())) {
-			Profile p = profileRepository.findByEmail(model.getEmail());
+			Optional<Profile> p = profileRepository.findByEmail(model.getEmail());
 			if(p != null){
 				return p;
 			}

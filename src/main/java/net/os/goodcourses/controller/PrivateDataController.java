@@ -19,7 +19,7 @@ public class PrivateDataController {
 
     @RequestMapping(value = { "/profiles" })
     public String listAll(Model model) {
-        Page<Profile> profiles = findProfileService.findAll(new PageRequest(0, Constants.MAX_PROFILES_PER_PAGE, new Sort("id")));
+        Page<Profile> profiles = findProfileService.findAll(PageRequest.of(0, Constants.MAX_PROFILES_PER_PAGE, Sort.by(Sort.Direction.ASC,"id")));
         model.addAttribute("profiles", profiles.getContent());
         model.addAttribute("page", profiles);
         return "profiles";

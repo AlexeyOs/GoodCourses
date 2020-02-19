@@ -2,6 +2,7 @@ package net.os.goodcourses.service.impl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import net.os.goodcourses.exception.CantCompleteClientRequestException;
 import net.os.goodcourses.repository.search.ProfileSearchRepository;
@@ -32,7 +33,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 	@Autowired
 	private ProfileRepository profileRepository;
 
-	@Autowired
+	@Autowired(required = false)
 	private ProfileSearchRepository profileSearchRepository;
 
 	@Autowired
@@ -80,7 +81,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 				LOGGER.info("New profile created: {}", profile.getUid());
 				profile.setCertificates(Collections.EMPTY_LIST);
 				profile.setSkills(Collections.EMPTY_LIST);
-				profileSearchRepository.save(profile);
+//				profileSearchRepository.save(profile);
 				LOGGER.info("New profile index created: {}", profile.getUid());
 			}
 		});
@@ -88,24 +89,24 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public List<Skill> listSkills(long idProfile) {
-		return profileRepository.findOne(idProfile).getSkills();
+		return profileRepository.findById(idProfile).get().getSkills();
 	}
 
 	@Override
 	public List<SkillCategory> listSkillCategories() {
-		return skillCategoryRepository.findAll(new Sort("id"));
+		return skillCategoryRepository.findAll(Sort.by(Sort.Direction.ASC,"id"));
 	}
 
 	@Override
 	@Transactional
 	public void updateSkills(long idProfile, List<Skill> updatedData) {
-		Profile profile = profileRepository.findOne(idProfile);
-		if (CollectionUtils.isEqualCollection(updatedData, profile.getSkills())) {
+		Optional<Profile> profile = profileRepository.findById(idProfile);
+		if (CollectionUtils.isEqualCollection(updatedData, profile.get().getSkills())) {
 			LOGGER.debug("Profile skills: nothing to update");
 			return;
 		} else {
-			profile.setSkills(updatedData);
-			profileRepository.save(profile);
+			profile.get().setSkills(updatedData);
+			profileRepository.save(profile.get());
 			registerUpdateIndexProfileSkillsIfTransactionSuccess(idProfile, updatedData);
 		}
 	}
@@ -121,9 +122,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 	}
 
 	private void updateIndexProfileSkills(long idProfile, List<Skill> updatedData) {
-		Profile profile = profileSearchRepository.findOne(idProfile);
-		profile.setSkills(updatedData);
-		profileSearchRepository.save(profile);
+//		Optional<Profile> profile = profileSearchRepository.findById(idProfile);
+//		profile.get().setSkills(updatedData);
+//		profileSearchRepository.save(profile.get());
 		LOGGER.info("Profile skills index updated");
 	}
 }

@@ -19,19 +19,19 @@ import net.os.goodcourses.service.FindProfileService;
 @Service
 public class ElasticSearchIndexingService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchIndexingService.class);
-	
+
 	@Value("${index.all.during.startup}")
 	private boolean indexAllDuringStartup;
-	
-	@Autowired
+
+	@Autowired(required = false)
 	private ProfileSearchRepository profileSearchRepository;
-	
+
 	@Autowired
 	private ElasticsearchOperations elasticsearchOperations;
-	
+
 	@Autowired
 	private FindProfileService findProfileService;
-	
+
 	@PostConstruct
 	private void postConstruct(){
 		if(indexAllDuringStartup) {

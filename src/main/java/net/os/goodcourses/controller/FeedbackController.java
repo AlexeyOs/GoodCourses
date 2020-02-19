@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
+
 @Controller
 public class FeedbackController {
 
@@ -27,10 +29,14 @@ public class FeedbackController {
     @RequestMapping(value = "/add/feedback", method= RequestMethod.POST)
     public String addFeedBack(@RequestParam("id_course") Long id_course,
                                       @RequestParam("feedback") String feedback) {
-        Course course = courseRepository.findById(id_course);
+        Optional<Course> course = courseRepository.findById(id_course);
         long uid = SecurityUtil.getCurrentIdProfile();
-        Profile profile = profileRepository.findOne(uid);
-        addFeedBackService.createNewFeedBack(course, profile, feedback);
-        return "redirect:/course/" + id_course;
+        Optional<Profile> profile = profileRepository.findById(uid);
+        if (course.isPresent() && profile.isPresent()) {
+            addFeedBackService.createNewFeedBack(course.get(), profile.get(), feedback);
+            return "redirect:/course/" + id_course;
+        } else {
+            return "redirect:/error";
+        }
     }
 }

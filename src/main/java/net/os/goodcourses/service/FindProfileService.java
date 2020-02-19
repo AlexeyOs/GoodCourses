@@ -5,14 +5,16 @@ import org.springframework.data.domain.Pageable;
 
 import net.os.goodcourses.entity.Profile;
 
+import java.util.Optional;
+
 /**
  *
  */
 public interface FindProfileService {
 
-	Profile findById(long id);
+	Optional<Profile> findById(long id);
 
-	Profile findByUid(String uid);
+	Optional<Profile> findByUid(String uid);
 
 	Page<Profile> findAll(Pageable pageable);
 

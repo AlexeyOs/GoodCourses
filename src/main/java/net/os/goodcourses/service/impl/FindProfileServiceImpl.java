@@ -17,6 +17,8 @@ import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.model.CurrentProfile;
 import net.os.goodcourses.service.FindProfileService;
 
+import java.util.Optional;
+
 @Service
 public class FindProfileServiceImpl implements FindProfileService, UserDetailsService{
 	private static final Logger LOGGER = LoggerFactory.getLogger(FindProfileServiceImpl.class);
@@ -24,16 +26,16 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 	@Autowired
 	private ProfileRepository profileRepository;
 
-	@Autowired
+	@Autowired(required = false)
 	private ProfileSearchRepository profileSearchRepository;
 
 	@Override
-	public Profile findById(long id) {
+	public Optional<Profile> findById(long id) {
 		return profileRepository.findById(id);
 	}
 
 	@Override
-	public Profile findByUid(String uid) {
+	public Optional<Profile> findByUid(String uid) {
 		return profileRepository.findByUid(uid);
 	}
 
@@ -63,22 +65,22 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Profile profile = findProfile(username);
-		if (profile != null) {
-			return new CurrentProfile(profile);
-		} else {
-			LOGGER.error("Profile not found by " + username);
-			throw new UsernameNotFoundException("Profile not found by " + username);
-		}
+		return new CurrentProfile(profile);
 	}
 
-	private Profile findProfile(String anyUnigueId) {
-		Profile profile = profileRepository.findByUid(anyUnigueId);
-		if (profile == null) {
+	private Profile findProfile(String anyUnigueId) throws UsernameNotFoundException {
+		Optional<Profile> profile = profileRepository.findByUid(anyUnigueId);
+		if (!profile.isPresent()) {
 			profile = profileRepository.findByEmail(anyUnigueId);
-			if (profile == null) {
+			if (!profile.isPresent()) {
 				profile = profileRepository.findByPhone(anyUnigueId);
 			}
 		}
-		return profile;
+		if (profile.isPresent()) {
+            return profile.get();
+        } else {
+            LOGGER.error("Profile not found by " + anyUnigueId);
+            throw new UsernameNotFoundException("Profile not found by " + anyUnigueId);
+        }
 	}
 }
