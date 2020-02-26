@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/AlexeyOs/GoodCourses.svg?branch=master)](https://travis-ci.org/AlexeyOs/GoodCourses)
 # GoodCourses
 
 # RUS:
