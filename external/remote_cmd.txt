@@ -10,9 +10,10 @@ sudo apt-get -y install python-software-properties
 #If error :Package 'python-software-properties' has no installation candidate
 #Then run: sudo apt --fix-broken install python-pycurl python-apt
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" >> /etc/apt/sources.list.d/postgresql.list'
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -sc)-pgdg main" > /etc/apt/sources.list.d/PostgreSQL.list'
 sudo apt-get update
-sudo apt-get install postgresql-9.6 pgadmin3
+sudo apt-get install postgresql-11
+
 
 sudo apt-get install imagemagick libmagickcore-dev
 whereis convert
@@ -28,17 +29,19 @@ echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" 
 sudo apt-get update
 sudo apt-get install -y mongodb-org
 
-#The following three commands write required changes in /etc/postgresql/9.5/main/pg_hba.conf, instead of using vi manually
-sudo sh -c 'echo "local all all trust" >> /etc/postgresql/9.5/main/pg_hba.conf'
-sudo sh -c 'echo "host all all 127.0.0.1/32 trust" >> /etc/postgresql/9.5/main/pg_hba.conf'
-sudo sh -c 'echo "host all all 0.0.0.0/0 trust" >> /etc/postgresql/9.5/main/pg_hba.conf'
+#The following three commands write required changes in /etc/postgresql/11/main/pg_hba.conf, instead of using vi manually
+sudo sh -c 'echo "local all all trust" >> /etc/postgresql/11/main/pg_hba.conf'
+sudo sh -c 'echo "host all all 127.0.0.1/32 trust" >> /etc/postgresql/11/main/pg_hba.conf'
+sudo sh -c 'echo "host all all 0.0.0.0/0 trust" >> /etc/postgresql/11/main/pg_hba.conf'
 
-sudo nano /etc/postgresql/9.5/main/postgresql.conf
+sudo nano /etc/postgresql/11/main/postgresql.conf
 ### Please add the following configs:
 #listen_addresses = '*'
 
 sudo service postgresql restart
 sudo passwd postgres
+
+sudo apt-get install pgadmin4 pgadmin4-apache2
 
 pg_dump --host=localhost --username=db-user --password= db_name > dump.sql 
 7z a dmp.7z dump.sql
