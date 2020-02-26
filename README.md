@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/AlexeyOs/GoodCourses.svg?branch=master)](https://travis-ci.org/AlexeyOs/GoodCourses)
+[![codecov](https://codecov.io/gh/AlexeyOs/GoodCourses/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexeyOs/GoodCourses)
+
 # GoodCourses
 
 # RUS:
