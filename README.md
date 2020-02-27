@@ -3,6 +3,8 @@
 
 # GoodCourses
 
+![Interface](img/interface.png)
+
 # RUS:
 Данный проект подразумевает создание площадки отзывов по обучающим курсам, в IT тематике.
 Если у вас есть желание поучаствовать в проекте, то можно писать на почту alexeyosetsky@gmail.com
@@ -13,5 +15,3 @@ This project involves the creation of a platform for feedback on training course
 If you have a desire to participate in the project, you can write to alexeyosetsky@gmail.com
 or fill [form](https://docs.google.com/forms/d/e/1FAIpQLSeCFOVM58BFpnGzUEBD0ZlkUl7-9wFrBj73IygYvd-xQdR4yQ/viewform)
 
-
-![Scheme](img/scheme.png)
