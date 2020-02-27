@@ -23,7 +23,7 @@ import javax.validation.constraints.Size;
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = { })
-@Size(min=8)
+@Size(min = 8)
 @NotNull
 @MinDigitCount
 @MinUpperCharCount

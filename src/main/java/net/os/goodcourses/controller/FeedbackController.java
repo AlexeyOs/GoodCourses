@@ -26,7 +26,7 @@ public class FeedbackController {
     @Autowired
     private ProfileRepository profileRepository;
 
-    @RequestMapping(value = "/add/feedback", method= RequestMethod.POST)
+    @RequestMapping(value = "/add/feedback", method = RequestMethod.POST)
     public String addFeedBack(@RequestParam("id_course") Long id_course,
                                       @RequestParam("feedback") String feedback) {
         Optional<Course> course = courseRepository.findById(id_course);

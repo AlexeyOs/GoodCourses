@@ -25,10 +25,9 @@ public class AuthController {
     @RequestMapping(value = "/sign-in")
     public String signIn() {
         CurrentProfile currentProfile = SecurityUtil.getCurrentProfile();
-        if(currentProfile != null) {
+        if (currentProfile != null) {
             return "redirect:/" + currentProfile.getUsername();
-        }
-        else{
+        } else {
             return "sign-in";
         }
     }
@@ -58,7 +57,7 @@ public class AuthController {
     @RequestMapping(value = "/sign-up", method = RequestMethod.GET)
     public String signUp() {
         CurrentProfile currentProfile = SecurityUtil.getCurrentProfile();
-        if(currentProfile != null) {
+        if (currentProfile != null) {
             return "redirect:/" + currentProfile.getUsername();
         } else {
             return "sign-up";

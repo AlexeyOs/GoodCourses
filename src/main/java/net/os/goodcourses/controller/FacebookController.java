@@ -49,14 +49,14 @@ public class FacebookController {
 		return client.getLoginDialogUrl(idClient, redirectUrl, scopeBuilder);
 	}
 	
-	@RequestMapping(value={"/fbLogin"}, method=RequestMethod.GET)
+	@RequestMapping(value = {"/fbLogin"}, method = RequestMethod.GET)
 	public String gotoFacebook(){
-		return "redirect:"+getAuthorizeUrl();
+		return "redirect:" + getAuthorizeUrl();
 	}
 	
-	@RequestMapping(value={"/fromFb"}, method=RequestMethod.GET)
-	public String fromFb(@RequestParam(value="code", required=false) String code) {
-		if(StringUtils.isBlank(code)) {
+	@RequestMapping(value = {"/fromFb"}, method = RequestMethod.GET)
+	public String fromFb(@RequestParam(value = "code", required = false) String code) {
+		if (StringUtils.isBlank(code)) {
 			return "redirect:/sign-in";
 		}
 		FacebookClient client = new DefaultFacebookClient(Version.VERSION_2_6);

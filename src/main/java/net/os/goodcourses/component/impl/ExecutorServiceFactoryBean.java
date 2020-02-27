@@ -20,20 +20,20 @@ public class ExecutorServiceFactoryBean implements FactoryBean<ExecutorService> 
 	
 	@Value("${executorService.threadCount}")
 	public void setThreadCount(String threadCount) {
-		if(AUTO.equalsIgnoreCase(threadCount.trim())) {
+		if (AUTO.equalsIgnoreCase(threadCount.trim())) {
 			autoThreadCount = true;
 		}
 		else {
 			this.threadCount = Integer.parseInt(threadCount.trim());
-			if(this.threadCount <= 0) {
+			if (this.threadCount <= 0) {
 				autoThreadCount = true;
 			}
 		}
 	}
 	
 	@PostConstruct
-	private void postConstruct(){
-		if(autoThreadCount) {
+	private void postConstruct() {
+		if (autoThreadCount) {
 			executorService = Executors.newCachedThreadPool();
 		} else {
 			executorService = Executors.newFixedThreadPool(threadCount);
@@ -41,7 +41,7 @@ public class ExecutorServiceFactoryBean implements FactoryBean<ExecutorService> 
 	}
 	
 	@PreDestroy
-	private void preDestroy (){
+	private void preDestroy() {
 		executorService.shutdown();
 	}
 	

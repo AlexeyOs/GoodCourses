@@ -22,7 +22,7 @@ public class EditProfileController {
 	@Autowired
 	private EditProfileService editProfileService;
 
-	@RequestMapping(value="/edit", method=RequestMethod.GET)
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String getEditProfile(){
 		return "edit";
 	}
@@ -42,7 +42,7 @@ public class EditProfileController {
 		return "redirect:/mike-ross";
 	}
 
-	private String gotoSkillsJSP(Model model){
+	private String gotoSkillsJSP(Model model) {
 		model.addAttribute("skillCategories", editProfileService.listSkillCategories());
 		return "edit/skills";
 	}

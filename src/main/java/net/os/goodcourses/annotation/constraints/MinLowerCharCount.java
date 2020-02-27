@@ -20,7 +20,7 @@ import javax.validation.Payload;
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy={})
+@Constraint(validatedBy = {})
 public @interface MinLowerCharCount {
 
 	int value() default 1;
