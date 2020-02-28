@@ -19,12 +19,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name = "profile")
-@Document(indexName="profile")
+@Document(indexName = "profile")
 public class Profile extends AbstractEntity<Long> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name = "PROFILE_ID_GENERATOR", sequenceName = "PROFILE_SEQ", allocationSize=1)
+	@SequenceGenerator(name = "PROFILE_ID_GENERATOR", sequenceName = "PROFILE_SEQ", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROFILE_ID_GENERATOR")
 	@Column(unique = true, nullable = false)
 	private Long id;
@@ -79,19 +79,19 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	@JsonIgnore
 	private boolean completed;
 
-	@Column(insertable=false)
+	@Column(insertable = false)
 	@JsonIgnore
 	private Timestamp created;
 
-	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
+	@OneToMany(mappedBy = "profile", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	private List<Certificate> certificates;
 
-	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
+	@OneToMany(mappedBy = "profile", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("finishYear DESC, beginYear DESC, id DESC")
 	@JsonIgnore
 	private List<Education> educations;
 
-	@OneToMany(mappedBy = "profile", cascade={CascadeType.MERGE, CascadeType.PERSIST})
+	@OneToMany(mappedBy = "profile", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("id ASC")
 	private List<Skill> skills;
 
@@ -103,7 +103,7 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "course_id"))
 	private List<Course> courses = new ArrayList<>();
 
-    public List<Course> getCourses () {
+    public List<Course> getCourses() {
         return courses;
     }
 
@@ -275,15 +275,15 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	@Transient
 	public int getAge(){
-		LocalDate birthdate = new LocalDate (birthDay);
+		LocalDate birthdate = new LocalDate(birthDay);
 		LocalDate now = new LocalDate();
 		Years age = Years.yearsBetween(birthdate, now);
 		return age.getYears();
 	}
 
 	@Transient
-	public String getProfilePhoto(){
-		if(largePhoto != null) {
+	public String getProfilePhoto() {
+		if (largePhoto != null) {
 			return largePhoto;
 		} else {
 			return "/static/img/profile-placeholder.png";
@@ -307,7 +307,7 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	// https://hibernate.atlassian.net/browse/HHH-7610
 	public Contacts getContacts() {
-		if(contacts == null) {
+		if (contacts == null) {
 			contacts = new Contacts();
 		}
 		return contacts;
@@ -318,8 +318,8 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	}
 
 	private void updateListSetProfile(List<? extends ProfileEntity> list) {
-		if(list != null) {
-			for(ProfileEntity entity : list) {
+		if (list != null) {
+			for (ProfileEntity entity : list) {
 				entity.setProfile(this);
 			}
 		}

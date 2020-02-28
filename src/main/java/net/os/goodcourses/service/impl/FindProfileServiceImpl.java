@@ -20,7 +20,8 @@ import net.os.goodcourses.service.FindProfileService;
 import java.util.Optional;
 
 @Service
-public class FindProfileServiceImpl implements FindProfileService, UserDetailsService{
+public class FindProfileServiceImpl implements FindProfileService, UserDetailsService {
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(FindProfileServiceImpl.class);
 
 	@Autowired
@@ -48,7 +49,7 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 	@Transactional
 	public Iterable<Profile> findAllForIndexing() {
 		Iterable<Profile> all = profileRepository.findAll();
-		for(Profile p : all) {
+		for (Profile p : all) {
 			p.getSkills().size();
 			p.getCertificates().size();
 			p.getCourses().size();

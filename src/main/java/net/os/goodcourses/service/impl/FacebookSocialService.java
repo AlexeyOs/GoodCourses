@@ -20,9 +20,9 @@ public class FacebookSocialService implements SocialService<User> {
 	
 	@Override
 	public Optional<Profile> loginViaSocialNetwork(User model) {
-		if(StringUtils.isNotBlank(model.getEmail())) {
+		if (StringUtils.isNotBlank(model.getEmail())) {
 			Optional<Profile> p = profileRepository.findByEmail(model.getEmail());
-			if(p != null){
+			if (p != null) {
 				return p;
 			}
 		}

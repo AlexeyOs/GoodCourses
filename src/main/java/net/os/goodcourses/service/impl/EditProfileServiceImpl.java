@@ -68,7 +68,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 		for (int i = 0; profileRepository.countByUid(uid) > 0; i++) {
 			uid = DataUtil.regenerateUidWithRandomSuffix(baseUid, generateUidAlphabet, generateUidSuffixLength);
 			if (i >= maxTryCountToGenerateUid) {
-				throw new CantCompleteClientRequestException("Can't generate unique uid for profile: " + baseUid+": maxTryCountToGenerateUid detected");
+				throw new CantCompleteClientRequestException("Can't generate unique uid for profile: " + baseUid + ": maxTryCountToGenerateUid detected");
 			}
 		}
 		return uid;
@@ -94,7 +94,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Override
 	public List<SkillCategory> listSkillCategories() {
-		return skillCategoryRepository.findAll(Sort.by(Sort.Direction.ASC,"id"));
+		return skillCategoryRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 	}
 
 	@Override

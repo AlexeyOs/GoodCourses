@@ -33,19 +33,18 @@ public class ElasticSearchIndexingService {
 	private FindProfileService findProfileService;
 
 	@PostConstruct
-	private void postConstruct(){
-		if(indexAllDuringStartup) {
+	private void postConstruct() {
+		if (indexAllDuringStartup) {
 			LOGGER.info("Detected index all command");
 			LOGGER.info("Clear old index");
 			elasticsearchOperations.deleteIndex(Profile.class);
 			LOGGER.info("Start index of profiles");
-			for(Profile p : findProfileService.findAllForIndexing()){
+			for (Profile p : findProfileService.findAllForIndexing()) {
 				profileSearchRepository.save(p);
-				LOGGER.info("Successful indexing of profile: "+p.getUid());
+				LOGGER.info("Successful indexing of profile: " + p.getUid());
 			}
 			LOGGER.info("Finish index of profiles");
-		}
-		else{
+		} else {
 			LOGGER.info("indexAllDuringStartup is disabled");
 		}
 	}

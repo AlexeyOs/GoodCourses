@@ -33,8 +33,8 @@ public class NotificationTemplateServiceImpl implements NotificationTemplateServ
 	@Override
 	public NotificationMessage createNotificationMessage(String templateName, Object model) {
 		NotificationMessage message = notificationTemplates.get(templateName);
-		if(message == null) {
-			throw new CantCompleteClientRequestException("Notification template '"+templateName+"' not found");
+		if (message == null) {
+			throw new CantCompleteClientRequestException("Notification template '" + templateName + "' not found");
 		}
 		String resolvedSubject = notificationContentResolver.resolve(message.getSubject(), model);
 		String resolvedContent = notificationContentResolver.resolve(message.getContent(), model);
@@ -42,12 +42,12 @@ public class NotificationTemplateServiceImpl implements NotificationTemplateServ
 	}
 	
 	@PostConstruct
-	private void postConstruct(){
+	private void postConstruct() {
 		notificationTemplates = Collections.unmodifiableMap(getNotificationTemplates());
 		LOGGER.info("Loaded {} notification templates", notificationTemplates.size());
 	}
 	
-	private Map<String, NotificationMessage> getNotificationTemplates(){
+	private Map<String, NotificationMessage> getNotificationTemplates() {
 		DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
 		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
 		reader.setValidating(false);
