@@ -18,7 +18,7 @@
             <course:link-on-courses/>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <course:check-auth />
+            <course:menu />
         </ul>
     </div>
 </nav>

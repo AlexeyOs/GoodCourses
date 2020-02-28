@@ -5,6 +5,19 @@
 
 <security:authorize access= "hasAuthority('USER')" var= "isUSer"/>
 
+<script>
+    //Функция отображения PopUp
+    function PopUpShow(){
+        document.getElementById("popup0").hidden = true;
+        document.getElementById("popup1").hidden = false;
+    }
+    //Функция скрытия PopUp
+    function PopUpHide(){
+        document.getElementById("popup0").hidden = false;
+        document.getElementById("popup1").hidden = true;
+    }
+</script>
+
 
 <c:if test= "${not isUSer}">
     <!--TODO попробовать реализовать исключения для отображения кнопки для адресов sign-in и sign-up средствами spring-security-->
@@ -23,7 +36,20 @@
         </c:when>
         <c:otherwise>
             <li class="nav-item">
-                <a href="/my-profile" class="nav-link">Мой профиль</a>
+                <div class="b-container" id="popup0">
+                    <a href="javascript:PopUpShow()">Меню</a>
+                </div>
+                <div class="b-popup" id="popup1" hidden>
+                    <div class="b-popup-content">
+                        <a href="/my-profile" >Перейти на страницу профиля</a>
+                    </div>
+                    <div class="b-popup-content">
+                        <a href="/sign-out" >Выйти</a>
+                    </div>
+                    <div class="b-popup-content">
+                        <a href="javascript:PopUpHide()">Свернуть</a>
+                    </div>
+                </div>
             </li>
         </c:otherwise>
     </c:choose>
