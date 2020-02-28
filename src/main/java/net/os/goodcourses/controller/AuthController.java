@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class AuthController {
@@ -37,7 +38,7 @@ public class AuthController {
                          @RequestParam(value = "last_name") String lastName,
                          @RequestParam(value = "uid") String uid,
                          @RequestParam(value = "password") String password) {
-        if (findProfileService.findByUid(uid) == null) {
+        if (findProfileService.findByUid(uid).equals(Optional.empty())) {
             Profile profile = addProfileService.createNewProfile(firstName, lastName, uid, password);
             SecurityUtil.authentificate(profile);
             return "redirect:/" + profile.getUid();
