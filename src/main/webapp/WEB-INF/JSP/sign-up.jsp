@@ -3,12 +3,38 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="resume" tagdir="/WEB-INF/tags"%>
 
+<script>
+    function checkUser() {
+        var data;
+        data = new FormData();
+        // data.append('file', $('#file')[0].files[0]);
+        var url = "/sign-up";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {
+                'first_name':$('#first_name').val(),
+                'last_name':$('#last_name').val(),
+                'uid':$('#uid').val(),
+                'password':$('#password').val()
+            },
+            enctype:"multipart/form-data",
+            success: [function (data) {
+                window.location.reload();
+            }],
+            error: [function (request) {
+                alert(request.responseText);
+            }]
+        });
+    }
+</script>
+
 <div class="card small-center-block">
     <div class="card-header">
         <i class="fa fa-sign-in"></i> Регистрация
     </div>
     <div class="card-body">
-        <form action="/sign-up" method="post">
+        <form action="javascript:checkUser()" method="post">
             <c:if test="${sessionScope.SPRING_SECURITY_LAST_EXCEPTION != null}">
                 <div class="alert alert-danger" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">

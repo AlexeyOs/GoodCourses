@@ -6,6 +6,9 @@ import net.os.goodcourses.service.AddProfileService;
 import net.os.goodcourses.service.FindProfileService;
 import net.os.goodcourses.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,16 +37,18 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
-    public String signUp(@RequestParam(value = "first_name") String firstName,
+    public ResponseEntity signUp(@RequestParam(value = "first_name") String firstName,
                          @RequestParam(value = "last_name") String lastName,
                          @RequestParam(value = "uid") String uid,
                          @RequestParam(value = "password") String password) {
         if (findProfileService.findByUid(uid).equals(Optional.empty())) {
             Profile profile = addProfileService.createNewProfile(firstName, lastName, uid, password);
             SecurityUtil.authentificate(profile);
-            return "redirect:/" + profile.getUid();
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", "/" + profile.getUid());
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);
         } else {
-            return "sign-up";
+            return new ResponseEntity<>("Incorrect data", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
