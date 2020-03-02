@@ -30,27 +30,22 @@
 </c:if>
 
 <c:if test= "${isUSer}">
-    <c:choose>
-        <c:when test="${profile != null}">
-            <%--Заглушка для страницы профиля--%>
-        </c:when>
-        <c:otherwise>
-            <li class="nav-item">
-                <div class="b-container" id="popup0">
-                    <a href="javascript:PopUpShow()">Меню</a>
+    <li class="nav-item">
+        <div class="b-container" id="popup0">
+            <a href="javascript:PopUpShow()">Меню</a>
+        </div>
+        <div class="b-popup" id="popup1" hidden>
+            <c:if test="${profile == null}">
+                <div class="b-popup-content">
+                    <a href="/my-profile" >Перейти на страницу профиля</a>
                 </div>
-                <div class="b-popup" id="popup1" hidden>
-                    <div class="b-popup-content">
-                        <a href="/my-profile" >Перейти на страницу профиля</a>
-                    </div>
-                    <div class="b-popup-content">
-                        <a href="/sign-out" >Выйти</a>
-                    </div>
-                    <div class="b-popup-content">
-                        <a href="javascript:PopUpHide()">Свернуть</a>
-                    </div>
-                </div>
-            </li>
-        </c:otherwise>
-    </c:choose>
+            </c:if>
+            <div class="b-popup-content">
+                <a href="/sign-out" >Выйти</a>
+            </div>
+            <div class="b-popup-content">
+                <a href="javascript:PopUpHide()">Свернуть</a>
+            </div>
+        </div>
+    </li>
 </c:if>
