@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- http://logback.qos.ch/manual/appenders.html -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</layout>
+	</appender>
+
+	<logger name="org.hibernate.SQL" level="debug" /> <logger name="org.hibernate.type" level="trace" />
+
+	<logger name="net.os.goodcourses.service.impl" level="debug" />
+
+	<logger name="net.os.goodcourses.controller" level="debug" />
+
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>
