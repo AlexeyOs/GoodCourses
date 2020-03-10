@@ -48,7 +48,6 @@ public class TestDataGenerator {
 	private static final String JDBC_PASSWORD = "1234";
 
 	private static final String PHOTO_PATH = "external/test-data/photos/";
-	private static final String CERTIFICATES_PATH = "external/test-data/certificates/";
 	//For Windows
 	private static final String MEDIA_DIR = "D:/os/workspace/goodcourses/src/main/webapp/media";
 	private static final String COUTRY = "Ukraine";
@@ -97,7 +96,6 @@ public class TestDataGenerator {
 
 	public static void main(String[] args) throws Exception {
 		clearMedia();
-		List<Certificate> certificates = loadCertificates();
 		List<Profile> profiles = loadProfiles();
 		List<ProfileConfig> profileConfigs = getProfileConfigs();
 		try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
@@ -105,7 +103,7 @@ public class TestDataGenerator {
 			clearDb(c);
 			for (Profile p : profiles) {
 				ProfileConfig profileConfig = profileConfigs.get(r.nextInt(profileConfigs.size()));
-				createProfile(c, p, profileConfig, certificates);
+				createProfile(c, p, profileConfig);
 				System.out.println("Created profile for " + p.firstName + " " + p.lastName);
 			}
 			insertSkillCategories(c);
@@ -169,22 +167,8 @@ public class TestDataGenerator {
 		return list;
 	}
 
-	private static List<Certificate> loadCertificates() {
-		File[] files = new File(CERTIFICATES_PATH).listFiles();
-		List<Certificate> list = new ArrayList<>(files.length);
-		for (File f : files) {
-			String name = f.getName().replace("-", " ");
-			name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
-			list.add(new Certificate(name, f.getAbsolutePath()));
-		}
-		return list;
-	}
-
-	private static void createProfile(Connection c, Profile profile, ProfileConfig profileConfig, List<Certificate> certificates) throws SQLException, IOException {
+	private static void createProfile(Connection c, Profile profile, ProfileConfig profileConfig) throws SQLException, IOException {
 		insertProfileData(c, profile, profileConfig);
-		if (profileConfig.certificates > 0) {
-			insertCertificates(c, profileConfig.certificates, certificates);
-		}
 		insertEducation(c);
 		insertHobbies(c);
 		insertSkills(c, profileConfig);
@@ -296,30 +280,6 @@ public class TestDataGenerator {
 				ps.close();
 			}
 		}
-	}
-
-	private static void insertCertificates(Connection c, int certificatesCount, List<Certificate> certificates) throws SQLException, IOException {
-		Collections.shuffle(certificates);
-		PreparedStatement ps = c.prepareStatement("insert into certificate values (nextval('certificate_seq'),?,?,?,?)");
-		for (int i = 0; i < certificatesCount && i < certificates.size(); i++) {
-			Certificate certificate = certificates.get(i);
-			ps.setLong(1, idProfile);
-			ps.setString(2, certificate.name);
-			String uid = UUID.randomUUID().toString() + ".jpg";
-			File photo = new File(MEDIA_DIR + "/certificates/" + uid);
-			if (!photo.getParentFile().exists()) {
-				photo.getParentFile().mkdirs();
-			}
-			String smallUid = uid.replace(".jpg", "-sm.jpg");
-			Files.copy(Paths.get(certificate.largeImg), Paths.get(photo.getAbsolutePath()));
-			ps.setString(3, "/media/certificates/" + uid);
-			Thumbnails.of(photo).size(100, 100).toFile(Paths.get(photo.getAbsolutePath().replace(".jpg", "-sm.jpg")).toFile());
-			ps.setString(4, "/media/certificates/" + smallUid);
-			ps.addBatch();
-		}
-
-		ps.executeBatch();
-		ps.close();
 	}
 
 	private static String getInfo() {
@@ -478,14 +438,12 @@ public class TestDataGenerator {
 		private final String objective;
 		private final String summary;
 		private final Course[] courses;
-		private final int certificates;
 
 		private ProfileConfig(String objective, String summary, Course[] courses, int certificates) {
 			super();
 			this.objective = objective;
 			this.summary = summary;
 			this.courses = courses;
-			this.certificates = certificates;
 		}
 	}
 

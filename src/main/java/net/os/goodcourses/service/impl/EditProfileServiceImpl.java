@@ -79,7 +79,7 @@ public class EditProfileServiceImpl implements EditProfileService {
 			@Override
 			public void afterCommit() {
 				LOGGER.info("New profile created: {}", profile.getUid());
-				profile.setCertificates(Collections.EMPTY_LIST);
+//				profile.setCertificates(Collections.EMPTY_LIST);
 				profile.setSkills(Collections.EMPTY_LIST);
 //				profileSearchRepository.save(profile);
 				LOGGER.info("New profile index created: {}", profile.getUid());

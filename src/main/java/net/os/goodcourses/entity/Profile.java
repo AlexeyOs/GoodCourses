@@ -84,9 +84,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	private Timestamp created;
 
 	@OneToMany(mappedBy = "profile", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-	private List<Certificate> certificates;
-
-	@OneToMany(mappedBy = "profile", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("finishYear DESC, beginYear DESC, id DESC")
 	@JsonIgnore
 	private List<Education> educations;
@@ -185,15 +182,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 		this.uid = uid;
 	}
 
-	public List<Certificate> getCertificates() {
-		return this.certificates;
-	}
-
-	public void setCertificates(List<Certificate> certificates) {
-		this.certificates = certificates;
-		updateListSetProfile(this.certificates);
-	}
-
 	public List<Education> getEducations() {
 		return this.educations;
 	}
@@ -274,7 +262,7 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	}
 
 	@Transient
-	public int getAge(){
+	public int getAge() {
 		LocalDate birthdate = new LocalDate(birthDay);
 		LocalDate now = new LocalDate();
 		Years age = Years.yearsBetween(birthdate, now);

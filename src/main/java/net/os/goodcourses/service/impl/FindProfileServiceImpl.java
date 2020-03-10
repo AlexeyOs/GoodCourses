@@ -51,7 +51,6 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 		Iterable<Profile> all = profileRepository.findAll();
 		for (Profile p : all) {
 			p.getSkills().size();
-			p.getCertificates().size();
 			p.getCourses().size();
 		}
 		return all;
