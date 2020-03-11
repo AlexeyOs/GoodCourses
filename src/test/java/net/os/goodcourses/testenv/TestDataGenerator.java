@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
 
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -169,7 +168,6 @@ public class TestDataGenerator {
 
 	private static void createProfile(Connection c, Profile profile, ProfileConfig profileConfig) throws SQLException, IOException {
 		insertProfileData(c, profile, profileConfig);
-		insertEducation(c);
 		insertHobbies(c);
 		insertSkills(c, profileConfig);
 		insertCourses(c);
@@ -209,26 +207,7 @@ public class TestDataGenerator {
 		ps.close();
 	}
 
-	private static void insertEducation(Connection c) throws SQLException {
-		PreparedStatement ps = c.prepareStatement("insert into education values (nextval('education_seq'),?,?,?,?,?,?)");
-		ps.setLong(1, idProfile);
-		ps.setString(2, "The specialist degree in Electronic Engineering");
-		Date finish = randomFinishEducation();
-		Date begin = addField(finish, Calendar.YEAR, -5, true);
-		ps.setInt(3, new DateTime(begin).getYear());
-		if (finish.getTime() > System.currentTimeMillis()) {
-			ps.setNull(4, Types.INTEGER);
-		} else {
-			ps.setInt(4, new DateTime(finish).getYear());
-		}
-		ps.setString(5, "Kharkiv National Technical University, Ukraine");
-		ps.setString(6, "Computer Science");
-		ps.executeUpdate();
-		ps.close();
-	}
-
 	private static void insertFeedBack(Connection c) throws SQLException{
-//		insert into feedback(id,course_id,profile_id,description,rating,start_date)
 		PreparedStatement ps = c.prepareStatement("insert into feedback values (nextval('feedback_seq'),?,?,?,?,?)");
 		ps.setLong(1, idProfile);
 		ps.setLong(2, 1);
@@ -237,17 +216,6 @@ public class TestDataGenerator {
 		ps.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
 		ps.executeUpdate();
 		ps.close();
-	}
-
-	private static Date addField(Date finish, int field, int value, boolean isBeginEducation) {
-		Calendar cl = Calendar.getInstance();
-		cl.setTimeInMillis(finish.getTime());
-		cl.add(field, value);
-		if (isBeginEducation) {
-			cl.set(Calendar.DAY_OF_MONTH, 1);
-			cl.set(Calendar.MONTH, Calendar.SEPTEMBER);
-		}
-		return new Date(cl.getTimeInMillis());
 	}
 
 	private static Date randomFinishEducation() {
@@ -465,20 +433,6 @@ public class TestDataGenerator {
 		@Override
 		public String toString() {
 			return String.format("Profile [firstName=%s, lastName=%s]", firstName, lastName);
-		}
-	}
-
-	/**
-	 *
-	 */
-	private static final class Certificate {
-		private final String name;
-		private final String largeImg;
-
-		private Certificate(String name, String largeImg) {
-			super();
-			this.name = name;
-			this.largeImg = largeImg;
 		}
 	}
 

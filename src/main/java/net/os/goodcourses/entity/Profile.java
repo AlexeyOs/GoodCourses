@@ -84,11 +84,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	private Timestamp created;
 
 	@OneToMany(mappedBy = "profile", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-	@OrderBy("finishYear DESC, beginYear DESC, id DESC")
-	@JsonIgnore
-	private List<Education> educations;
-
-	@OneToMany(mappedBy = "profile", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@OrderBy("id ASC")
 	private List<Skill> skills;
 
@@ -180,15 +175,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	public void setUid(String uid) {
 		this.uid = uid;
-	}
-
-	public List<Education> getEducations() {
-		return this.educations;
-	}
-
-	public void setEducations(List<Education> educations) {
-		this.educations = educations;
-		updateListSetProfile(this.educations);
 	}
 
 	public List<Skill> getSkills() {

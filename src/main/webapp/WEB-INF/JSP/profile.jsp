@@ -10,7 +10,6 @@
 			<resume:profile-objective/>
 			<resume:profile-skills />
 			<resume:profile-cources/>
-			<resume:profile-education />
 		</div>
 	</div>
 </div>
