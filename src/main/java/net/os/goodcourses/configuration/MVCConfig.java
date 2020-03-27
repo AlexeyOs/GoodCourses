@@ -43,7 +43,7 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public CommonsMultipartResolver multipartResolver(){
+	public CommonsMultipartResolver multipartResolver() {
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
 		return multipartResolver;
 	}

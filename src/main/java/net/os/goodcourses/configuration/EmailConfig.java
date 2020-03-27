@@ -16,10 +16,10 @@ public class EmailConfig {
 	private ConfigurableEnvironment environment;
 	
 	@Bean
-	public JavaMailSender javaMailSender(){
+	public JavaMailSender javaMailSender() {
 		JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 		javaMailSender.setHost(environment.getRequiredProperty("email.smtp.server"));
-		if(environment.containsProperty("email.smtp.username")){
+		if (environment.containsProperty("email.smtp.username")) {
 			javaMailSender.setUsername(environment.resolveRequiredPlaceholders(environment.getRequiredProperty("email.smtp.username")));
 			javaMailSender.setPassword(environment.resolveRequiredPlaceholders(environment.getRequiredProperty("email.smtp.password")));
 			javaMailSender.setPort(Integer.parseInt(environment.getRequiredProperty("email.smtp.port")));
@@ -29,7 +29,7 @@ public class EmailConfig {
 		return javaMailSender;
 	}
 	
-	private Properties javaMailProperties(){
+	private Properties javaMailProperties() {
 		Properties p = new Properties();
 		p.setProperty("mail.smtp.auth", "true");
 		p.setProperty("mail.smtp.starttls.enable", "true");
