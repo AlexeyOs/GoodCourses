@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.16
--- Dumped by pg_dump version 9.6.16
+-- Dumped from database version 11.1
+-- Dumped by pg_dump version 11.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -12,23 +12,8 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
-SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
---
-
---COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
 
 SET default_tablespace = '';
 
@@ -108,23 +93,6 @@ CREATE SEQUENCE public.course_seq
 ALTER TABLE public.course_seq OWNER TO goodcourses;
 
 --
--- Name: education; Type: TABLE; Schema: public; Owner: goodcourses
---
-
-CREATE TABLE public.education (
-    id bigint NOT NULL,
-    id_profile bigint NOT NULL,
-    summary character varying(100) NOT NULL,
-    begin_year integer NOT NULL,
-    finish_year integer,
-    university text NOT NULL,
-    faculty character varying(255) NOT NULL
-);
-
-
-ALTER TABLE public.education OWNER TO goodcourses;
-
---
 -- Name: education_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
 --
 
@@ -168,19 +136,6 @@ CREATE SEQUENCE public.feedback_seq
 
 
 ALTER TABLE public.feedback_seq OWNER TO goodcourses;
-
---
--- Name: hobby; Type: TABLE; Schema: public; Owner: goodcourses
---
-
-CREATE TABLE public.hobby (
-    id bigint NOT NULL,
-    id_profile bigint NOT NULL,
-    name character varying(30) NOT NULL
-);
-
-
-ALTER TABLE public.hobby OWNER TO goodcourses;
 
 --
 -- Name: hobby_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
@@ -346,13 +301,6 @@ COPY public.certificate (id, id_profile, name, large_url, small_url) FROM stdin;
 
 
 --
--- Name: certificate_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.certificate_seq', 1, false);
-
-
---
 -- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
@@ -369,28 +317,6 @@ COPY public.course_profile (course_id, profile_id, amount) FROM stdin;
 
 
 --
--- Name: course_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.course_seq', 1, false);
-
-
---
--- Data for Name: education; Type: TABLE DATA; Schema: public; Owner: goodcourses
---
-
-COPY public.education (id, id_profile, summary, begin_year, finish_year, university, faculty) FROM stdin;
-\.
-
-
---
--- Name: education_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.education_seq', 1, false);
-
-
---
 -- Data for Name: feedback; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
@@ -399,47 +325,11 @@ COPY public.feedback (id, course_id, profile_id, description, rating, start_date
 
 
 --
--- Name: feedback_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.feedback_seq', 1, false);
-
-
---
--- Data for Name: hobby; Type: TABLE DATA; Schema: public; Owner: goodcourses
---
-
-COPY public.hobby (id, id_profile, name) FROM stdin;
-\.
-
-
---
--- Name: hobby_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.hobby_seq', 1, false);
-
-
---
--- Name: language_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.language_seq', 1, false);
-
-
---
 -- Data for Name: persistent_logins; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
 COPY public.persistent_logins (username, series, token, last_used) FROM stdin;
 \.
-
-
---
--- Name: practic_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.practic_seq', 1, false);
 
 
 --
@@ -459,13 +349,6 @@ COPY public.profile_restore (id, token) FROM stdin;
 
 
 --
--- Name: profile_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.profile_seq', 1, false);
-
-
---
 -- Data for Name: skill; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
@@ -479,6 +362,62 @@ COPY public.skill (id, id_profile, category, value) FROM stdin;
 
 COPY public.skill_category (id, category) FROM stdin;
 \.
+
+
+--
+-- Name: certificate_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
+--
+
+SELECT pg_catalog.setval('public.certificate_seq', 1, false);
+
+
+--
+-- Name: course_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
+--
+
+SELECT pg_catalog.setval('public.course_seq', 1, false);
+
+
+--
+-- Name: education_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
+--
+
+SELECT pg_catalog.setval('public.education_seq', 1, false);
+
+
+--
+-- Name: feedback_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
+--
+
+SELECT pg_catalog.setval('public.feedback_seq', 1, false);
+
+
+--
+-- Name: hobby_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
+--
+
+SELECT pg_catalog.setval('public.hobby_seq', 1, false);
+
+
+--
+-- Name: language_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
+--
+
+SELECT pg_catalog.setval('public.language_seq', 1, false);
+
+
+--
+-- Name: practic_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
+--
+
+SELECT pg_catalog.setval('public.practic_seq', 1, false);
+
+
+--
+-- Name: profile_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
+--
+
+SELECT pg_catalog.setval('public.profile_seq', 1, false);
 
 
 --

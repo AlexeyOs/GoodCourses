@@ -168,7 +168,6 @@ public class TestDataGenerator {
 
 	private static void createProfile(Connection c, Profile profile, ProfileConfig profileConfig) throws SQLException, IOException {
 		insertProfileData(c, profile, profileConfig);
-		insertHobbies(c);
 		insertSkills(c, profileConfig);
 		insertCourses(c);
 		insertFeedBack(c);
@@ -189,19 +188,6 @@ public class TestDataGenerator {
 				ps.setString(3, StringUtils.join(entry.getValue().toArray(), ", "));
 				ps.addBatch();
 			}
-		}
-		ps.executeBatch();
-		ps.close();
-	}
-
-	private static void insertHobbies(Connection c) throws SQLException {
-		PreparedStatement ps = c.prepareStatement("insert into hobby values (nextval('hobby_seq'),?,?)");
-		List<String> hobbies = new ArrayList<>(Arrays.asList(HOBBIES));
-		Collections.shuffle(hobbies);
-		for (int i = 0; i < 5; i++) {
-			ps.setLong(1, idProfile);
-			ps.setString(2, hobbies.remove(0));
-			ps.addBatch();
 		}
 		ps.executeBatch();
 		ps.close();
