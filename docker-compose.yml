@@ -1,0 +1,36 @@
+version: '3.3'
+
+services:
+  db_postgre:
+    build:
+      context:  .
+      dockerfile: docker/postgresql/Dockerfile
+    image: postgres:11
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    container_name: postgresql-postgis-container
+    ports:
+    - 5432:5432
+    restart: always
+    networks:
+    - eb
+
+  tomcat_eb:
+    build:
+      context:  .
+      dockerfile: docker/tomcat/Dockerfile
+    image: tomcat-eb:v.9
+    container_name: tomcat-eb-container
+    ports:
+    - 8888:8080
+    restart: on-failure
+    depends_on:
+    - db_postgre
+    networks:
+    - eb
+
+volumes:
+  pg_data:
+
+networks:
+  eb:
