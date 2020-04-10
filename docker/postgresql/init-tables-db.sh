@@ -1,4 +1,8 @@
---
+#!/usr/bin/env bash
+set -e
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+   --
 -- PostgreSQL database dump
 --
 
@@ -431,3 +435,5 @@ SELECT pg_catalog.setval('public.skill_seq', 1, false);
 -- PostgreSQL database dump complete
 --
 
+
+EOSQL

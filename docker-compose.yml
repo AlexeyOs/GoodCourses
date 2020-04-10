@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   db_postgre:
-    build: ./postgresql-postgis
+    build: docker/postgresql
     image: postgres:11
     container_name: postgresql-postgis-container
     ports:
@@ -14,7 +14,7 @@ services:
   tomcat_eb:
     build:
       context:  .
-      dockerfile: ./tomcat/Dockerfile
+      dockerfile: docker/tomcat/Dockerfile
     image: tomcat-eb:v.9
     container_name: tomcat-eb-container
     ports:
