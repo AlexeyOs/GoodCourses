@@ -2,8 +2,12 @@ version: '3.3'
 
 services:
   db_postgre:
-    build: docker/postgresql
+    build:
+      context:  .
+      dockerfile: docker/postgresql/Dockerfile
     image: postgres:11
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
     container_name: postgresql-postgis-container
     ports:
     - 5432:5432
