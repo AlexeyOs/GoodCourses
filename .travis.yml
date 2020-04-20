@@ -12,10 +12,13 @@ env:
 
 script:
 - mvn clean install -DskipTests
+- docker-compose up --build -d
+- mvn test
 
 # после выполнения сборки запустить скрипт, который будет собирать статистику по JaCoCo
 # Здесь используется сторонни сервис https://codecov.io/
 after_success:
+- docker-compose down
 - bash <(curl -s https://codecov.io/bash)
 
 # Отправлять уведомление на почту youremail@smtp.ru(Изменить на свою) если сборка упала
