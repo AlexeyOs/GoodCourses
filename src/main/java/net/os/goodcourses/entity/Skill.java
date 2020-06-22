@@ -14,7 +14,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import net.os.goodcourses.annotation.constraints.EnglishLanguage;
 
@@ -22,30 +21,29 @@ import net.os.goodcourses.annotation.constraints.EnglishLanguage;
  *
  */
 @Entity
-@Table(name="skill")
+@Table(name = "skill")
 public class Skill extends AbstractEntity<Long> implements Serializable, ProfileEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="SKILL_ID_GENERATOR", sequenceName="SKILL_SEQ", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SKILL_ID_GENERATOR")
-	@Column(unique=true, nullable=false)
+	@SequenceGenerator(name = "SKILL_ID_GENERATOR", sequenceName = "SKILL_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SKILL_ID_GENERATOR")
+	@Column(unique = true, nullable = false)
 	private Long id;
 
-	@Column(nullable=false, length=50)
+	@Column(nullable = false, length = 50)
 	@EnglishLanguage
-	@Size(min=1)
+	@Size(min = 1)
 	private String category;
 
-	@Column(nullable=false, length=2147483647)
+	@Column(nullable = false, length = 2147483647)
 	@EnglishLanguage
-	@Size(min=1)
+	@Size(min = 1)
 	private String value;
 
 	//bi-directional many-to-one association to Profile
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="id_profile", nullable=false)
-	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_profile", nullable = false)
 	private Profile profile;
 
 	public Skill() {
@@ -95,28 +93,37 @@ public class Skill extends AbstractEntity<Long> implements Serializable, Profile
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!super.equals(obj))
+		}
+		if (!super.equals(obj)) {
 			return false;
-		if (!(obj instanceof Skill))
+		}
+		if (!(obj instanceof Skill)) {
 			return false;
+		}
 		Skill other = (Skill) obj;
 		if (category == null) {
-			if (other.category != null)
+			if (other.category != null) {
 				return false;
-		} else if (!category.equals(other.category))
+			}
+		} else if (!category.equals(other.category)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (value == null) {
-			if (other.value != null)
+			if (other.value != null) {
 				return false;
-		} else if (!value.equals(other.value))
+			}
+		} else if (!value.equals(other.value)) {
 			return false;
+		}
 		return true;
 	}
 }

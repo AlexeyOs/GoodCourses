@@ -21,13 +21,13 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 	@Column(unique = true, nullable = false)
 	private Long id;
 
-	@Column(length=60)
+	@Column(length = 60)
 	private String platform;
 
-	@Column(length=60)
+	@Column(length = 60)
 	private String author;
 
-	@Column(name = "subject_of_study", length =120)
+	@Column(name = "subject_of_study", length = 120)
 	private String subjectOfStudy;
 
 	@Column(name = "link")
@@ -48,9 +48,12 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
             inverseJoinColumns = @JoinColumn(name = "profile_id"))
 	private List<Profile> profiles = new ArrayList<>();
 
-	@OneToMany(mappedBy = "course", cascade={CascadeType.ALL, CascadeType.PERSIST})
+	@OneToMany(mappedBy = "course", cascade = {CascadeType.ALL, CascadeType.PERSIST})
 	private List<FeedBack> feedbacks;
 
+	//profile create user
+
+	//profile admin user
     public List<Profile> getProfiles() {
         return profiles;
     }

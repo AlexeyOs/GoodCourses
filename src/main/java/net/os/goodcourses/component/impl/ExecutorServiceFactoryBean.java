@@ -22,8 +22,7 @@ public class ExecutorServiceFactoryBean implements FactoryBean<ExecutorService> 
 	public void setThreadCount(String threadCount) {
 		if (AUTO.equalsIgnoreCase(threadCount.trim())) {
 			autoThreadCount = true;
-		}
-		else {
+		} else {
 			this.threadCount = Integer.parseInt(threadCount.trim());
 			if (this.threadCount <= 0) {
 				autoThreadCount = true;
