@@ -42,13 +42,15 @@ import net.coobird.thumbnailator.Thumbnails;
 public class TestDataGenerator {
 
 	// JDBC setting for database
-	private static final String JDBC_URL ="jdbc:postgresql://localhost:5432/goodcourses";
+	private static final String JDBC_URL ="jdbc:postgresql://127.0.0.1:5432/goodcourses";
 	private static final String JDBC_USERNAME = "goodcourses";
 	private static final String JDBC_PASSWORD = "1234";
 
 	private static final String PHOTO_PATH = "external/test-data/photos/";
+	//For Docker
+	private static final String MEDIA_DIR ="/home/travis/build/AlexeyOs/GoodCourses/src/main/webapp/media";
 	//For Windows
-	private static final String MEDIA_DIR = "D:/os/workspace/goodcourses/src/main/webapp/media";
+	//private static final String MEDIA_DIR = "D:/os/workspace/goodcourses/src/main/webapp/media";
 	private static final String COUTRY = "Ukraine";
 	private static final String[] CITIES = { "Kharkiv", "Kiyv", "Odessa" };
 	private static final String PASSWORD_HASH = "$2a$10$q7732w6Rj3kZGhfDYSIXI.wFp.uwTSi2inB2rYHvm1iDIAf1J1eVq";
