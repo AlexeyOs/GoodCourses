@@ -16,12 +16,12 @@ public final class SecurityUtil {
 
 	public static CurrentProfile getCurrentProfile() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if(authentication == null) {
+		if (authentication == null) {
 			return null;
 		}
 		Object principal = authentication.getPrincipal();
 		if (principal instanceof CurrentProfile) {
-			return ((CurrentProfile)principal);
+			return ((CurrentProfile) principal);
 		} else {
 			return null;
 		}
@@ -43,11 +43,11 @@ public final class SecurityUtil {
 		return getCurrentProfile() != null;
 	}
 
-	public static String generateNewActionUid(){
+	public static String generateNewActionUid() {
 		return UUID.randomUUID().toString();
 	}
 
-	public static String generateNewRestoreAccessToken(){
+	public static String generateNewRestoreAccessToken() {
 		return UUID.randomUUID().toString().replace("-", "");
 	}
 }
