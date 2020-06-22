@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import net.os.goodcourses.exception.CantCompleteClientRequestException;
-import net.os.goodcourses.repository.search.ProfileSearchRepository;
 import net.os.goodcourses.repository.storage.ProfileRepository;
 import net.os.goodcourses.repository.storage.SkillCategoryRepository;
 import org.apache.commons.collections.CollectionUtils;
@@ -32,9 +31,6 @@ public class EditProfileServiceImpl implements EditProfileService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EditProfileServiceImpl.class);
 	@Autowired
 	private ProfileRepository profileRepository;
-
-	@Autowired(required = false)
-	private ProfileSearchRepository profileSearchRepository;
 
 	@Autowired
 	private SkillCategoryRepository skillCategoryRepository;
