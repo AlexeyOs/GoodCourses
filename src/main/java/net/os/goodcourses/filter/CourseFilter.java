@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class ResumeFilter extends AbstractFilter {
+public class CourseFilter extends AbstractFilter {
 
 	@Value("${application.production}")
 	private boolean production;

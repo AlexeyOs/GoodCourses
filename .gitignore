@@ -1,6 +1,9 @@
 config
 logs
 target
+classes
+src/main/webapp/WEB-INF/lib/
+src/main/webapp/media/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

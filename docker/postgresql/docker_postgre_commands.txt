@@ -1,0 +1,7 @@
+# Build from parent folder - GoodCourses
+docker build -t db_postgre -f docker/postgresql/Dockerfile .
+# Run container
+docker run -d -p 5432:5432 db_postgre
+# Find ip for docker-machine and set parameter db.url=jdbc:postgresql://ip_docker_machine:5432/goodcourses
+# in application.properties
+docker-machine ip
