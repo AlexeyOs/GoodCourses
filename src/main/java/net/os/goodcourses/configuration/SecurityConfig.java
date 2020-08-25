@@ -27,9 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private DataSource dataSource;
-	
+
 	@Bean
-	public PersistentTokenRepository persistentTokenRepository(){
+	public PersistentTokenRepository persistentTokenRepository() {
 		JdbcTokenRepositoryImpl persistentTokenRepository = new JdbcTokenRepositoryImpl();
 		persistentTokenRepository.setDataSource(dataSource);
 		return persistentTokenRepository;
@@ -48,7 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.antMatchers("/my-profile","/profiles","/add","/add/**", "/edit", "/edit/**", "/remove").hasAuthority(Constants.USER)
+			.antMatchers("/my-profile",
+					"/profiles",
+					"/add",
+					"/add/**",
+					"/edit",
+					"/edit/**",
+					"/remove")
+				.hasAuthority(Constants.USER)
 			.anyRequest().permitAll(); 
 		http.formLogin()
 			.loginPage("/sign-in")
