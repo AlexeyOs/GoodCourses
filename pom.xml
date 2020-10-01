@@ -13,6 +13,31 @@
 	</properties>
 
 
+	<profiles>
+		<profile>
+			<id>docker</id>
+			<properties>
+				<configProfile>docker</configProfile>
+			</properties>
+		</profile>
+		<profile>
+			<id>heroku</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<configProfile>heroku</configProfile>
+			</properties>
+		</profile>
+		<profile>
+			<id>windows</id>
+			<properties>
+				<configProfile>windows</configProfile>
+			</properties>
+		</profile>
+	</profiles>
+
+
 	<build>
 		<finalName>GoodCourses</finalName>
 		<pluginManagement>
@@ -120,6 +145,7 @@
 				</executions>
 			</plugin>
 
+			<!--plugin for build web on Heroku-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -136,6 +162,24 @@
 									<destFileName>webapp-runner.jar</destFileName>
 								</artifactItem>
 							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!--for write properties in file-->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>write-project-properties</goal>
+						</goals>
+						<configuration>
+							<outputFile>${basedir}/target/classes/application.properties</outputFile>
 						</configuration>
 					</execution>
 				</executions>
@@ -312,5 +356,10 @@
 			<version>1.23.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.10</version>
+		</dependency>
 	</dependencies>
 </project>
