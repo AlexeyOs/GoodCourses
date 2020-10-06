@@ -34,7 +34,7 @@ import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {EmailConfig.class, JPAConfig.class, MVCConfig.class, ResumeWebApplicationInitializer.class, SecurityConfig.class, ServiceConfig.class})
+@ContextConfiguration(classes = {EmailConfig.class, JPAConfig.class, MVCConfig.class, CourseWebApplicationInitializer.class, SecurityConfig.class, ServiceConfig.class})
 @TestPropertySource("classpath:/test.properties")
 public class CourseFilterTests {
 

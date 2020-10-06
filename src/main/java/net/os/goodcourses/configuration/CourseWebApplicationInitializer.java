@@ -26,7 +26,7 @@ import net.os.goodcourses.filter.CourseFilter;
 /**
  *
  */
-public class ResumeWebApplicationInitializer implements WebApplicationInitializer {
+public class CourseWebApplicationInitializer implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext container) throws ServletException {

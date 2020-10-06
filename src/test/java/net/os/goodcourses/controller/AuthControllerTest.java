@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {EmailConfig.class, JPAConfig.class, MVCConfig.class, ResumeWebApplicationInitializer.class, SecurityConfig.class, ServiceConfig.class})
+@ContextConfiguration(classes = {EmailConfig.class, JPAConfig.class, MVCConfig.class, CourseWebApplicationInitializer.class, SecurityConfig.class, ServiceConfig.class})
 @TestPropertySource("classpath:/test.properties")
 public class AuthControllerTest {
 
