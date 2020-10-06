@@ -33,7 +33,8 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 
 	@Override
 	public Optional<Profile> findByUid(String uid) {
-		return profileRepository.findByUid(uid);
+		Optional<Profile> profile = profileRepository.findByUid(uid);
+		return profile;
 	}
 
 	@Override

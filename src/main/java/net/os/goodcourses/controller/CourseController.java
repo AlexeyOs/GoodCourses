@@ -88,8 +88,9 @@ public class CourseController {
     }
 
     @RequestMapping(value = { "/courses" })
-    public String courseAll(Model model) {
-        Page<Course> courses = findCourseService.findAll(PageRequest.of(0, Constants.MAX_PROFILES_PER_PAGE, Sort.by(Sort.Direction.ASC, "id")));
+    public String courseAll(@RequestParam(defaultValue = "0") Integer pageNum,
+                            Model model) {
+        Page<Course> courses = findCourseService.findAll(PageRequest.of(pageNum, Constants.MAX_PROFILES_PER_PAGE, Sort.by(Sort.Direction.ASC, "id")));
         model.addAttribute("courses", courses.getContent());
         model.addAttribute("page", courses);
         if (SecurityUtil.getCurrentIdProfile() != null) {
