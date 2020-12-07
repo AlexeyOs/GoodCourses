@@ -20,7 +20,7 @@
 			</c:if>
 			<div class="help-block">Вы можете использовать Ваши UID или Email или Phone в качестве логина</div>
 			<div class="form-group">
-				<label for="uid">Логин</label> <input id="uid" name="uid" class="form-control" placeholder="UID или Email или Phone" required autofocus>
+				<label for="uid">Логин</label> <input id="uid" name="uid" class="form-control" placeholder="Login" required autofocus>
 			</div>
 			<div class="form-group">
 				<label for="password">Пароль</label> <input id="password" type="password" name="password" class="form-control" placeholder="Password" required>

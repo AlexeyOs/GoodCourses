@@ -16,6 +16,7 @@
                 'first_name':$('#first_name').val(),
                 'last_name':$('#last_name').val(),
                 'uid':$('#uid').val(),
+                'mail':$('#mail').val(),
                 'password':$('#password').val()
             },
             enctype:"multipart/form-data",
@@ -52,7 +53,10 @@
                 <label for="last_name">Фамилия</label> <input id="last_name" name="last_name" class="form-control" placeholder="Иванов" required autofocus>
             </div>
             <div class="form-group">
-                <label for="uid">Логин</label> <input id="uid" name="uid" class="form-control" placeholder="UID или Email или Phone" required autofocus>
+                <label for="uid">Логин</label> <input id="uid" name="uid" class="form-control" placeholder="Ivan_I" required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="mail">Email</label> <input id="mail" name="mail" class="form-control" placeholder="ivan@gmail.com" required autofocus>
             </div>
             <div class="form-group">
                 <label for="password">Пароль</label> <input id="password" type="password" name="password" class="form-control" placeholder="Password" required>

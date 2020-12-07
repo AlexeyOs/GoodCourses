@@ -40,9 +40,10 @@ public class AuthController {
     public ResponseEntity signUp(@RequestParam(value = "first_name") String firstName,
                          @RequestParam(value = "last_name") String lastName,
                          @RequestParam(value = "uid") String uid,
+                         @RequestParam(value = "mail") String mail,
                          @RequestParam(value = "password") String password) {
         if (findProfileService.findByUid(uid).equals(Optional.empty())) {
-            Profile profile = addProfileService.createNewProfile(firstName, lastName, uid, password);
+            Profile profile = addProfileService.createNewProfile(firstName, lastName, uid, mail, password);
             SecurityUtil.authentificate(profile);
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/" + profile.getUid());

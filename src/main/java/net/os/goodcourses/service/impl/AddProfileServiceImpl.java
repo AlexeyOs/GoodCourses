@@ -20,11 +20,13 @@ public class AddProfileServiceImpl implements AddProfileService {
     public Profile createNewProfile(String firstName,
                                     String lastName,
                                     String uid,
+                                    String mail,
                                     String password) {
             Profile profile = new Profile();
             profile.setFirstName(firstName);
             profile.setLastName(lastName);
             profile.setUid(uid);
+            profile.setEmail(mail);
             profile.setPassword(password);
             profileRepository.save(profile);
             return profile;
