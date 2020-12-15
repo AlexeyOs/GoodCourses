@@ -57,7 +57,7 @@ CREATE TABLE public.course (
     platform character varying(60),
     author character varying(60),
     description character varying,
-    visible boolean NOT NULL,
+    visible boolean NOT NULL DEFAULT FALSE,
     subject_of_study character varying(120),
     link character varying,
     finish_date date,
