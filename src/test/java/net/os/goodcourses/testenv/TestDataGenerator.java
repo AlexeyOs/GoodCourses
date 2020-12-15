@@ -219,19 +219,21 @@ public class TestDataGenerator {
 	private static void insertCourses(Connection c) throws SQLException {
 		if (r.nextBoolean()) {
 			if(!platforms.isEmpty() &&  !authors.isEmpty() && !subjectOfStudy.isEmpty()) {
-			PreparedStatement ps = c.prepareStatement("insert into course values (nextval('course_seq'),?,?,?,?,?,?)");
+			PreparedStatement ps = c.prepareStatement("insert into course values (nextval('course_seq'),?,?,?,?,?,?,?,?)");
 			//TODO переделать обработку массива с списком платформ
 				ps.setString(1, platforms.remove(0));
 				ps.setString(2, authors.remove(0));
-				ps.setString(3, subjectOfStudy.remove(0));
-				ps.setString(4, links.remove(0));
+				ps.setString(3, "Test data");
+				ps.setBoolean(4, false);
+				ps.setString(5, subjectOfStudy.remove(0));
+				ps.setString(6, links.remove(0));
 				Date finish = randomFinishEducation();
 				if (finish.getTime() > System.currentTimeMillis()) {
-					ps.setNull(5, Types.DATE);
+					ps.setNull(7, Types.DATE);
 				} else {
-					ps.setDate(5, finish);
+					ps.setDate(7, finish);
 				}
-				ps.setInt(6, 1);
+				ps.setInt(8, 1);
 				ps.executeUpdate();
 				ps.close();
 			}
