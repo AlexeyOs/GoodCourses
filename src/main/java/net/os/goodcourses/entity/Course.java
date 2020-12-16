@@ -21,6 +21,10 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 	@Column(unique = true, nullable = false)
 	private Long id;
 
+	public Course() {
+
+	}
+
 	@Column(length=60)
 	private String platform;
 
@@ -49,6 +53,7 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 	private List<Profile> profiles = new ArrayList<>();
 
 	@OneToMany(mappedBy = "course", cascade={CascadeType.ALL, CascadeType.PERSIST})
+	@OrderBy("id ASC")
 	private List<FeedBack> feedbacks;
 
     public List<Profile> getProfiles() {
@@ -153,5 +158,13 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 }
