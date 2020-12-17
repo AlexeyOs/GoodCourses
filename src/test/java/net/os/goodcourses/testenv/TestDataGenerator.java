@@ -224,7 +224,7 @@ public class TestDataGenerator {
 				ps.setString(1, platforms.remove(0));
 				ps.setString(2, authors.remove(0));
 				ps.setString(3, "Test data");
-				ps.setBoolean(4, false);
+				ps.setBoolean(4, true);
 				ps.setString(5, subjectOfStudy.remove(0));
 				ps.setString(6, links.remove(0));
 				Date finish = randomFinishEducation();
