@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @PropertySources({
         @PropertySource("classpath:application.properties"),
-        @PropertySource("classpath:${config.profile}.properties")
+        @PropertySource("classpath:${configProfile}.properties")
 })
 @EnableTransactionManagement
 @EnableJpaRepositories("net.os.goodcourses.repository.storage")
