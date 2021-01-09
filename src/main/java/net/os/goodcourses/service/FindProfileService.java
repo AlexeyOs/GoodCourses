@@ -16,6 +16,8 @@ public interface FindProfileService {
 
 	Optional<Profile> findByUid(String uid);
 
+	Optional<Profile> findByEmail(String mail);
+
 	Page<Profile> findAll(Pageable pageable);
 
 	Iterable<Profile> findAllForIndexing();

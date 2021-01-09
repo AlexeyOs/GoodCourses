@@ -4,12 +4,14 @@ import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.model.CurrentProfile;
 import net.os.goodcourses.service.AddProfileService;
 import net.os.goodcourses.service.FindProfileService;
+import net.os.goodcourses.service.NotificationManagerService;
 import net.os.goodcourses.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +27,9 @@ public class AuthController {
 
     @Autowired
     private AddProfileService addProfileService;
+
+    @Autowired
+    private NotificationManagerService notificationManagerService;
 
     @RequestMapping(value = "/sign-in")
     public String signIn() {
@@ -77,5 +82,32 @@ public class AuthController {
             return "redirect:/sign-up";
         }
         return "sign-up";
+    }
+
+    @RequestMapping(value = "/password-reset", method = RequestMethod.GET)
+    public String passwordReset() {
+        CurrentProfile currentProfile = SecurityUtil.getCurrentProfile();
+        if (currentProfile != null) {
+            return "redirect:/" + currentProfile.getUsername();
+        } else {
+            return "password-reset";
+        }
+    }
+
+    @RequestMapping(value = "/password-reset", method = RequestMethod.POST)
+    public String passwordReset(@RequestParam(value = "mail") String mail) {
+        Optional<Profile> profile =  findProfileService.findByEmail(mail);
+        if (profile.isPresent()) {
+            notificationManagerService.sendPasswordChanged(profile.get());
+            return "password-reset";
+        } else {
+            return "redirect:/password-reset-failed";
+        }
+    }
+
+    @RequestMapping(value = "/password-reset-failed")
+    public String passwordResetFailed(Model model) {
+        model.addAttribute("alertMsg", "Email в системе не зарегестрирован");
+        return "password-reset";
     }
 }
