@@ -59,6 +59,13 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 		return new CurrentProfile(profile);
 	}
 
+	@Override
+	public Optional<Profile> findByEmail(String mail) {
+		Optional<Profile> profile = profileRepository.findByEmail(mail);
+		return profile;
+	}
+
+
 	private Profile findProfile(String anyUnigueId) throws UsernameNotFoundException {
 		Optional<Profile> profile = profileRepository.findByUid(anyUnigueId);
 		if (!profile.isPresent()) {
