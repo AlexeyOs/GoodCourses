@@ -58,6 +58,13 @@ public class EditProfileServiceImpl implements EditProfileService {
 		return profile;
 	}
 
+	@Override
+	@Transactional
+	public void updatePassword(Profile profile, String password) {
+		profile.setPassword(password);
+		profileRepository.save(profile);
+	}
+
 	private String generateProfileUid(SignUpForm signUpForm) throws CantCompleteClientRequestException {
 		String baseUid = DataUtil.generateProfileUid(signUpForm);
 		String uid = baseUid;

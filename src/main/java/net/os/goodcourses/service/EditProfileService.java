@@ -13,6 +13,8 @@ import net.os.goodcourses.form.SignUpForm;
 public interface EditProfileService {
 
 	Profile createNewProfile(SignUpForm signUpForm);
+
+	void updatePassword(Profile profile, String password);
 	
 	List<Skill> listSkills(long idProfile);
 

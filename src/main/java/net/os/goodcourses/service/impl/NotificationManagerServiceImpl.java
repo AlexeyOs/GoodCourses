@@ -31,7 +31,8 @@ public class NotificationManagerServiceImpl implements NotificationManagerServic
 		Map<String, Object> model = new HashMap<>();
 		model.put("profile", profile);
 		model.put("restoreLink", restoreLink);
-		processNotification(profile, "restoreAccessNotification", model);
+		//TODO исправить настройку языка интерфейса
+		processNotification(profile, "restoreAccessNotificationRus", model);
 	}
 
 	@Override
@@ -39,7 +40,8 @@ public class NotificationManagerServiceImpl implements NotificationManagerServic
 		LOGGER.debug("Password changed for account {}", profile.getUid());
 		Map<String, Object> model = new HashMap<>();
 		model.put("profile", profile);
-		processNotification(profile, "passwordChangedNotification", model);
+		//TODO исправить настройку языка интерфейса
+		processNotification(profile, "passwordChangedNotificationRus", model);
 	}
 
 	private void processNotification(Profile profile, String templateName, Object model) {
@@ -48,6 +50,7 @@ public class NotificationManagerServiceImpl implements NotificationManagerServic
 			NotificationMessage notificationMessage = notificationTemplateService.createNotificationMessage(templateName, model);
 			notificationMessage.setDestinationAddress(destinationAddress);
 			notificationMessage.setDestinationName(profile.getFullName());
+			//TODO исправить настройку языка интерфейса
 			notificationSenderService.sendNotification(notificationMessage);
 		} else {
 			LOGGER.error("Notification ignored: destinationAddress is empty for profile " + profile.getUid());
