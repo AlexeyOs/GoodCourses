@@ -22,8 +22,8 @@ public class ProfileRestore extends AbstractEntity<Long> implements Serializable
 	@Column(unique = true, nullable = false)
 	private Long id;
 	
-	@OneToOne(fetch=FetchType.LAZY, optional=false)
-	@JoinColumn(name="id", nullable=false)
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id", nullable = false)
 	private Profile profile;
 
 	@Column(nullable = false, unique = true, length = 100)

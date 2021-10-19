@@ -23,7 +23,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @EnableSpringDataWebSupport
-@ComponentScan({ "net.os.goodcourses.controller" })
+@ComponentScan({"net.os.goodcourses.controller"})
 public class MVCConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
@@ -43,7 +43,7 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public CommonsMultipartResolver multipartResolver(){
+	public CommonsMultipartResolver multipartResolver() {
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
 		return multipartResolver;
 	}

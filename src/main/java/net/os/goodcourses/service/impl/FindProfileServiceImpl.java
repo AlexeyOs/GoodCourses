@@ -1,6 +1,5 @@
 package net.os.goodcourses.service.impl;
 
-import net.os.goodcourses.repository.search.ProfileSearchRepository;
 import net.os.goodcourses.repository.storage.ProfileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +26,6 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 	@Autowired
 	private ProfileRepository profileRepository;
 
-	@Autowired(required = false)
-	private ProfileSearchRepository profileSearchRepository;
-
 	@Override
 	public Optional<Profile> findById(long id) {
 		return profileRepository.findById(id);
@@ -37,7 +33,8 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 
 	@Override
 	public Optional<Profile> findByUid(String uid) {
-		return profileRepository.findByUid(uid);
+		Optional<Profile> profile = profileRepository.findByUid(uid);
+		return profile;
 	}
 
 	@Override
@@ -56,17 +53,18 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 		return all;
 	}
 
-//	@Override
-//	public Page<Profile> findBySearchQuery(String query, Pageable pageable) {
-//		return profileSearchRepository.findByObjectiveLikeOrSummaryLikeOrPracticsCompanyLikeOrPracticsPositionLike(
-//				query, query, query, query, pageable);
-//	}
-
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Profile profile = findProfile(username);
 		return new CurrentProfile(profile);
 	}
+
+	@Override
+	public Optional<Profile> findByEmail(String mail) {
+		Optional<Profile> profile = profileRepository.findByEmail(mail);
+		return profile;
+	}
+
 
 	private Profile findProfile(String anyUnigueId) throws UsernameNotFoundException {
 		Optional<Profile> profile = profileRepository.findByUid(anyUnigueId);

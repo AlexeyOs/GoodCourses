@@ -56,6 +56,8 @@ CREATE TABLE public.course (
     id bigint NOT NULL,
     platform character varying(60),
     author character varying(60),
+    description character varying,
+    visible boolean NOT NULL DEFAULT FALSE,
     subject_of_study character varying(120),
     link character varying,
     finish_date date,
@@ -198,7 +200,7 @@ ALTER TABLE public.practic_seq OWNER TO goodcourses;
 --
 
 CREATE TABLE public.profile (
-    id bigint NOT NULL,
+    id bigserial NOT NULL,
     uid character varying(100) NOT NULL,
     first_name character varying(50) NOT NULL,
     last_name character varying(50) NOT NULL,
@@ -304,7 +306,7 @@ COPY public.certificate (id, id_profile, name, large_url, small_url) FROM stdin;
 -- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
-COPY public.course (id, platform, author, subject_of_study, link, finish_date, status) FROM stdin;
+COPY public.course (id, platform, author, description, visible, subject_of_study, link, finish_date, status) FROM stdin;
 \.
 
 

@@ -1,7 +1,6 @@
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="resume" tagdir="/WEB-INF/tags"%>
 
 <div class="card small-center-block">
 	<div class="card-header">
@@ -18,9 +17,9 @@
 					<c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session" />
 				</div>
 			</c:if>
-			<div class="help-block">Вы можете использовать Ваши UID или Email или Phone в качестве логина</div>
+			<div class="help-block">Вы можете использовать Ваши UID или Email в качестве логина</div>
 			<div class="form-group">
-				<label for="uid">Логин</label> <input id="uid" name="uid" class="form-control" placeholder="UID или Email или Phone" required autofocus>
+				<label for="uid">Логин</label> <input id="uid" name="uid" class="form-control" placeholder="Login" required autofocus>
 			</div>
 			<div class="form-group">
 				<label for="password">Пароль</label> <input id="password" type="password" name="password" class="form-control" placeholder="Password" required>
@@ -33,7 +32,7 @@
 				<a href="/sign-up" class="pull-right">Зарегистрироваться</a>
 				<br/>
 				<br/>
-				<a href="#" class="pull-right">Восстановить доступ</a>
+				<a href="/password-reset" class="pull-right">Восстановить доступ</a>
 			</div>
 			<%--TODO скрыта кнопка FACEBOOK, пока нельзя авторизоваться--%>
 			<%--<div class="form-group text-center">--%>

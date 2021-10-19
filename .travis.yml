@@ -11,8 +11,9 @@ env:
   - CODECOV_TOKEN="c5edd35b-97a8-4705-8054-b0c9b1402eba"
 
 script:
-- mvn clean install -DskipTests
+- mvn clean install -DskipTests -Pdocker
 - docker-compose up --build -d
+- mvn exec:java -Dexec.mainClass="net.os.goodcourses.testenv.TestDataGenerator" -Dexec.classpathScope="test"
 - mvn test
 
 # после выполнения сборки запустить скрипт, который будет собирать статистику по JaCoCo

@@ -36,9 +36,9 @@ public class FacebookController {
 	
 	@Value("${app.host}")
 	public void setRedirectUrl(String appHost) {
-		this.redirectUrl = appHost+"/fromFb";
+		this.redirectUrl = appHost + "/fromFb";
 	}
-	
+
 	@Autowired
 	private SocialService<User> facebookSocialService;
 	
@@ -50,7 +50,7 @@ public class FacebookController {
 	}
 	
 	@RequestMapping(value = {"/fbLogin"}, method = RequestMethod.GET)
-	public String gotoFacebook(){
+	public String gotoFacebook() {
 		return "redirect:" + getAuthorizeUrl();
 	}
 	
@@ -64,10 +64,10 @@ public class FacebookController {
 		client = new DefaultFacebookClient(accessToken.getAccessToken(), Version.VERSION_2_6);
 		User user = client.fetchObject("me", User.class, Parameter.with("fields", "name,email,first_name,last_name"));
 		Optional<Profile> p = facebookSocialService.loginViaSocialNetwork(user);
-		if(p.isPresent()) {
+		if (p.isPresent()) {
 			SecurityUtil.authentificate(p.get());
 			return "redirect:/" + p.get().getUid();
-		} else{
+		} else {
 			return "redirect:/sign-in";
 		}
 	}

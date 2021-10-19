@@ -1,6 +1,5 @@
 package net.os.goodcourses.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,28 +11,26 @@ public class FeedBack extends AbstractEntity<Long> implements Serializable, Prof
     private static final long serialVersionUID = 1L;
 
     @Id
-    @SequenceGenerator(name="FEEDBACK_ID_GENERATOR", sequenceName="FEEDBACK_SEQ", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="FEEDBACK_ID_GENERATOR")
-    @Column(unique=true, nullable=false)
+    @SequenceGenerator(name = "FEEDBACK_ID_GENERATOR", sequenceName = "FEEDBACK_SEQ", allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FEEDBACK_ID_GENERATOR")
+    @Column(unique = true, nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profile_id", nullable = false)
-    @JsonIgnore
     private Profile profile;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
-    @JsonIgnore
     private Course course;
 
     @Column(nullable = false, length = 2147483647)
     private String description;
 
-    @Column(name="start_date", nullable=false)
+    @Column(name = "start_date", nullable = false)
     private Timestamp startDate;
 
-    @Column(name="last_update")
+    @Column(name = "last_update")
     private Timestamp lastUpdate;
 
     @Override

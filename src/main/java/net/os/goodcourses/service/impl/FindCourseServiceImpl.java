@@ -29,4 +29,9 @@ public class FindCourseServiceImpl implements FindCourseService {
         return courseRepository.findAll(pageable);
     }
 
+    @Override
+    public Page<Course> findByVisible(boolean visible, Pageable pageable) {
+        return courseRepository.findByVisible(visible, pageable);
+    }
+
 }

@@ -1,15 +1,19 @@
 package net.os.goodcourses.configuration;
 
+import java.net.URI;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -21,10 +25,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  *
  */
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySources({
+        @PropertySource("classpath:application.properties"),
+        @PropertySource("classpath:${configProfile}.properties")
+})
 @EnableTransactionManagement
 @EnableJpaRepositories("net.os.goodcourses.repository.storage")
 public class JPAConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(JPAConfig.class);
 
     @Autowired
     private Environment environment;
@@ -37,14 +46,31 @@ public class JPAConfig {
 
     @Bean(/*destroyMethod="close"*/)
     public DataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(environment.getRequiredProperty("db.driver"));
-        dataSource.setUrl(environment.getRequiredProperty("db.url"));
-        dataSource.setUsername(environment.getRequiredProperty("db.username"));
-        dataSource.setPassword(environment.getRequiredProperty("db.password"));
-        dataSource.setInitialSize(Integer.parseInt(environment.getRequiredProperty("db.pool.initSize")));
-        dataSource.setMaxTotal(Integer.parseInt(environment.getRequiredProperty("db.pool.maxSize")));
-        return dataSource;
+        BasicDataSource basicDataSource = new BasicDataSource();
+        if (System.getenv("DATABASE_URL") != null) {
+            try {
+                URI dbUri = new URI(System.getenv("DATABASE_URL"));
+
+                String username = dbUri.getUserInfo().split(":")[0];
+                String password = dbUri.getUserInfo().split(":")[1];
+                String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+
+                basicDataSource.setUrl(dbUrl);
+                basicDataSource.setUsername(username);
+                basicDataSource.setPassword(password);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+
+        } else {
+            basicDataSource.setDriverClassName(environment.getRequiredProperty("db.driver"));
+            basicDataSource.setUrl(environment.getRequiredProperty("db.url"));
+            basicDataSource.setUsername(environment.getRequiredProperty("db.username"));
+            basicDataSource.setPassword(environment.getRequiredProperty("db.password"));
+        }
+        basicDataSource.setInitialSize(Integer.parseInt(environment.getRequiredProperty("db.pool.initSize")));
+        basicDataSource.setMaxTotal(Integer.parseInt(environment.getRequiredProperty("db.pool.maxSize")));
+        return basicDataSource;
     }
 
     private Properties hibernateProperties() {

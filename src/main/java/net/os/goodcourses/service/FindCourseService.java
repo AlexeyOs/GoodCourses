@@ -14,4 +14,6 @@ public interface FindCourseService {
     Optional<Course> findById(String uid);
 
     Page<Course> findAll(Pageable pageable);
+
+    Page<Course> findByVisible(boolean visible, Pageable pageable);
 }

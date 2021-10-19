@@ -16,6 +16,8 @@ import net.os.goodcourses.model.CurrentProfile;
 import net.os.goodcourses.service.EditProfileService;
 import net.os.goodcourses.util.SecurityUtil;
 
+import java.util.Optional;
+
 @Controller
 public class EditProfileController {
 
@@ -23,7 +25,7 @@ public class EditProfileController {
 	private EditProfileService editProfileService;
 
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public String getEditProfile(){
+	public String getEditProfile() {
 		return "edit";
 	}
 
@@ -49,7 +51,11 @@ public class EditProfileController {
 	}
 
 	@RequestMapping(value = "/my-profile")
-	public String getMyProfile(@AuthenticationPrincipal CurrentProfile currentProfile) {
-		return "redirect:/" + currentProfile.getUsername();
+	public String getMyProfile(@AuthenticationPrincipal CurrentProfile currentProfile, Model model) {
+		if (Optional.ofNullable(currentProfile).isPresent()) {
+			return "redirect:/" + currentProfile.getUsername();
+		} else {
+			return "redirect:/sign-in";
+		}
 	}
 }

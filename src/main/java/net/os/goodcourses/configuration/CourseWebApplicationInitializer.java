@@ -21,12 +21,12 @@ import org.springframework.web.filter.RequestContextFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import net.os.goodcourses.component.impl.ApplicationListener;
-import net.os.goodcourses.filter.ResumeFilter;
+import net.os.goodcourses.filter.CourseFilter;
 
 /**
  *
  */
-public class ResumeWebApplicationInitializer implements WebApplicationInitializer {
+public class CourseWebApplicationInitializer implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext container) throws ServletException {
@@ -49,7 +49,7 @@ public class ResumeWebApplicationInitializer implements WebApplicationInitialize
 	}
 
 	private void registerFilters(ServletContext container, WebApplicationContext ctx) {
-		registerFilter(container, ctx.getBean(ResumeFilter.class));
+		registerFilter(container, ctx.getBean(CourseFilter.class));
 		registerFilter(container, new CharacterEncodingFilter("UTF-8", true));
 		registerFilter(container, new OpenEntityManagerInViewFilter());
 		registerFilter(container, new RequestContextFilter());

@@ -1,16 +1,30 @@
 <!DOCTYPE xml>
 <beans>
-	<bean id="restoreAccessNotification" class="net.os.goodcourses.model.NotificationMessage">
+	<bean id="restoreAccessNotificationEng" class="net.os.goodcourses.model.NotificationMessage">
         <property name="subject" value="Restore access" />
         <property name="content">
         	<value>To restore access please click on ${restoreLink}.</value>
         </property>
     </bean>
+
+    <bean id="restoreAccessNotificationRus" class="net.os.goodcourses.model.NotificationMessage">
+        <property name="subject" value="Restore access" />
+        <property name="content">
+            <value>Для восстановления доступа нажмите ${restoreLink}.</value>
+        </property>
+    </bean>
     
-    <bean id="passwordChangedNotification" class="net.os.goodcourses.model.NotificationMessage">
+    <bean id="passwordChangedNotificationEng" class="net.os.goodcourses.model.NotificationMessage">
         <property name="subject" value="Password changed" />
         <property name="content">
         	<value>This email is to notify you that the password for your account ${profile.uid} has been changed.</value>
+        </property>
+    </bean>
+
+    <bean id="passwordChangedNotificationRus" class="net.os.goodcourses.model.NotificationMessage">
+        <property name="subject" value="Password changed" />
+        <property name="content">
+            <value>Это электронное письмо уведомляет вас о том, что пароль вашей учетной записи ${profile.uid} был изменён.</value>
         </property>
     </bean>
 </beans>

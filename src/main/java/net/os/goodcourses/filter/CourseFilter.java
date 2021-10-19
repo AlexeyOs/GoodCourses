@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class ResumeFilter extends AbstractFilter {
+public class CourseFilter extends AbstractFilter {
 
 	@Value("${application.production}")
 	private boolean production;
@@ -26,7 +26,7 @@ public class ResumeFilter extends AbstractFilter {
 		try {
 			chain.doFilter(req, resp);
 		} catch (Throwable th) {
-			LOGGER.error("Process request failed: " + requestUrl, th);
+			logger.error("Process request failed: " + requestUrl, th);
 			handleException(th, requestUrl, resp);
 		}
 	}

@@ -4,6 +4,7 @@ import net.os.goodcourses.Constants;
 import net.os.goodcourses.entity.Course;
 import net.os.goodcourses.entity.FeedBack;
 import net.os.goodcourses.entity.Profile;
+import net.os.goodcourses.repository.storage.ProfileRepository;
 import net.os.goodcourses.service.AddCourseService;
 import net.os.goodcourses.service.FindCourseService;
 import net.os.goodcourses.service.FindProfileService;
@@ -33,6 +34,9 @@ public class CourseController {
 
     @Autowired
     private FindProfileService findProfileService;
+
+    @Autowired
+    private ProfileRepository profileRepository;
 
     @RequestMapping(value = "/add/course", method = RequestMethod.GET)
     public String signUp() {
@@ -84,8 +88,15 @@ public class CourseController {
     }
 
     @RequestMapping(value = { "/courses" })
-    public String courseAll(Model model) {
-        Page<Course> courses = findCourseService.findAll(PageRequest.of(0, Constants.MAX_PROFILES_PER_PAGE, Sort.by(Sort.Direction.ASC, "id")));
+    public String courseAll(@RequestParam(defaultValue = "0") Integer pageNum,
+                            Model model) {
+        Page<Course> courses = findCourseService.findByVisible(
+                true,
+                PageRequest.of(pageNum,
+                        Constants.MAX_PROFILES_PER_PAGE,
+                        Sort.by(Sort.Direction.ASC, "id")
+                )
+        );
         model.addAttribute("courses", courses.getContent());
         model.addAttribute("page", courses);
         if (SecurityUtil.getCurrentIdProfile() != null) {

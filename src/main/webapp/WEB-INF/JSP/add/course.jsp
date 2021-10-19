@@ -8,7 +8,7 @@
         Добавить курс
     </div>
     <div class="card-body">
-        <form:form action="/add/course" method="post" commandName="courseForm">
+        <form:form action="/add/course" method="post">
             <div class="form-group">
                 <label for="platform">Платформа</label> <input id="platform" name="platform" class="form-control">
             </div>

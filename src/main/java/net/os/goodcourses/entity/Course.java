@@ -3,6 +3,7 @@ package net.os.goodcourses.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 
@@ -21,13 +22,19 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 	@Column(unique = true, nullable = false)
 	private Long id;
 
-	@Column(length=60)
+	@Column(length = 60)
 	private String platform;
 
-	@Column(length=60)
+	@Column(length = 60)
 	private String author;
 
-	@Column(name = "subject_of_study", length =120)
+	@Column(name = "description")
+	private String description;
+
+	@Column(nullable = false)
+	private boolean visible;
+
+	@Column(name = "subject_of_study", length = 120)
 	private String subjectOfStudy;
 
 	@Column(name = "link")
@@ -48,9 +55,12 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
             inverseJoinColumns = @JoinColumn(name = "profile_id"))
 	private List<Profile> profiles = new ArrayList<>();
 
-	@OneToMany(mappedBy = "course", cascade={CascadeType.ALL, CascadeType.PERSIST})
+	@OneToMany(mappedBy = "course", cascade = {CascadeType.ALL, CascadeType.PERSIST})
 	private List<FeedBack> feedbacks;
 
+	//profile create user
+
+	//profile admin user
     public List<Profile> getProfiles() {
         return profiles;
     }
@@ -61,56 +71,6 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((getFinishDate() == null) ? 0 : getFinishDate().hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((platform == null) ? 0 : platform.hashCode());
-		result = prime * result + ((author == null) ? 0 : author.hashCode());
-		result = prime * result + ((subjectOfStudy == null) ? 0 : subjectOfStudy.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (!(obj instanceof Course))
-			return false;
-		Course other = (Course) obj;
-		if (getFinishDate() == null) {
-			if (other.getFinishDate() != null)
-				return false;
-		} else if (!getFinishDate().equals(other.getFinishDate()))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (platform == null) {
-			if (other.platform != null)
-				return false;
-		} else if (!platform.equals(other.platform))
-			return false;
-		if (author == null) {
-			if (other.author != null)
-				return false;
-		} else if (!author.equals(other.author))
-			return false;
-		if (subjectOfStudy == null) {
-			if (other.subjectOfStudy != null)
-				return false;
-		} else if (!subjectOfStudy.equals(other.subjectOfStudy))
-			return false;
-
-		return true;
 	}
 
 	public List<FeedBack> getFeedbacks() {
@@ -153,5 +113,44 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		Course course = (Course) o;
+		return visible == course.visible &&
+				status == course.status &&
+				Objects.equals(id, course.id) &&
+				Objects.equals(platform, course.platform) &&
+				Objects.equals(author, course.author) &&
+				Objects.equals(description, course.description) &&
+				Objects.equals(subjectOfStudy, course.subjectOfStudy) &&
+				Objects.equals(link, course.link) &&
+				Objects.equals(profiles, course.profiles) &&
+				Objects.equals(feedbacks, course.feedbacks);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), id, platform, author, description, visible, subjectOfStudy, link, status, profiles, feedbacks);
 	}
 }

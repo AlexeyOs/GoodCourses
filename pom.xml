@@ -9,8 +9,34 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
-		<springVersion>[5.2.2,)</springVersion>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<springVersion>5.2.2.RELEASE</springVersion>
 	</properties>
+
+
+	<profiles>
+		<profile>
+			<id>docker</id>
+			<properties>
+				<configProfile>docker</configProfile>
+			</properties>
+		</profile>
+		<profile>
+			<id>heroku</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<configProfile>heroku</configProfile>
+			</properties>
+		</profile>
+		<profile>
+			<id>windows</id>
+			<properties>
+				<configProfile>windows</configProfile>
+			</properties>
+		</profile>
+	</profiles>
 
 
 	<build>
@@ -119,6 +145,47 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!--plugin for build web on Heroku-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals><goal>copy</goal></goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.heroku</groupId>
+									<artifactId>webapp-runner</artifactId>
+									<version>9.0.30.0</version>
+									<destFileName>webapp-runner.jar</destFileName>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!--for write properties in file-->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>write-project-properties</goal>
+						</goals>
+						<configuration>
+							<outputFile>${basedir}/target/classes/application.properties</outputFile>
+							<outputFile>${basedir}/src/main/resources/application.properties</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -160,14 +227,8 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
-			<version>[1.11.22,)</version>
+			<version>2.1.10.RELEASE</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-elasticsearch</artifactId>
-			<version>3.2.4.RELEASE</version>
-		</dependency>
-
 		<!--for DB-->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -265,6 +326,14 @@
 			<version>2.13.1</version>
 		</dependency>
 
+        <!--for short annotations replacing the code-->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.22</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!--other-->
 		<dependency>
 			<groupId>net.coobird</groupId>
@@ -297,5 +366,10 @@
 			<version>1.23.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.10</version>
+		</dependency>
 	</dependencies>
 </project>
