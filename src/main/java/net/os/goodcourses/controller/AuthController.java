@@ -1,13 +1,10 @@
 package net.os.goodcourses.controller;
 
+import lombok.AllArgsConstructor;
 import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.model.CurrentProfile;
-import net.os.goodcourses.service.AddProfileService;
-import net.os.goodcourses.service.EditProfileService;
-import net.os.goodcourses.service.FindProfileService;
-import net.os.goodcourses.service.NotificationManagerService;
+import net.os.goodcourses.service.*;
 import net.os.goodcourses.util.SecurityUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,27 +18,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.Optional;
-import java.util.UUID;
 
 @Controller
+@AllArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private FindProfileService findProfileService;
-
-    @Autowired
-    private AddProfileService addProfileService;
-
-    @Autowired
-    private EditProfileService editProfileService;
-
-    @Autowired
-    private NotificationManagerService notificationManagerService;
-
-    @Autowired
-    private PersistentTokenRepository persistentTokenRepository;
+    private final FindProfileService findProfileService;
+    private final AddProfileService addProfileService;
+    private final EditProfileService editProfileService;
+    private final NotificationManagerService notificationManagerService;
+    private final PersistentTokenRepository persistentTokenRepository;
+    private final AuthService authService;
 
     @RequestMapping(value = "/sign-in")
     public String signIn() {
@@ -108,48 +96,9 @@ public class AuthController {
 
     @RequestMapping(value = "/password-reset", method = RequestMethod.POST)
     public String passwordReset(HttpServletRequest request,
-                                @RequestParam(value = "mail") String mail,
+                                @RequestParam(value = "mailOrLogin") String mailOrLogin,
                                 Model model) {
-        Optional<Profile> profile =  findProfileService.findByEmail(mail);
-        //TODO вынести в сервис
-        if (profile.isPresent()) {
-            PersistentRememberMeToken persistentRememberMeToken = persistentTokenRepository.getTokenForSeries(
-                    String.valueOf(profile.get().getId())
-            );
-            if (persistentRememberMeToken == null) {
-                persistentRememberMeToken = new PersistentRememberMeToken(
-                        profile.get().getFullName(),
-                        String.valueOf(profile.get().getId()),
-                        UUID.randomUUID().toString(),
-                        new Date()
-                );
-                persistentTokenRepository.createNewToken(persistentRememberMeToken);
-
-                String url = request.getRequestURL().toString();
-                String urlForChangePassword = url.substring(0, url.lastIndexOf("/")) +
-                        "/password-change" +
-                        "?token=" + persistentRememberMeToken.getTokenValue() +
-                        "&profileId=" + profile.get().getId();
-                notificationManagerService.sendRestoreAccessLink(profile.get(), urlForChangePassword);
-            } else {
-                String tokenValue = UUID.randomUUID().toString();
-                persistentTokenRepository.updateToken(persistentRememberMeToken.getSeries(),
-                        tokenValue,
-                        new Date()
-                );
-                String url = request.getRequestURL().toString();
-                String urlForChangePassword = url.substring(0, url.lastIndexOf("/")) +
-                        "/password-change" +
-                        "?token=" + tokenValue +
-                        "&profileId=" + profile.get().getId();
-                notificationManagerService.sendRestoreAccessLink(profile.get(), urlForChangePassword);
-            }
-            //TODO убрать хардкод в конфиг
-            model.addAttribute("alertMsg","Вам будет отправлено сообщение, проверьте почту");
-            return "password-reset";
-        } else {
-            return "redirect:/password-reset-failed";
-        }
+        return authService.passwordReset(request, mailOrLogin, model);
     }
 
     @RequestMapping(value = "/password-reset-failed")

@@ -15,7 +15,7 @@
     <div class="card-body">
         <form action="/password-reset" method="post">
             <div class="form-group">
-                <label for="mail">Email</label> <input id="mail" type="mail" name="mail" class="form-control" required>
+                <label for="mailOrLogin">Email или login</label> <input id="mailOrLogin" type="mail" name="mailOrLogin" class="form-control" required>
             </div>
             <div class="form-group" style="display:table;width:100%;">
                 <button type="submit" class="btn btn-primary pull-left">Отправить</button>
