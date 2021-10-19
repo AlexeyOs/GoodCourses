@@ -38,6 +38,8 @@ public class EmailConfig {
 		p.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		p.setProperty("mail.store.protocol", "pop3");
 		p.setProperty("mail.transport.protocol", "smtp");
+		p.setProperty("mail.smtp.starttls.required", "true");
+		p.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
 		return p;
 	}
 }
