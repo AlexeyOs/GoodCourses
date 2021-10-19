@@ -17,9 +17,8 @@
 					<c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session" />
 				</div>
 			</c:if>
-			<div class="help-block">Вы можете использовать Ваши Login или Email в качестве логина</div>
 			<div class="form-group">
-				<label for="uid">Логин или email</label> <input id="uid" name="uid" class="form-control" placeholder="Login" required autofocus>
+				<label for="uid">Логин или email</label> <input id="uid" name="uid" class="form-control" placeholder="Login or email" required autofocus>
 			</div>
 			<div class="form-group">
 				<label for="password">Пароль</label> <input id="password" type="password" name="password" class="form-control" placeholder="Password" required>
