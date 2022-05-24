@@ -1,15 +1,12 @@
 package net.os.goodcourses.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
 
-import org.joda.time.LocalDate;
-import org.joda.time.Years;
 /**
  *
  */
@@ -23,15 +20,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROFILE_ID_GENERATOR")
 	@Column(unique = true, nullable = false)
 	private Long id;
-
-	@Column(name = "birth_day")
-	private Date birthDay;
-
-	@Column
-	private String city;
-
-	@Column
-	private String country;
 
 	@Column(name = "first_name", nullable = false, length = 50)
 	private String firstName;
@@ -47,9 +35,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	@Column(name = "small_photo", length = 255)
 	private String smallPhoto;
-
-	@Column(length = 20)
-	private String phone;
 
 	@Column(length = 100)
 	private String email;
@@ -71,10 +56,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	@Column(insertable = false)
 	private Timestamp created;
-
-	@OneToMany(mappedBy = "profile", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-	@OrderBy("id ASC")
-	private List<Skill> skills;
 
 
 
@@ -100,30 +81,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Date getBirthDay() {
-		return this.birthDay;
-	}
-
-	public void setBirthDay(Date birthDay) {
-		this.birthDay = birthDay;
-	}
-
-	public String getCity() {
-		return this.city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getCountry() {
-		return this.country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
 	}
 
 	public String getFirstName() {
@@ -166,15 +123,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 		this.uid = uid;
 	}
 
-	public List<Skill> getSkills() {
-		return this.skills;
-	}
-
-	public void setSkills(List<Skill> skills) {
-		this.skills = skills;
-		updateListSetProfile(this.skills);
-	}
-
 	public String getLargePhoto() {
 		return largePhoto;
 	}
@@ -189,14 +137,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	public void setSmallPhoto(String smallPhoto) {
 		this.smallPhoto = smallPhoto;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 
 	public String getEmail() {
@@ -234,14 +174,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	@Transient
 	public String getFullName() {
 		return firstName + " " + lastName;
-	}
-
-	@Transient
-	public int getAge() {
-		LocalDate birthdate = new LocalDate(birthDay);
-		LocalDate now = new LocalDate();
-		Years age = Years.yearsBetween(birthdate, now);
-		return age.getYears();
 	}
 
 	@Transient

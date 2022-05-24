@@ -1,20 +1,17 @@
 package net.os.goodcourses.controller;
 
-import javax.validation.Valid;
 
+import net.os.goodcourses.entity.Profile;
+import net.os.goodcourses.service.FindProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import net.os.goodcourses.form.SkillForm;
 import net.os.goodcourses.model.CurrentProfile;
 import net.os.goodcourses.service.EditProfileService;
-import net.os.goodcourses.util.SecurityUtil;
 
 import java.util.Optional;
 
@@ -24,34 +21,19 @@ public class EditProfileController {
 	@Autowired
 	private EditProfileService editProfileService;
 
-	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public String getEditProfile() {
-		return "edit";
+	@Autowired
+	private FindProfileService findProfileService;
+
+	@RequestMapping(value = "/edit/profile", method = RequestMethod.GET)
+	public String getEditProfile(@AuthenticationPrincipal CurrentProfile currentProfile, Model model) {
+		Optional<Profile> profile = findProfileService.findById(currentProfile.getId());
+		profile.ifPresent(value -> model.addAttribute("profile", value));
+		return "edit/profile";
 	}
 
-	@RequestMapping(value = "/edit/skills", method = RequestMethod.GET)
-	public String getEditSkills(Model model) {
-		model.addAttribute("skillForm", new SkillForm(editProfileService.listSkills(SecurityUtil.getCurrentIdProfile())));
-		return gotoSkillsJSP(model);
-	}
-
-	@RequestMapping(value = "/edit/skills", method = RequestMethod.POST)
-	public String saveEditSkills(@Valid @ModelAttribute("skillForm") SkillForm form, BindingResult bindingResult, Model model) {
-		if (bindingResult.hasErrors()) {
-			return gotoSkillsJSP(model);
-		}
-		editProfileService.updateSkills(SecurityUtil.getCurrentIdProfile(), form.getItems());
-		//TODO delete hardcode
-		return "redirect:/mike-ross";
-	}
-
-	private String gotoSkillsJSP(Model model) {
-		model.addAttribute("skillCategories", editProfileService.listSkillCategories());
-		return "edit/skills";
-	}
 
 	@RequestMapping(value = "/my-profile")
-	public String getMyProfile(@AuthenticationPrincipal CurrentProfile currentProfile, Model model) {
+	public String getMyProfile(@AuthenticationPrincipal CurrentProfile currentProfile) {
 		if (Optional.ofNullable(currentProfile).isPresent()) {
 			return "redirect:/" + currentProfile.getUsername();
 		} else {

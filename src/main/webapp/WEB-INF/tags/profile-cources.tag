@@ -4,7 +4,7 @@
 
 <div class="card">
 	<div class="card-header">
-		<i class="fa fa-book"></i> Courses <a class="edit-block" href="/edit/courses">Edit</a>
+		<i class="fa fa-book"></i> Курсы
 	</div>
 	<c:if test="${fn:length(profile.courses) > 0}">
 		<div class="card-body">

@@ -35,7 +35,7 @@
             <a href="javascript:PopUpShow()">Меню</a>
         </div>
         <div class="b-popup" id="popup1" hidden>
-            <c:if test="${profile == null}">
+            <c:if test="${profile == null} && ">
                 <div class="b-popup-content">
                     <a href="/my-profile" >Перейти на страницу профиля</a>
                 </div>

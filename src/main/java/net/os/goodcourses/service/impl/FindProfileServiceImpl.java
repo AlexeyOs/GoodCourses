@@ -47,7 +47,6 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 	public Iterable<Profile> findAllForIndexing() {
 		Iterable<Profile> all = profileRepository.findAll();
 		for (Profile p : all) {
-			p.getSkills().size();
 			p.getCourses().size();
 		}
 		return all;
@@ -70,9 +69,6 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 		Optional<Profile> profile = profileRepository.findByUid(anyUnigueId);
 		if (!profile.isPresent()) {
 			profile = profileRepository.findByEmail(anyUnigueId);
-			if (!profile.isPresent()) {
-				profile = profileRepository.findByPhone(anyUnigueId);
-			}
 		}
 		if (profile.isPresent()) {
             return profile.get();
