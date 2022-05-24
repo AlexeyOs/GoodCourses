@@ -20,35 +20,6 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: certificate; Type: TABLE; Schema: public; Owner: goodcourses
---
-
-CREATE TABLE public.certificate (
-    id bigint NOT NULL,
-    id_profile bigint NOT NULL,
-    name character varying(50) NOT NULL,
-    large_url character varying(255) NOT NULL,
-    small_url character varying(255) NOT NULL
-);
-
-
-ALTER TABLE public.certificate OWNER TO goodcourses;
-
---
--- Name: certificate_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
---
-
-CREATE SEQUENCE public.certificate_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.certificate_seq OWNER TO goodcourses;
-
---
 -- Name: course; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
@@ -95,20 +66,6 @@ CREATE SEQUENCE public.course_seq
 ALTER TABLE public.course_seq OWNER TO goodcourses;
 
 --
--- Name: education_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
---
-
-CREATE SEQUENCE public.education_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.education_seq OWNER TO goodcourses;
-
---
 -- Name: feedback; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
@@ -140,34 +97,6 @@ CREATE SEQUENCE public.feedback_seq
 ALTER TABLE public.feedback_seq OWNER TO goodcourses;
 
 --
--- Name: hobby_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
---
-
-CREATE SEQUENCE public.hobby_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.hobby_seq OWNER TO goodcourses;
-
---
--- Name: language_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
---
-
-CREATE SEQUENCE public.language_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.language_seq OWNER TO goodcourses;
-
---
 -- Name: persistent_logins; Type: TABLE; Schema: public; Owner: goodcourses
 --
 
@@ -180,20 +109,6 @@ CREATE TABLE public.persistent_logins (
 
 
 ALTER TABLE public.persistent_logins OWNER TO goodcourses;
-
---
--- Name: practic_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
---
-
-CREATE SEQUENCE public.practic_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.practic_seq OWNER TO goodcourses;
 
 --
 -- Name: profile; Type: TABLE; Schema: public; Owner: goodcourses
@@ -254,53 +169,6 @@ CREATE SEQUENCE public.profile_seq
 
 ALTER TABLE public.profile_seq OWNER TO goodcourses;
 
---
--- Name: skill; Type: TABLE; Schema: public; Owner: goodcourses
---
-
-CREATE TABLE public.skill (
-    id bigint NOT NULL,
-    id_profile bigint NOT NULL,
-    category character varying(50) NOT NULL,
-    value text NOT NULL
-);
-
-
-ALTER TABLE public.skill OWNER TO goodcourses;
-
---
--- Name: skill_category; Type: TABLE; Schema: public; Owner: goodcourses
---
-
-CREATE TABLE public.skill_category (
-    id bigint NOT NULL,
-    category character varying(50) NOT NULL
-);
-
-
-ALTER TABLE public.skill_category OWNER TO goodcourses;
-
---
--- Name: skill_seq; Type: SEQUENCE; Schema: public; Owner: goodcourses
---
-
-CREATE SEQUENCE public.skill_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.skill_seq OWNER TO goodcourses;
-
---
--- Data for Name: certificate; Type: TABLE DATA; Schema: public; Owner: goodcourses
---
-
-COPY public.certificate (id, id_profile, name, large_url, small_url) FROM stdin;
-\.
-
 
 --
 -- Data for Name: course; Type: TABLE DATA; Schema: public; Owner: goodcourses
@@ -351,40 +219,10 @@ COPY public.profile_restore (id, token) FROM stdin;
 
 
 --
--- Data for Name: skill; Type: TABLE DATA; Schema: public; Owner: goodcourses
---
-
-COPY public.skill (id, id_profile, category, value) FROM stdin;
-\.
-
-
---
--- Data for Name: skill_category; Type: TABLE DATA; Schema: public; Owner: goodcourses
---
-
-COPY public.skill_category (id, category) FROM stdin;
-\.
-
-
---
--- Name: certificate_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.certificate_seq', 1, false);
-
-
---
 -- Name: course_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
 --
 
 SELECT pg_catalog.setval('public.course_seq', 1, false);
-
-
---
--- Name: education_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.education_seq', 1, false);
 
 
 --
@@ -395,38 +233,10 @@ SELECT pg_catalog.setval('public.feedback_seq', 1, false);
 
 
 --
--- Name: hobby_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.hobby_seq', 1, false);
-
-
---
--- Name: language_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.language_seq', 1, false);
-
-
---
--- Name: practic_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.practic_seq', 1, false);
-
-
---
 -- Name: profile_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
 --
 
 SELECT pg_catalog.setval('public.profile_seq', 1, false);
-
-
---
--- Name: skill_seq; Type: SEQUENCE SET; Schema: public; Owner: goodcourses
---
-
-SELECT pg_catalog.setval('public.skill_seq', 1, false);
 
 
 --

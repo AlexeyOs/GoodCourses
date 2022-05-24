@@ -41,56 +41,11 @@
     width: 25px;
 }
 
-.resume .hobbies {
-    text-align: center;
-}
-
-.resume .hobbies i {
-    font-size: 1.8em;
-    margin: 0 5px;
-    color: #767270;
-}
-
-.resume .hobbies .table>tbody>tr>td {
-    vertical-align: middle;
-}
-
-.resume .certificates .thumbnail {
-    width: 160px;
-    margin: 0 auto;
-    display: inline-block;
-}
-
 .resume a.edit-block {
     color: #495057;
     float: right;
     font-size: 0.9em;
     text-decoration: underline;
-}
-
-.resume .skill-delim {
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-    margin-top: 5px;
-    border-bottom: 1px solid #eee;
-}
-
-.resume .skill-delim .alert {
-    margin-bottom: 0;
-}
-
-.resume .skill-item textarea {
-    margin-right: 20px;
-}
-
-.resume .skill-item .value-container {
-    position: relative;
-}
-
-.resume .skill-item .value-container .close {
-    position: absolute;
-    right: 15px;
-    top:-5px;
 }
 
 .resume .profiles blockquote {

@@ -21,13 +21,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
@@ -107,7 +102,6 @@ public class TestDataGenerator {
 				createProfile(c, p, profileConfig);
 				System.out.println("Created profile for " + p.firstName + " " + p.lastName);
 			}
-			insertSkillCategories(c);
 			c.commit();
 			System.out.println("Data generated successful");
 		}
@@ -135,14 +129,7 @@ public class TestDataGenerator {
 	private static void clearDb(Connection c) throws SQLException {
 		Statement st = c.createStatement();
 		st.executeUpdate("delete from profile");
-		st.executeUpdate("delete from skill_category");
 		st.executeQuery("select setval('profile_seq', 1, false)");
-		st.executeQuery("select setval('hobby_seq', 1, false)");
-		st.executeQuery("select setval('certificate_seq', 1, false)");
-		st.executeQuery("select setval('education_seq', 1, false)");
-		st.executeQuery("select setval('language_seq', 1, false)");
-		st.executeQuery("select setval('practic_seq', 1, false)");
-		st.executeQuery("select setval('skill_seq', 1, false)");
 		st.executeQuery("select setval('course_seq', 1, false)");
 		System.out.println("Db cleared");
 	}
@@ -170,29 +157,8 @@ public class TestDataGenerator {
 
 	private static void createProfile(Connection c, Profile profile, ProfileConfig profileConfig) throws SQLException, IOException {
 		insertProfileData(c, profile, profileConfig);
-		insertSkills(c, profileConfig);
 		insertCourses(c);
 		insertFeedBack(c);
-	}
-
-	private static void insertSkills(Connection c, ProfileConfig profileConfig) throws SQLException {
-		PreparedStatement ps = c.prepareStatement("insert into skill values (nextval('skill_seq'),?,?,?)");
-		Map<String, Set<String>> map = createSkillMap();
-		for (Course course : profileConfig.courses) {
-			for (String key : map.keySet()) {
-				map.get(key).addAll(course.skills.get(key));
-			}
-		}
-		for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
-			if (!entry.getValue().isEmpty()) {
-				ps.setLong(1, idProfile);
-				ps.setString(2, entry.getKey());
-				ps.setString(3, StringUtils.join(entry.getValue().toArray(), ", "));
-				ps.addBatch();
-			}
-		}
-		ps.executeBatch();
-		ps.close();
 	}
 
 	private static void insertFeedBack(Connection c) throws SQLException{
@@ -321,19 +287,6 @@ public class TestDataGenerator {
 		idProfile++;
 	}
 
-	private static void insertSkillCategories(Connection c) throws SQLException {
-		int id = 1;
-		Map<String, Set<String>> categories = createSkillMap();
-		PreparedStatement ps = c.prepareStatement("insert into skill_category values (?,?)");
-		for (String category : categories.keySet()) {
-			ps.setLong(1, id++);
-			ps.setString(2, category);
-			ps.addBatch();
-		}
-		ps.executeBatch();
-		ps.close();
-	}
-
 	private static String generatePhone() {
 		StringBuilder phone = new StringBuilder("+38050");
 		for (int i = 0; i < 7; i++) {
@@ -373,20 +326,6 @@ public class TestDataGenerator {
 				"Three Java professional courses with developing one console application and two web applications: blog and resume (Links to demo are provided)",
 				new Course[] { Course.createAdvancedCourse(), Course.createBaseCourse(), Course.createCoreCourse() }, 2));
 		return res;
-	}
-
-	private static Map<String, Set<String>> createSkillMap() {
-		Map<String, Set<String>> skills = new LinkedHashMap<>();
-		skills.put("Languages", new LinkedHashSet<String>());
-		skills.put("DBMS", new LinkedHashSet<String>());
-		skills.put("Web", new LinkedHashSet<String>());
-		skills.put("Java", new LinkedHashSet<String>());
-		skills.put("IDE", new LinkedHashSet<String>());
-		skills.put("CVS", new LinkedHashSet<String>());
-		skills.put("Web Servers", new LinkedHashSet<String>());
-		skills.put("Build system", new LinkedHashSet<String>());
-		skills.put("Cloud", new LinkedHashSet<String>());
-		return skills;
 	}
 
 	/**
@@ -435,117 +374,32 @@ public class TestDataGenerator {
 		private final String github;
 		private final String responsibilities;
 		private final String demo;
-		private final Map<String, Set<String>> skills;
 
-		private Course(String name, String company, String github, String responsibilities, String demo, Map<String, Set<String>> skills) {
+		private Course(String name, String company, String github, String responsibilities, String demo) {
 			super();
 			this.name = name;
 			this.company = company;
 			this.github = github;
 			this.responsibilities = responsibilities;
 			this.demo = demo;
-			this.skills = skills;
 		}
 
 		static Course createCoreCourse() {
-			Map<String, Set<String>> skills = createSkillMap();
-			skills.get("Languages").add("Java");
-
-			skills.get("DBMS").add("Mysql");
-
-			skills.get("Java").add("Threads");
-			skills.get("Java").add("IO");
-			skills.get("Java").add("JAXB");
-			skills.get("Java").add("GSON");
-
-			skills.get("IDE").add("Eclipse for JEE Developer");
-
-			skills.get("CVS").add("Git");
-			skills.get("CVS").add("Github");
-
-			skills.get("Build system").add("Maven");
-
-			return new Course("Java Core Course", "DevStudy.net", null, "Developing the java console application which imports XML, JSON, Properties, CVS to Db via JDBC", null, skills);
+			return new Course("Java Core Course", "DevStudy.net", null, "Developing the java console application which imports XML, JSON, Properties, CVS to Db via JDBC", null);
 		}
 
 		static Course createBaseCourse() {
-			Map<String, Set<String>> skills = createSkillMap();
-			skills.get("Languages").add("Java");
-			skills.get("Languages").add("SQL");
-
-			skills.get("DBMS").add("Postgresql");
-
-			skills.get("Web").add("HTML");
-			skills.get("Web").add("CSS");
-			skills.get("Web").add("JS");
-			skills.get("Web").add("JS");
-			skills.get("Web").add("Foundation");
-			skills.get("Web").add("JQuery");
-
-			skills.get("Java").add("Servlets");
-			skills.get("Java").add("Logback");
-			skills.get("Java").add("JSP");
-			skills.get("Java").add("JSTL");
-			skills.get("Java").add("JDBC");
-			skills.get("Java").add("Apache Commons");
-			skills.get("Java").add("Google+ Social API");
-
-			skills.get("IDE").add("Eclipse for JEE Developer");
-
-			skills.get("CVS").add("Git");
-			skills.get("CVS").add("Github");
-
-			skills.get("Web Servers").add("Tomcat");
-
-			skills.get("Build system").add("Maven");
-
-			skills.get("Cloud").add("OpenShift");
 
 			return new Course("Java Base Course", "DevStudy.net", "https://github.com/TODO",
 					"Developing the web application 'blog' using free HTML template, downloaded from intenet. Populating database by test data and uploading web project to OpenShift free hosting",
-					"http://LINK_TO_DEMO_SITE", skills);
+					"http://LINK_TO_DEMO_SITE");
 		}
 
 		static Course createAdvancedCourse() {
-			Map<String, Set<String>> skills = createSkillMap();
-			skills.get("Languages").add("Java");
-			skills.get("Languages").add("SQL");
-			skills.get("Languages").add("PLSQL");
-
-			skills.get("DBMS").add("Postgresql");
-
-			skills.get("Web").add("HTML");
-			skills.get("Web").add("CSS");
-			skills.get("Web").add("JS");
-			skills.get("Web").add("JS");
-			skills.get("Web").add("Bootstrap");
-			skills.get("Web").add("JQuery");
-
-			skills.get("Java").add("Spring MVC");
-			skills.get("Java").add("Logback");
-			skills.get("Java").add("JSP");
-			skills.get("Java").add("JSTL");
-			skills.get("Java").add("Spring Data JPA");
-			skills.get("Java").add("Apache Commons");
-			skills.get("Java").add("Spring Security");
-			skills.get("Java").add("Hibernate JPA");
-			skills.get("Java").add("Facebook Social API");
-
-			skills.get("IDE").add("Eclipse for JEE Developer");
-
-			skills.get("CVS").add("Git");
-			skills.get("CVS").add("Github");
-
-			skills.get("Web Servers").add("Tomcat");
-			skills.get("Web Servers").add("Nginx");
-
-			skills.get("Build system").add("Maven");
-
-			skills.get("Cloud").add("AWS");
 
 			return new Course("Java Advanced Course", "DevStudy.net", "https://github.com/TODO",
 					"Developing the web application 'online-resume' using bootstrap HTML template, downloaded from intenet. Populating database by test data and uploading web project to AWS EC2 instance",
-					"http://LINK_TO_DEMO_SITE", skills);
+					"http://LINK_TO_DEMO_SITE");
 		}
 	}
 }

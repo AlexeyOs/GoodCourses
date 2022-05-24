@@ -71,7 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.deleteCookies("JSESSIONID");
 		http.rememberMe()
 			.rememberMeParameter("remember-me")
-			.key("resume-online")
+			.key("user-gc-online")
 			.tokenRepository(persistentTokenRepository());
 		http.csrf().disable();
 	}

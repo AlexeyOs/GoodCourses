@@ -27,15 +27,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	@Column(name = "last_name", nullable = false, length = 50)
 	private String lastName;
 
-	@Column(length = 2147483647)
-	private String objective;
-
-	@Column(name = "large_photo", length = 255)
-	private String largePhoto;
-
-	@Column(name = "small_photo", length = 255)
-	private String smallPhoto;
-
 	@Column(length = 100)
 	private String email;
 
@@ -99,14 +90,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public String getObjective() {
-		return this.objective;
-	}
-
-	public void setObjective(String objective) {
-		this.objective = objective;
-	}
-
 	public String getSummary() {
 		return this.summary;
 	}
@@ -121,22 +104,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	public void setUid(String uid) {
 		this.uid = uid;
-	}
-
-	public String getLargePhoto() {
-		return largePhoto;
-	}
-
-	public void setLargePhoto(String largePhoto) {
-		this.largePhoto = largePhoto;
-	}
-
-	public String getSmallPhoto() {
-		return smallPhoto;
-	}
-
-	public void setSmallPhoto(String smallPhoto) {
-		this.smallPhoto = smallPhoto;
 	}
 
 	public String getEmail() {
@@ -176,22 +143,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 		return firstName + " " + lastName;
 	}
 
-	@Transient
-	public String getProfilePhoto() {
-		if (largePhoto != null) {
-			return largePhoto;
-		} else {
-			return "/static/img/profile-placeholder.png";
-		}
-	}
-
-	public String updateProfilePhotos(String largePhoto, String smallPhoto) {
-		String oldLargeImage = this.largePhoto;
-		setLargePhoto(largePhoto);
-		setSmallPhoto(smallPhoto);
-		return oldLargeImage;
-	}
-
 	public String getInfo() {
 		return info;
 	}
@@ -210,13 +161,5 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	public void setContacts(Contacts contacts) {
 		this.contacts = contacts;
-	}
-
-	private void updateListSetProfile(List<? extends ProfileEntity> list) {
-		if (list != null) {
-			for (ProfileEntity entity : list) {
-				entity.setProfile(this);
-			}
-		}
 	}
 }

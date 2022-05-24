@@ -7,7 +7,6 @@
 			<resume:profile-main />
 		</div>
 		<div class="col-md-8 col-sm-6">
-			<resume:profile-objective/>
 			<resume:profile-cources/>
 		</div>
 	</div>
