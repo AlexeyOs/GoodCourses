@@ -6,8 +6,8 @@
     <div class="card-body">
         <form:form action="/edit/profile" method="post">
             <div class="form-group">
-                <label for="platform">Редактировать информацию о себе</label>
-                <input id="platform" name="platform" value="${profile.summary}" class="form-control">
+                <label for="summary">Редактировать информацию о себе</label>
+                <input id="summary" name="summary" value="${profile.summary}" class="form-control">
             </div>
             <div class="form-group" style="display:table;width:100%;">
                 <input type="submit" class="btn btn-primary" value="Сохранить">

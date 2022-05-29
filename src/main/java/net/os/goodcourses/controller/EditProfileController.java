@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import net.os.goodcourses.model.CurrentProfile;
 import net.os.goodcourses.service.EditProfileService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -29,6 +30,14 @@ public class EditProfileController {
 		Optional<Profile> profile = findProfileService.findById(currentProfile.getId());
 		profile.ifPresent(value -> model.addAttribute("profile", value));
 		return "edit/profile";
+	}
+
+	@RequestMapping(value = "/edit/profile", method = RequestMethod.POST)
+	public String updateProfileInfo(@RequestParam("summary") String summary,
+									@AuthenticationPrincipal CurrentProfile currentProfile) {
+		Optional<Profile> profile = findProfileService.findById(currentProfile.getId());
+		profile.ifPresent(value -> editProfileService.updateInfo(value, summary));
+		return "redirect:/" + currentProfile.getUsername();
 	}
 
 

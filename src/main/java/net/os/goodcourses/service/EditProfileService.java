@@ -13,4 +13,6 @@ public interface EditProfileService {
 
 	void updatePassword(Profile profile, String password);
 
+	void updateInfo(Profile profile, String summary);
+
 }
