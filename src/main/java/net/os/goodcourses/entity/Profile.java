@@ -1,5 +1,8 @@
 package net.os.goodcourses.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -7,9 +10,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
-/**
- *
- */
+@Getter
+@Setter
 @Entity
 @Table(name = "profile")
 public class Profile extends AbstractEntity<Long> implements Serializable {
@@ -66,89 +68,9 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	public Profile() {
 	}
 
-	public Long getId() {
-		return this.id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getFirstName() {
-		return this.firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return this.lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getSummary() {
-		return this.summary;
-	}
-
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
-
-	public String getUid() {
-		return this.uid;
-	}
-
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public boolean isCompleted() {
-		return completed;
-	}
-
-	public void setCompleted(boolean completed) {
-		this.completed = completed;
-	}
-
-	public Timestamp getCreated() {
-		return created;
-	}
-
-	public void setCreated(Timestamp created) {
-		this.created = created;
-	}
-
 	@Transient
 	public String getFullName() {
 		return firstName + " " + lastName;
-	}
-
-	public String getInfo() {
-		return info;
-	}
-
-	public void setInfo(String info) {
-		this.info = info;
 	}
 
 	// https://hibernate.atlassian.net/browse/HHH-7610
@@ -159,7 +81,4 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 		return contacts;
 	}
 
-	public void setContacts(Contacts contacts) {
-		this.contacts = contacts;
-	}
 }

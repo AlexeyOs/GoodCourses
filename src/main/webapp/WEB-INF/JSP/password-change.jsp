@@ -9,15 +9,13 @@
     }
 
     function checkAndSendPassword() {
-        var data;
-        data = new FormData();
         if ($('#password').val() !== $('#repeatPassword').val()) {
             //TODO хардкод, нужно убрать
             alert("Пароли не совпадают");
         } else {
-            var urlForSend = "/password-change";
-            var urlCurrentString = window.location.href;
-            var urlCurrent = new URL(urlCurrentString);
+            const urlForSend = "/password-change";
+            const urlCurrentString = window.location.href;
+            const urlCurrent = new URL(urlCurrentString);
             $.ajax({
                 type: "POST",
                 url: urlForSend,
@@ -27,7 +25,7 @@
                     'password': $('#password').val()
                 },
                 enctype: "multipart/form-data",
-                success: [function (data) {
+                success: [function () {
                     window.location.replace("/sign-in");
                 }],
                 error: [function (request) {

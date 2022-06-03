@@ -1,5 +1,8 @@
 package net.os.goodcourses.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +11,8 @@ import java.util.Objects;
 import javax.persistence.*;
 
 
-/**
- *
- */
+@Getter
+@Setter
 @Entity
 @Table(name = "course")
 public class Course extends AbstractFinishDateEntity<Long> implements Serializable {
@@ -58,78 +60,6 @@ public class Course extends AbstractFinishDateEntity<Long> implements Serializab
 	@OneToMany(mappedBy = "course", cascade = {CascadeType.ALL, CascadeType.PERSIST})
 	private List<FeedBack> feedbacks;
 
-	//profile create user
-
-	//profile admin user
-    public List<Profile> getProfiles() {
-        return profiles;
-    }
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public List<FeedBack> getFeedbacks() {
-		return feedbacks;
-	}
-
-	public void setFeedbacks(List<FeedBack> feedbacks) {
-		this.feedbacks = feedbacks;
-		//TODO возможно нужен будет метод для обновления отзывов
-		//updateListSetFeedBacks(this.feedbacks);
-	}
-
-	public String getPlatform() {
-		return platform;
-	}
-
-	public void setPlatform(String platform) {
-		this.platform = platform;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public String getSubjectOfStudy() {
-		return subjectOfStudy;
-	}
-
-	public void setSubjectOfStudy(String subjectOfStudy) {
-		this.subjectOfStudy = subjectOfStudy;
-	}
-
-	public String getLink() {
-		return link;
-	}
-
-	public void setLink(String link) {
-		this.link = link;
-	}
-
-	public boolean isVisible() {
-		return visible;
-	}
-
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 	@Override
 	public boolean equals(Object o) {

@@ -1,5 +1,8 @@
 package net.os.goodcourses.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -10,9 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-/**
- *
- */
+@Getter
+@Setter
 @Entity
 @Table(name = "profile_restore")
 public class ProfileRestore extends AbstractEntity<Long> implements Serializable {
@@ -32,27 +34,4 @@ public class ProfileRestore extends AbstractEntity<Long> implements Serializable
 	public ProfileRestore() {
 	}
 
-	public Long getId() {
-		return this.id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Profile getProfile() {
-		return profile;
-	}
-
-	public void setProfile(Profile profile) {
-		this.profile = profile;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
 }

@@ -1,10 +1,15 @@
 package net.os.goodcourses.entity;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "feedback")
 public class FeedBack extends AbstractEntity<Long> implements Serializable, ProfileEntity {
@@ -43,39 +48,4 @@ public class FeedBack extends AbstractEntity<Long> implements Serializable, Prof
         this.profile = profile;
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Timestamp getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Timestamp startDate) {
-        this.startDate = startDate;
-    }
-
-    public Timestamp getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Timestamp lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
 }

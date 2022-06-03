@@ -2,15 +2,15 @@ package net.os.goodcourses.model;
 
 import java.util.Collections;
 
+import lombok.Getter;
 import net.os.goodcourses.entity.Profile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import net.os.goodcourses.Constants;
 
-/**
- *
- */
+
+@Getter
 public class CurrentProfile extends User {
 	private static final long serialVersionUID = 3850489832510630519L;
 	private final Long id;
@@ -20,14 +20,6 @@ public class CurrentProfile extends User {
 		super(profile.getUid(), profile.getPassword(), true, true, true, true, Collections.singleton(new SimpleGrantedAuthority(Constants.USER)));
 		this.id = profile.getId();
 		this.fullName = profile.getFullName();
-	}
-
-	public Long getId() {
-		return id;
-	}
-	
-	public String getFullName() {
-		return fullName;
 	}
 
 	@Override

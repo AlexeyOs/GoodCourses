@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- *
- */
+
 public abstract class AbstractFilter implements Filter {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	@Override

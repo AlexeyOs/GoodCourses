@@ -4,9 +4,7 @@ import java.io.Serializable;
 
 import net.os.goodcourses.model.AbstractModel;
 
-/**
- *
- */
+
 public abstract class AbstractEntity<T> extends AbstractModel implements Serializable {
 	private static final long serialVersionUID = 8982713310863621560L;
 	

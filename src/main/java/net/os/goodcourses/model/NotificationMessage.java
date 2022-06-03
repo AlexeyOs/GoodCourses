@@ -1,5 +1,8 @@
 package net.os.goodcourses.model;
 
+import lombok.Data;
+
+@Data
 public class NotificationMessage {
 	private String destinationAddress;
 	private String destinationName;
@@ -14,28 +17,5 @@ public class NotificationMessage {
 		this.subject = subject;
 		this.content = content;
 	}
-	public String getSubject() {
-		return subject;
-	}
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
-	public String getDestinationAddress() {
-		return destinationAddress;
-	}
-	public void setDestinationAddress(String destinationAddress) {
-		this.destinationAddress = destinationAddress;
-	}
-	public String getDestinationName() {
-		return destinationName;
-	}
-	public void setDestinationName(String destinationName) {
-		this.destinationName = destinationName;
-	}
+
 }

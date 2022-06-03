@@ -33,10 +33,6 @@
 				<br/>
 				<a href="/password-reset" class="pull-right">Восстановить доступ</a>
 			</div>
-			<%--TODO скрыта кнопка FACEBOOK, пока нельзя авторизоваться--%>
-			<%--<div class="form-group text-center">--%>
-				<%--<a href="/fbLogin" class="btn btn-warning">Войти через Facebook</a>--%>
-			<%--</div>--%>
 		</form>
 	</div>
 </div>

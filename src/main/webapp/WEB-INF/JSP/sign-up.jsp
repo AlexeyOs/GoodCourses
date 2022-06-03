@@ -5,10 +5,7 @@
 
 <script>
     function checkUser() {
-        var data;
-        data = new FormData();
-        // data.append('file', $('#file')[0].files[0]);
-        var url = "/sign-up";
+        const url = "/sign-up";
         $.ajax({
             type: "POST",
             url: url,
@@ -20,7 +17,7 @@
                 'password':$('#password').val()
             },
             enctype:"multipart/form-data",
-            success: [function (data) {
+            success: [function () {
                 window.location.reload();
             }],
             error: [function (request) {
