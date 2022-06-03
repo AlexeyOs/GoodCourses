@@ -9,9 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import net.os.goodcourses.model.CurrentProfile;
 
-/**
- *
- */
+
 public final class SecurityUtil {
 
 	public static CurrentProfile getCurrentProfile() {

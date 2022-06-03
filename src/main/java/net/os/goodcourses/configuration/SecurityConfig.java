@@ -2,6 +2,7 @@ package net.os.goodcourses.configuration;
 
 import javax.sql.DataSource;
 
+import net.os.goodcourses.enums.RoleType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -55,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					"/edit",
 					"/edit/**",
 					"/remove")
-				.hasAuthority(Constants.USER)
+				.hasAuthority(RoleType.USER.toString())
 			.anyRequest().permitAll(); 
 		http.formLogin()
 			.loginPage("/sign-in")

@@ -23,9 +23,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 import net.os.goodcourses.component.impl.ApplicationListener;
 import net.os.goodcourses.filter.CourseFilter;
 
-/**
- *
- */
+
 public class CourseWebApplicationInitializer implements WebApplicationInitializer {
 
 	@Override

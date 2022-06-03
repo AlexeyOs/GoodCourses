@@ -5,9 +5,7 @@ import java.util.Random;
 import net.os.goodcourses.form.SignUpForm;
 import org.apache.commons.lang.WordUtils;
 
-/**
- *
- */
+
 public class DataUtil {
 
 	public static String normalizeName(String name) {

@@ -5,9 +5,7 @@ import javax.validation.ConstraintValidatorContext;
 
 import net.os.goodcourses.annotation.constraints.EnglishLanguage;
 
-/**
- *
- */
+
 public class EnglishLanguageConstraintValidator implements ConstraintValidator<EnglishLanguage, String>{
 	
 	private boolean withNumbers;

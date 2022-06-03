@@ -4,10 +4,9 @@ import java.util.Collections;
 
 import lombok.Getter;
 import net.os.goodcourses.entity.Profile;
+import net.os.goodcourses.enums.RoleType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-
-import net.os.goodcourses.Constants;
 
 
 @Getter
@@ -17,7 +16,14 @@ public class CurrentProfile extends User {
 	private final String fullName;
 
 	public CurrentProfile(Profile profile) {
-		super(profile.getUid(), profile.getPassword(), true, true, true, true, Collections.singleton(new SimpleGrantedAuthority(Constants.USER)));
+		super(profile.getUid(),
+				profile.getPassword(),
+				true,
+				true,
+				true,
+				true,
+				Collections.singleton(new SimpleGrantedAuthority(RoleType.USER.toString()))
+		);
 		this.id = profile.getId();
 		this.fullName = profile.getFullName();
 	}
