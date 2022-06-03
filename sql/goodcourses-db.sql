@@ -126,8 +126,6 @@ CREATE TABLE public.profile (
     city character varying(100),
     objective text,
     summary text,
-    large_photo character varying(255),
-    small_photo character varying(255),
     info text,
     password character varying(255) NOT NULL,
     completed boolean NOT NULL,
@@ -206,7 +204,7 @@ COPY public.persistent_logins (username, series, token, last_used) FROM stdin;
 -- Data for Name: profile; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
-COPY public.profile (id, uid, first_name, last_name, birth_day, phone, email, country, city, objective, summary, large_photo, small_photo, info, password, completed, created, skype, vkontakte, facebook, linkedin, github, stackoverflow) FROM stdin;
+COPY public.profile (id, uid, first_name, last_name, birth_day, phone, email, country, city, objective, summary, info, password, completed, created, skype, vkontakte, facebook, linkedin, github, stackoverflow) FROM stdin;
 \.
 
 
