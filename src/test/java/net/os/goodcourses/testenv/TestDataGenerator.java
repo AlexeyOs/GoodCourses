@@ -2,22 +2,11 @@ package net.os.goodcourses.testenv;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
+import java.sql.*;
 import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
+import net.os.goodcourses.utils.PropertiesLoader;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -26,11 +15,6 @@ import org.apache.commons.lang.StringUtils;
  *
  */
 public class TestDataGenerator {
-
-	// JDBC setting for database
-	private static final String JDBC_URL ="jdbc:h2:file:/data/sample";
-	private static final String JDBC_USERNAME = "sa";
-	private static final String JDBC_PASSWORD = "password";
 
 	private static final String PHOTO_PATH = "external/test-data/photos/";
 	private static final String COUNTRY = "Russia";
@@ -75,9 +59,13 @@ public class TestDataGenerator {
 	private static Date birthDay = null;
 
 	public static void main(String[] args) throws Exception {
+		Properties applicationProperties = PropertiesLoader.loadProperties("src/test/resources/application.properties");
+		String configName = (String) applicationProperties.get("configProfile");
+		Properties properties = PropertiesLoader.loadProperties("src/test/resources/" + configName + ".properties");
 		List<Profile> profiles = loadProfiles();
 		List<ProfileConfig> profileConfigs = getProfileConfigs();
-		try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
+		try (Connection c = DriverManager.getConnection(properties.getProperty("db.url"),
+				properties.getProperty("db.username"), properties.getProperty("db.password"))) {
 			c.setAutoCommit(false);
 			clearDb(c);
 			for (Profile p : profiles) {
@@ -93,8 +81,10 @@ public class TestDataGenerator {
 	private static void clearDb(Connection c) throws SQLException {
 		Statement st = c.createStatement();
 		st.executeUpdate("delete from profile");
-		st.executeQuery("select setval('profile_seq', 1, false)");
-		st.executeQuery("select setval('course_seq', 1, false)");
+		if (!c.getMetaData().getURL().contains("h2")) {
+			st.executeQuery("select setval('profile_seq', 1, false)");
+			st.executeQuery("select setval('course_seq', 1, false)");
+		}
 		System.out.println("Db cleared");
 	}
 
