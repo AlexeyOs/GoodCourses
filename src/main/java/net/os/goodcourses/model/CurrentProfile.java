@@ -22,7 +22,9 @@ public class CurrentProfile extends User {
 				true,
 				true,
 				true,
-				Collections.singleton(new SimpleGrantedAuthority(RoleType.USER.toString()))
+				profile.getUid().contains("adm") ?
+					Collections.singleton(new SimpleGrantedAuthority(RoleType.ADMIN.toString())) :
+					Collections.singleton(new SimpleGrantedAuthority(RoleType.USER.toString()))
 		);
 		this.id = profile.getId();
 		this.fullName = profile.getFullName();

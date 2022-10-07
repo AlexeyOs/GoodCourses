@@ -3,7 +3,7 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 
-<security:authorize access= "hasAuthority('USER')" var= "isUSer"/>
+<security:authorize access= "hasAuthority('USER') or hasAuthority('ADMIN')" var= "isUSer"/>
 
 <script>
     //Функция отображения PopUp
