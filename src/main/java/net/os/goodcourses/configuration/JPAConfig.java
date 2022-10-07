@@ -10,12 +10,16 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -42,7 +46,7 @@ public class JPAConfig {
      * By default, beans defined using Java config that have a public close or shutdown method are automatically enlisted with a destruction callback.
      */
 
-    @Bean(/*destroyMethod="close"*/)
+    @Bean(name = "dataSource"/*destroyMethod="close"*/)
     public DataSource dataSource() {
         BasicDataSource basicDataSource = new BasicDataSource();
         if (System.getenv("DATABASE_URL") != null) {
@@ -69,6 +73,15 @@ public class JPAConfig {
         basicDataSource.setInitialSize(Integer.parseInt(environment.getRequiredProperty("db.pool.initSize")));
         basicDataSource.setMaxTotal(Integer.parseInt(environment.getRequiredProperty("db.pool.maxSize")));
         return basicDataSource;
+    }
+    @Bean
+    public DataSourceInitializer dataSourceInitializer(@Qualifier("dataSource") final DataSource dataSource) {
+        ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
+        resourceDatabasePopulator.addScript(new ClassPathResource("/sql/structure.sql"));
+        DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
+        dataSourceInitializer.setDataSource(dataSource);
+        dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
+        return dataSourceInitializer;
     }
 
     private Properties hibernateProperties() {

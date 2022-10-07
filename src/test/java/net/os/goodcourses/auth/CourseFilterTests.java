@@ -13,6 +13,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestPropertySources;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,7 +36,10 @@ import static org.junit.Assert.assertNull;
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {EmailConfig.class, JPAConfig.class, MVCConfig.class, CourseWebApplicationInitializer.class, SecurityConfig.class, ServiceConfig.class})
-@TestPropertySource("classpath:/test.properties")
+@TestPropertySources({
+        @TestPropertySource("classpath:application.properties"),
+        @TestPropertySource("classpath:${configProfile}.properties")
+})
 public class CourseFilterTests {
 
     private FilterChainProxy filterChainProxy;

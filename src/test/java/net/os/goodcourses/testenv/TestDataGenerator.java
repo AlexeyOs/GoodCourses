@@ -28,9 +28,9 @@ import org.apache.commons.lang.StringUtils;
 public class TestDataGenerator {
 
 	// JDBC setting for database
-	private static final String JDBC_URL ="jdbc:postgresql://127.0.0.1:5432/goodcourses";
-	private static final String JDBC_USERNAME = "goodcourses";
-	private static final String JDBC_PASSWORD = "1234";
+	private static final String JDBC_URL ="jdbc:h2:file:/data/sample";
+	private static final String JDBC_USERNAME = "sa";
+	private static final String JDBC_PASSWORD = "password";
 
 	private static final String PHOTO_PATH = "external/test-data/photos/";
 	private static final String COUNTRY = "Russia";
@@ -126,12 +126,13 @@ public class TestDataGenerator {
 	}
 
 	private static void insertFeedBack(Connection c) throws SQLException{
-		PreparedStatement ps = c.prepareStatement("insert into feedback values (nextval('feedback_seq'),?,?,?,?,?)");
+		PreparedStatement ps = c.prepareStatement("insert into feedback values (nextval('feedback_seq'),?,?,?,?,?,?)");
 		ps.setLong(1, idProfile);
 		ps.setLong(2, 1);
 		ps.setString(3,"Good course");
 		ps.setInt(4,4);
 		ps.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+		ps.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
 		ps.executeUpdate();
 		ps.close();
 	}
