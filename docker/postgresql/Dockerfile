@@ -5,3 +5,4 @@ ENV POSTGRES_PASSWORD 1234
 ENV POSTGRES_DB goodcourses
 ENV POSTGRES_DBNAME: goodcourses
 
+ADD ./src/main/resources/sql/structure.sql /docker-entrypoint-initdb.d
