@@ -13,7 +13,7 @@ env:
 script:
 - mvn clean install -DskipTests -Pdocker
 - docker-compose up --build -d
-- mvn exec:java -Dexec.mainClass="net.os.goodcourses.testenv.TestDataGenerator" -Dexec.classpathScope="test"
+- mvn exec:java -Dexec.mainClass="net.os.goodcourses.testenv.TestDataGenerator" -Dexec.classpathScope="test" -X
 - mvn test
 
 # после выполнения сборки запустить скрипт, который будет собирать статистику по JaCoCo
