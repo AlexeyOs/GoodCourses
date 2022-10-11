@@ -22,6 +22,7 @@ public class CurrentProfile extends User {
 				true,
 				true,
 				true,
+				//TODO убрать хардкод, сделать считываение роли из колонки
 				profile.getUid().contains("adm") ?
 					Collections.singleton(new SimpleGrantedAuthority(RoleType.ADMIN.toString())) :
 					Collections.singleton(new SimpleGrantedAuthority(RoleType.USER.toString()))

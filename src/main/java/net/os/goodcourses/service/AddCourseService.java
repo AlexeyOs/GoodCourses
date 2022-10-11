@@ -5,5 +5,6 @@ public interface AddCourseService {
     void createNewCourse(String platform,
                          String author,
                          String subjectOfStudy,
-                         String link);
+                         String link,
+                         String description);
 }

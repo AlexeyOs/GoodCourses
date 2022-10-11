@@ -21,6 +21,9 @@
             <div class="form-group">
                 <label for="link">Сслыка на курс</label> <input id="link" name="link" class="form-control" required>
             </div>
+            <div class="form-group">
+                <label for="description">Краткое описание курса</label> <input id="description" name="description" class="form-control" required>
+            </div>
             <div class="form-group" style="display:table;width:100%;">
                 <input type="submit" class="btn btn-primary" value="Сохранить">
             </div>

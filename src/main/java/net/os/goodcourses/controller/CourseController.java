@@ -1,15 +1,14 @@
 package net.os.goodcourses.controller;
 
+import lombok.AllArgsConstructor;
 import net.os.goodcourses.Constants;
 import net.os.goodcourses.entity.Course;
 import net.os.goodcourses.entity.FeedBack;
 import net.os.goodcourses.entity.Profile;
-import net.os.goodcourses.repository.storage.ProfileRepository;
 import net.os.goodcourses.service.AddCourseService;
 import net.os.goodcourses.service.FindCourseService;
 import net.os.goodcourses.service.FindProfileService;
 import net.os.goodcourses.util.SecurityUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,20 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 @Controller
 public class CourseController {
 
-    @Autowired
-    private AddCourseService addCourseService;
-
-    @Autowired
-    private FindCourseService findCourseService;
-
-    @Autowired
-    private FindProfileService findProfileService;
-
-    @Autowired
-    private ProfileRepository profileRepository;
+    private final AddCourseService addCourseService;
+    private final FindCourseService findCourseService;
+    private final FindProfileService findProfileService;
 
     @RequestMapping(value = "/add/course", method = RequestMethod.GET)
     public String signUp() {
@@ -48,12 +40,10 @@ public class CourseController {
                                     @RequestParam("author") String author,
                                     @RequestParam("subjectOfStudy") String subjectOfStudy,
                                     @RequestParam("link") String link,
+                                    @RequestParam("description") String description,
                                     Model model) {
-        //TODO добавить пользователя в сущность курса
-//        long uid = SecurityUtil.getCurrentIdProfile();
-//        Profile profile = profileRepository.findOne(uid);
         model.addAttribute("alertMsg", "Данные успешно добавлены");
-        addCourseService.createNewCourse(platform, author, subjectOfStudy, link);
+        addCourseService.createNewCourse(platform, author, subjectOfStudy, link, description);
         return "redirect:/courses";
     }
 

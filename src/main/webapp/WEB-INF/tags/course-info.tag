@@ -23,6 +23,10 @@
 					<td>Сслыка на курс: </td>
 					<td><a target="_blank" href="${course.link}">${course.link}</a></td>
 				</tr>
+				<tr>
+					<td>Описание : </td>
+					<td>${course.description}</td>
+				</tr>
 				</tbody>
 			</table>
 		</div>
