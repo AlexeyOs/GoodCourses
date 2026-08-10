@@ -72,7 +72,7 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	@Column(insertable = false)
 	private Timestamp created;
 
-	@OneToMany(mappedBy = "profile", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("id ASC")
 	private List<Skill> skills;
 

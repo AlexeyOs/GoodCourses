@@ -363,6 +363,15 @@ COPY public.skill (id, id_profile, category, value) FROM stdin;
 --
 
 COPY public.skill_category (id, category) FROM stdin;
+1	Languages
+2	DBMS
+3	Web
+4	Java
+5	IDE
+6	CVS
+7	Web Servers
+8	Build system
+9	Cloud
 \.
 
 

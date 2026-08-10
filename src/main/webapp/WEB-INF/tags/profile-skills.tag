@@ -3,9 +3,23 @@
 
 <div class="card">
 	<div class="card-header">
-		<i class="fa fa-code"></i> Technical Skills <a class="edit-block" href="/edit/skills">Edit</a>
+		<i class="fa fa-code"></i> Технические навыки
+		<c:if test="${canEdit}">
+			<a class="btn btn-primary btn-sm pull-right" href="${pageContext.request.contextPath}/edit/skills">
+				<i class="fa fa-pencil"></i> Редактировать навыки
+			</a>
+		</c:if>
 	</div>
 	<div class="card-body">
+		<c:if test="${empty profile.skills}">
+			<p class="text-muted">Навыки пока не добавлены.</p>
+			<c:if test="${canEdit}">
+				<a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/edit/skills">
+					<i class="fa fa-plus"></i> Добавить первый навык
+				</a>
+			</c:if>
+		</c:if>
+		<c:if test="${not empty profile.skills}">
 		<table class="table table-striped table-bordered">
 			<tbody>
 			<tr>
@@ -20,5 +34,6 @@
 			</c:forEach>
 			</tbody>
 		</table>
+		</c:if>
 	</div>
 </div>

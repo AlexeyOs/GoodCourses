@@ -1,13 +1,17 @@
 package net.os.goodcourses.service.impl;
 
 import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import net.os.goodcourses.exception.CantCompleteClientRequestException;
 import net.os.goodcourses.repository.storage.ProfileRepository;
 import net.os.goodcourses.repository.storage.SkillCategoryRepository;
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,15 +107,44 @@ public class EditProfileServiceImpl implements EditProfileService {
 	@Override
 	@Transactional
 	public void updateSkills(long idProfile, List<Skill> updatedData) {
-		Optional<Profile> profile = profileRepository.findById(idProfile);
-		if (CollectionUtils.isEqualCollection(updatedData, profile.get().getSkills())) {
-			LOGGER.debug("Profile skills: nothing to update");
-			return;
-		} else {
-			profile.get().setSkills(updatedData);
-			profileRepository.save(profile.get());
-			registerUpdateIndexProfileSkillsIfTransactionSuccess(idProfile, updatedData);
+		Profile profile = profileRepository.findById(idProfile)
+				.orElseThrow(() -> new CantCompleteClientRequestException("Profile not found: " + idProfile));
+		Map<Long, Skill> existingById = new HashMap<>();
+		for (Skill skill : profile.getSkills()) {
+			existingById.put(skill.getId(), skill);
 		}
+		Set<String> allowedCategories = new HashSet<>();
+		for (SkillCategory category : listSkillCategories()) {
+			allowedCategories.add(category.getCategory());
+		}
+
+		List<Skill> reconciled = new ArrayList<>();
+		Set<Long> submittedIds = new HashSet<>();
+		for (Skill submitted : updatedData) {
+			if (!allowedCategories.contains(submitted.getCategory())) {
+				throw new CantCompleteClientRequestException("Unknown skill category: " + submitted.getCategory());
+			}
+			Skill skill;
+			if (submitted.getId() == null) {
+				skill = new Skill();
+			} else {
+				skill = existingById.get(submitted.getId());
+				if (skill == null || !submittedIds.add(submitted.getId())) {
+					throw new CantCompleteClientRequestException("Invalid skill id: " + submitted.getId());
+				}
+			}
+			skill.setCategory(submitted.getCategory().trim());
+			skill.setValue(submitted.getValue().trim());
+			reconciled.add(skill);
+		}
+
+		profile.getSkills().clear();
+		for (Skill skill : reconciled) {
+			skill.setProfile(profile);
+			profile.getSkills().add(skill);
+		}
+		profileRepository.save(profile);
+		registerUpdateIndexProfileSkillsIfTransactionSuccess(idProfile, new ArrayList<>(profile.getSkills()));
 	}
 
 	private void registerUpdateIndexProfileSkillsIfTransactionSuccess(final long idProfile, final List<Skill> updatedData) {

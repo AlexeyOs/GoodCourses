@@ -5,6 +5,7 @@
 
 <%@ attribute name="index" required="true" type="java.lang.Object"%>
 <%@ attribute name="skill" required="false" type="net.os.goodcourses.entity.Skill"%>
+<%@ attribute name="showErrors" required="false" type="java.lang.Boolean"%>
 
 <div id="ui-item-${index }" class="row ui-item skill-item">
 	<div class="col-xs-5 col-sm-4 col-md-2 form-group">
@@ -16,7 +17,7 @@
 		</select>
 	</div>
 	<div class="col-xs-7 col-sm-8 col-md-10 value-container">
-		<button type="button" class="close" onclick="$('#ui-item-${index }').remove();">
+		<button type="button" class="close js-remove-skill" aria-label="Удалить навык">
 			<span aria-hidden="true">&times;</span>
 		</button>
 		<textarea name="items[${index }].value" class="form-control pull-right" required="required" rows="2">${skill.value }</textarea>
@@ -24,6 +25,9 @@
 </div>
 <div class="row skill-delim" >
 	<div class="col-xs-offset-5 col-sm-offset-4 col-md-offset-2 col-xs-7 col-sm-8 col-md-10" style="padding-left:0px;">
-		<form:errors path="items[${index }].value" cssClass="alert alert-danger" element="div" />
+		<c:if test="${showErrors ne false}">
+			<form:errors path="items[${index }].value" cssClass="alert alert-danger" element="div" />
+			<form:errors path="items[${index }].category" cssClass="alert alert-danger" element="div" />
+		</c:if>
 	</div>
 </div>
