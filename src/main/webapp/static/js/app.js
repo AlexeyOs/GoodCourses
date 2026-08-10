@@ -36,3 +36,33 @@ var resume = {
         });
     }
 };
+
+resume.skills = {
+    reindex : function() {
+        $('#ui-block-container .skill-item').each(function(index) {
+            var item = $(this);
+            item.attr('id', 'ui-item-' + index);
+            item.find('[name]').each(function() {
+                this.name = this.name.replace(/items\[\d+\]/, 'items[' + index + ']');
+            });
+        });
+    },
+
+    add : function() {
+        var index = $('#ui-block-container .skill-item').length;
+        var template = $('#skill-row-template').html().replace(/__index__/g, index);
+        $('#ui-block-container').append(template);
+    }
+};
+
+$(function() {
+    $(document).on('click', '.js-add-skill', function() {
+        resume.skills.add();
+    });
+    $(document).on('click', '.js-remove-skill', function() {
+        var item = $(this).closest('.skill-item');
+        item.next('.skill-delim').remove();
+        item.remove();
+        resume.skills.reindex();
+    });
+});
