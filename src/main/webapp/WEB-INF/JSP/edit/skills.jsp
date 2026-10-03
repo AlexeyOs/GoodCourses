@@ -11,7 +11,7 @@
 			<div class="col-xs-5 col-sm-4 col-md-2 text-center"><strong>Категория</strong></div>
 			<div class="col-xs-7 col-sm-8 col-md-10 text-center"><strong>Фреймворк и технология</strong></div>
 		</div>
-		<form:form action="/edit/skills" method="post" commandName="skillForm">
+		<form:form action="/edit/skills" method="post" modelAttribute="skillForm">
 			<div id="ui-block-container">
 				<c:forEach var="skill" items="${skillForm.items }" varStatus="status">
 					<resume:edit-skill-block index="${status.index}" skill="${skill }" />
@@ -19,7 +19,7 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<a href="javascript:void(0);">+ Добавить навык</a>
+					<button type="button" class="btn btn-link js-add-skill">+ Добавить навык</button>
 				</div>
 			</div>
 			<hr />
@@ -29,5 +29,8 @@
 				</div>
 			</div>
 		</form:form>
+		<script type="text/template" id="skill-row-template">
+			<resume:edit-skill-block index="__index__" showErrors="${false}" />
+		</script>
 	</div>
 </div>

@@ -45,8 +45,7 @@ public class EditProfileController {
 			return gotoSkillsJSP(model);
 		}
 		editProfileService.updateSkills(SecurityUtil.getCurrentIdProfile(), form.getItems());
-		//TODO delete hardcode
-		return "redirect:/mike-ross";
+		return "redirect:/my-profile";
 	}
 
 	private String gotoSkillsJSP(Model model) {
