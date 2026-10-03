@@ -1,13 +1,17 @@
 package net.os.goodcourses.service.impl;
 
 import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import net.os.goodcourses.exception.CantCompleteClientRequestException;
 import net.os.goodcourses.repository.storage.ProfileRepository;
 import net.os.goodcourses.repository.storage.SkillCategoryRepository;
 import org.apache.commons.collections.CollectionUtils;
+import net.os.goodcourses.repository.storage.CourseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.entity.Skill;
 import net.os.goodcourses.entity.SkillCategory;
+import net.os.goodcourses.entity.Course;
 import net.os.goodcourses.form.SignUpForm;
 import net.os.goodcourses.service.EditProfileService;
 import net.os.goodcourses.util.DataUtil;
@@ -34,6 +39,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Autowired
 	private SkillCategoryRepository skillCategoryRepository;
+
+	@Autowired
+	private CourseRepository courseRepository;
 
 	@Value("${generate.uid.suffix.length}")
 	private int generateUidSuffixLength;
@@ -96,8 +104,40 @@ public class EditProfileServiceImpl implements EditProfileService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public List<Course> listCourses(long idProfile) {
+		return new ArrayList<>(profileRepository.findById(idProfile)
+				.orElseThrow(() -> new CantCompleteClientRequestException("Profile not found"))
+				.getCourses());
+	}
+
+	@Override
 	public List<SkillCategory> listSkillCategories() {
 		return skillCategoryRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
+
+	@Override
+	public List<Course> listAvailableCourses() {
+		return courseRepository.findByVisibleOrderByIdAsc(true);
+	}
+
+	@Override
+	@Transactional
+	public void updateCourses(long idProfile, List<Long> courseIds) {
+		Profile profile = profileRepository.findById(idProfile)
+				.orElseThrow(() -> new CantCompleteClientRequestException("Profile not found"));
+		Set<Long> requestedIds = new HashSet<>(courseIds == null ? Collections.emptyList() : courseIds);
+		List<Course> selectedCourses = new ArrayList<>();
+		for (Course course : listAvailableCourses()) {
+			if (requestedIds.remove(course.getId())) {
+				selectedCourses.add(course);
+			}
+		}
+		if (!requestedIds.isEmpty()) {
+			throw new CantCompleteClientRequestException("Unknown or unavailable course");
+		}
+		profile.setCourses(selectedCourses);
+		profileRepository.save(profile);
 	}
 
 	@Override

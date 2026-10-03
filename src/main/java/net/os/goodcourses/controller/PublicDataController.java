@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import net.os.goodcourses.Constants;
 import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.service.FindProfileService;
+import net.os.goodcourses.model.CurrentProfile;
+import net.os.goodcourses.util.SecurityUtil;
 
 @Controller
 public class PublicDataController {
@@ -26,6 +28,9 @@ public class PublicDataController {
 		Optional<Profile> profile = findProfileService.findByUid(uid);
 		if (profile.isPresent()) {
 			model.addAttribute("profile", profile.get());
+			CurrentProfile currentProfile = SecurityUtil.getCurrentProfile();
+			model.addAttribute("canEdit", currentProfile != null
+					&& currentProfile.getId().equals(profile.get().getId()));
 			return "profile";
 		} else {
 			//TODO нужно протестировать

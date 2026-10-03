@@ -88,6 +88,10 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
         return courses;
     }
 
+	public void setCourses(List<Course> courses) {
+		this.courses = courses;
+	}
+
 	@Embedded
 	private Contacts contacts;
 

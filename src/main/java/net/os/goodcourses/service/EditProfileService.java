@@ -18,7 +18,13 @@ public interface EditProfileService {
 	
 	List<Skill> listSkills(long idProfile);
 
+	List<net.os.goodcourses.entity.Course> listCourses(long idProfile);
+
 	List<SkillCategory> listSkillCategories();
 	
 	void updateSkills(long idProfile, List<Skill> skills);
+
+	List<net.os.goodcourses.entity.Course> listAvailableCourses();
+
+	void updateCourses(long idProfile, List<Long> courseIds);
 }

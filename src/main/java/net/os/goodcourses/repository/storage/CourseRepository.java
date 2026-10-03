@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Optional;
+import java.util.List;
 
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
@@ -20,5 +21,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Course findBySubjectOfStudy(String subjectOfStudy);
 
     Page<Course> findByVisible(boolean visible, Pageable pageable);
+
+    List<Course> findByVisibleOrderByIdAsc(boolean visible);
 
 }
