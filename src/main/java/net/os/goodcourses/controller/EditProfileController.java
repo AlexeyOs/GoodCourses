@@ -17,6 +17,10 @@ import net.os.goodcourses.service.EditProfileService;
 import net.os.goodcourses.util.SecurityUtil;
 
 import java.util.Optional;
+import java.util.List;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class EditProfileController {
@@ -47,6 +51,21 @@ public class EditProfileController {
 	private String gotoSkillsJSP(Model model) {
 		model.addAttribute("skillCategories", editProfileService.listSkillCategories());
 		return "edit/skills";
+	}
+
+	@RequestMapping(value = "/edit/courses", method = RequestMethod.GET)
+	public String getEditCourses(Model model) {
+		long profileId = SecurityUtil.getCurrentIdProfile();
+		model.addAttribute("courses", editProfileService.listAvailableCourses());
+		model.addAttribute("selectedCourseIds", new HashSet<>(editProfileService.listCourses(profileId)
+				.stream().map(course -> course.getId()).collect(Collectors.toList())));
+		return "edit/courses";
+	}
+
+	@RequestMapping(value = "/edit/courses", method = RequestMethod.POST)
+	public String saveEditCourses(@RequestParam(value = "courseIds", required = false) List<Long> courseIds) {
+		editProfileService.updateCourses(SecurityUtil.getCurrentIdProfile(), courseIds);
+		return "redirect:/my-profile";
 	}
 
 	@RequestMapping(value = "/my-profile")
