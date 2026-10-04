@@ -142,6 +142,24 @@ public class EditProfileServiceImpl implements EditProfileService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public String getAboutMe(long idProfile) {
+		return profileRepository.findById(idProfile)
+				.orElseThrow(() -> new CantCompleteClientRequestException("Profile not found"))
+				.getAboutMe();
+	}
+
+	@Override
+	@Transactional
+	public void updateAboutMe(long idProfile, String aboutMe) {
+		Profile profile = profileRepository.findById(idProfile)
+				.orElseThrow(() -> new CantCompleteClientRequestException("Profile not found"));
+		String normalizedAboutMe = aboutMe == null ? null : aboutMe.trim();
+		profile.setAboutMe(normalizedAboutMe == null || normalizedAboutMe.isEmpty() ? null : normalizedAboutMe);
+		profileRepository.save(profile);
+	}
+
+	@Override
 	@Transactional
 	public void updateSkills(long idProfile, List<Skill> updatedData) {
 		Profile profile = profileRepository.findById(idProfile)

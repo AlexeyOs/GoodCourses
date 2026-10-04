@@ -39,8 +39,8 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	@Column(name = "last_name", nullable = false, length = 50)
 	private String lastName;
 
-	@Column(length = 2147483647)
-	private String objective;
+	@Column(name = "objective", length = 2147483647)
+	private String aboutMe;
 
 	@Column(name = "large_photo", length = 255)
 	private String largePhoto;
@@ -146,12 +146,12 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public String getObjective() {
-		return this.objective;
+	public String getAboutMe() {
+		return this.aboutMe;
 	}
 
-	public void setObjective(String objective) {
-		this.objective = objective;
+	public void setAboutMe(String aboutMe) {
+		this.aboutMe = aboutMe;
 	}
 
 	public String getSummary() {
