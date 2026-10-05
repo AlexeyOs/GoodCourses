@@ -27,4 +27,8 @@ public interface EditProfileService {
 	List<net.os.goodcourses.entity.Course> listAvailableCourses();
 
 	void updateCourses(long idProfile, List<Long> courseIds);
+
+	String getAboutMe(long idProfile);
+
+	void updateAboutMe(long idProfile, String aboutMe);
 }

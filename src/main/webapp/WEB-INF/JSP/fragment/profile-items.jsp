@@ -12,11 +12,10 @@
 				<h4 class="media-heading">
 					<a href="/${profile.uid }">${profile.id}) ${profile.fullName }, ${profile.age }</a>
 				</h4>
-				<strong>${profile.objective }</strong>
+				<c:if test="${not empty profile.aboutMe}">
+					<p><c:out value="${profile.aboutMe}" /></p>
+				</c:if>
 				<p>${profile.city },${profile.country }</p>
-				<blockquote>
-					<small>${profile.summary }</small>
-				</blockquote>
 			</div>
 		</div>
 	</div>

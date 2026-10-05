@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import net.os.goodcourses.form.SkillForm;
+import net.os.goodcourses.form.AboutMeForm;
 import net.os.goodcourses.model.CurrentProfile;
 import net.os.goodcourses.service.EditProfileService;
 import net.os.goodcourses.util.SecurityUtil;
@@ -51,6 +52,23 @@ public class EditProfileController {
 	private String gotoSkillsJSP(Model model) {
 		model.addAttribute("skillCategories", editProfileService.listSkillCategories());
 		return "edit/skills";
+	}
+
+	@RequestMapping(value = "/edit/about", method = RequestMethod.GET)
+	public String getEditAbout(Model model) {
+		model.addAttribute("aboutMeForm",
+				new AboutMeForm(editProfileService.getAboutMe(SecurityUtil.getCurrentIdProfile())));
+		return "edit/about";
+	}
+
+	@RequestMapping(value = "/edit/about", method = RequestMethod.POST)
+	public String saveEditAbout(@Valid @ModelAttribute("aboutMeForm") AboutMeForm form,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "edit/about";
+		}
+		editProfileService.updateAboutMe(SecurityUtil.getCurrentIdProfile(), form.getAboutMe());
+		return "redirect:/my-profile";
 	}
 
 	@RequestMapping(value = "/edit/courses", method = RequestMethod.GET)
