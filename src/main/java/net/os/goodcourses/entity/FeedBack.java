@@ -2,11 +2,16 @@ package net.os.goodcourses.entity;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 @Entity
-@Table(name = "feedback")
+@Table(name = "feedback", uniqueConstraints = @UniqueConstraint(
+        name = "uq_feedback_course_profile",
+        columnNames = {"course_id", "profile_id"}))
 public class FeedBack extends AbstractEntity<Long> implements Serializable, ProfileEntity {
     private static final long serialVersionUID = 1L;
 
@@ -25,6 +30,8 @@ public class FeedBack extends AbstractEntity<Long> implements Serializable, Prof
     private Course course;
 
     @Column(nullable = false, length = 2147483647)
+    @NotBlank
+    @Size(max = 2000)
     private String description;
 
     @Column(name = "start_date", nullable = false)

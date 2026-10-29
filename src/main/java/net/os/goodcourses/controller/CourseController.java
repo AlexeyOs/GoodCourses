@@ -4,6 +4,7 @@ import net.os.goodcourses.Constants;
 import net.os.goodcourses.entity.Course;
 import net.os.goodcourses.entity.FeedBack;
 import net.os.goodcourses.entity.Profile;
+import net.os.goodcourses.form.FeedbackForm;
 import net.os.goodcourses.repository.storage.ProfileRepository;
 import net.os.goodcourses.service.AddCourseService;
 import net.os.goodcourses.service.FindCourseService;
@@ -66,6 +67,9 @@ public class CourseController {
             //TODO настройка отображения формы для добавления отзыва
             //TODO в зависимости от того добавлял пользователь ранне отзыв к данному курсу или нет
             if (SecurityUtil.getCurrentIdProfile() != null) {
+                if (!model.containsAttribute("feedbackForm")) {
+                    model.addAttribute("feedbackForm", new FeedbackForm());
+                }
                 long idProfile = SecurityUtil.getCurrentIdProfile();
                 Optional<Profile> profile = findProfileService.findById(idProfile);
                 boolean editFeedback = false;

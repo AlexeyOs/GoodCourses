@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AddCourseServiceImpl implements AddCourseService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AddFeedBackServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddCourseServiceImpl.class);
 
     @Autowired
     CourseRepository courseRepository;

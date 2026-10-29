@@ -54,6 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					"/add/**",
 					"/edit",
 					"/edit/**",
+					"/my-reviews",
+					"/my-reviews/**",
 					"/remove")
 				.hasAuthority(Constants.USER)
 			.anyRequest().permitAll(); 
