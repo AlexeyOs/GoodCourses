@@ -41,6 +41,9 @@
                 </div>
             </c:if>
             <div class="b-popup-content">
+                <a href="${pageContext.request.contextPath}/my-reviews">Мои отзывы</a>
+            </div>
+            <div class="b-popup-content">
                 <a href="/sign-out" >Выйти</a>
             </div>
             <div class="b-popup-content">

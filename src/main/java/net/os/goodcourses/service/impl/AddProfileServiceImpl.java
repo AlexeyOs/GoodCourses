@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AddProfileServiceImpl implements AddProfileService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AddFeedBackServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AddProfileServiceImpl.class);
 
     @Autowired
     private ProfileRepository profileRepository;

@@ -1,15 +1,20 @@
 package net.os.goodcourses.repository.storage;
 
-import net.os.goodcourses.entity.Course;
 import net.os.goodcourses.entity.FeedBack;
-import net.os.goodcourses.entity.Profile;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FeedBackRepository extends PagingAndSortingRepository<FeedBack, Long> {
-    FeedBack findById(long id);
+import java.util.Optional;
 
-    FeedBack findByProfile(Profile profile);
+public interface FeedBackRepository extends JpaRepository<FeedBack, Long> {
 
-    FeedBack findByCourse(Course course);
+    @EntityGraph(attributePaths = "course")
+    Page<FeedBack> findAllByProfileIdOrderByStartDateDesc(long profileId, Pageable pageable);
 
+    @EntityGraph(attributePaths = "course")
+    Optional<FeedBack> findByIdAndProfileId(long feedbackId, long profileId);
+
+    boolean existsByCourseIdAndProfileId(long courseId, long profileId);
 }

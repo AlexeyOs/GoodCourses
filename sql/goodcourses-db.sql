@@ -116,10 +116,11 @@ CREATE TABLE public.feedback (
     id bigint NOT NULL,
     course_id bigint NOT NULL,
     profile_id bigint NOT NULL,
-    description text,
+    description text NOT NULL,
     rating integer,
-    start_date timestamp without time zone,
-    last_update timestamp without time zone
+    start_date timestamp without time zone NOT NULL,
+    last_update timestamp without time zone,
+    CONSTRAINT uq_feedback_course_profile UNIQUE (course_id, profile_id)
 );
 
 

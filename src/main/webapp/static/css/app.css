@@ -127,3 +127,40 @@
     height: 110px;
     width: 110px;
 }
+
+.resume .my-reviews-empty {
+    padding: 30px 15px;
+}
+
+.resume .my-review-item {
+    margin-bottom: 15px;
+}
+
+.resume .my-review-text {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+.resume .my-review-actions .btn,
+.resume .my-review-actions form {
+    margin-right: 6px;
+    margin-bottom: 6px;
+}
+
+.resume .my-reviews-pagination {
+    margin-top: 20px;
+}
+
+.resume .edit-feedback {
+    max-width: 800px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.resume .edit-feedback-actions .btn {
+    margin-right: 6px;
+}
