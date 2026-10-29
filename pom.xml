@@ -223,6 +223,12 @@
 			<version>${springVersion}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<version>${springVersion}</version>
+			<scope>test</scope>
+		</dependency>
 		<!--spring for DB-->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
