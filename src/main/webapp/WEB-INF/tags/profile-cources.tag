@@ -7,7 +7,7 @@
 		<i class="fa fa-book"></i> Courses
 		<c:if test="${canEdit}">
 			<a class="btn btn-primary btn-sm pull-right" href="${pageContext.request.contextPath}/edit/courses">
-				<i class="fa fa-pencil"></i> Редактировать курсы
+				<i class="fa fa-pencil"></i> Редактировать
 			</a>
 		</c:if>
 	</div>

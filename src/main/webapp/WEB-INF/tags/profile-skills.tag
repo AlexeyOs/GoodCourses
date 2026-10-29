@@ -6,7 +6,7 @@
 		<i class="fa fa-code"></i> Технические навыки
 		<c:if test="${canEdit}">
 			<a class="btn btn-primary btn-sm pull-right" href="${pageContext.request.contextPath}/edit/skills">
-				<i class="fa fa-pencil"></i> Редактировать навыки
+				<i class="fa fa-pencil"></i> Редактировать
 			</a>
 		</c:if>
 	</div>
