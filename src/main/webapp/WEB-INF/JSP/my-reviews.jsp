@@ -28,6 +28,13 @@
                                 <dd class="col-sm-9"><c:out value="${review.course.platform}" /></dd>
                                 <dt class="col-sm-3">Автор курса</dt>
                                 <dd class="col-sm-9"><c:out value="${review.course.author}" /></dd>
+                                <dt class="col-sm-3">Оценка</dt>
+                                <dd class="col-sm-9">
+                                    <c:choose>
+                                        <c:when test="${not empty review.rating}"><c:out value="${review.rating}" /> из 5</c:when>
+                                        <c:otherwise>Без оценки</c:otherwise>
+                                    </c:choose>
+                                </dd>
                                 <dt class="col-sm-3">Дата создания</dt>
                                 <dd class="col-sm-9"><fmt:formatDate value="${review.startDate}" pattern="dd.MM.yyyy HH:mm" /></dd>
                                 <c:if test="${not empty review.lastUpdate}">

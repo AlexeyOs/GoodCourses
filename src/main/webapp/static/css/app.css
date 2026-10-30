@@ -164,3 +164,8 @@
 .resume .edit-feedback-actions .btn {
     margin-right: 6px;
 }
+
+.resume .course-feedback-text {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}

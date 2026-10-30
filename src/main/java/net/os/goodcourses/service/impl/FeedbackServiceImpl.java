@@ -6,6 +6,8 @@ import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.exception.DuplicateFeedbackException;
 import net.os.goodcourses.exception.ResourceNotFoundException;
 import net.os.goodcourses.form.FeedbackForm;
+import net.os.goodcourses.model.CourseRatingSummary;
+import net.os.goodcourses.repository.projection.CourseRatingProjection;
 import net.os.goodcourses.repository.storage.CourseRepository;
 import net.os.goodcourses.repository.storage.FeedBackRepository;
 import net.os.goodcourses.repository.storage.ProfileRepository;
@@ -44,6 +46,8 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     @Transactional
     public FeedBack create(long profileId, long courseId, FeedbackForm form) {
+        String description = normalizeDescription(form);
+        int rating = validateRating(form);
         if (feedBackRepository.existsByCourseIdAndProfileId(courseId, profileId)) {
             throw new DuplicateFeedbackException("Вы уже оставили отзыв на этот курс");
         }
@@ -56,7 +60,8 @@ public class FeedbackServiceImpl implements FeedbackService {
         FeedBack feedback = new FeedBack();
         feedback.setProfile(profile);
         feedback.setCourse(course);
-        feedback.setDescription(normalizeDescription(form));
+        feedback.setDescription(description);
+        feedback.setRating(rating);
         feedback.setStartDate(new Timestamp(System.currentTimeMillis()));
 
         try {
@@ -78,6 +83,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     public FeedBack update(long profileId, long feedbackId, FeedbackForm form) {
         FeedBack feedback = findOwned(profileId, feedbackId);
         feedback.setDescription(normalizeDescription(form));
+        feedback.setRating(validateRating(form));
         feedback.setLastUpdate(new Timestamp(System.currentTimeMillis()));
         return feedBackRepository.save(feedback);
     }
@@ -89,6 +95,16 @@ public class FeedbackServiceImpl implements FeedbackService {
         feedBackRepository.delete(feedback);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public CourseRatingSummary getCourseRatingSummary(long courseId) {
+        CourseRatingProjection projection = feedBackRepository.findRatingSummaryByCourseId(courseId);
+        if (projection == null) {
+            return new CourseRatingSummary(null, 0);
+        }
+        return new CourseRatingSummary(projection.getAverage(), projection.getCount());
+    }
+
     private String normalizeDescription(FeedbackForm form) {
         if (form == null || form.getDescription() == null || form.getDescription().trim().isEmpty()) {
             throw new IllegalArgumentException("Текст отзыва не может быть пустым");
@@ -98,5 +114,16 @@ public class FeedbackServiceImpl implements FeedbackService {
             throw new IllegalArgumentException("Отзыв не должен превышать 2000 символов");
         }
         return description;
+    }
+
+    private int validateRating(FeedbackForm form) {
+        if (form == null || form.getRating() == null) {
+            throw new IllegalArgumentException("Выберите оценку");
+        }
+        int rating = form.getRating();
+        if (rating < 1 || rating > 5) {
+            throw new IllegalArgumentException("Оценка должна быть от 1 до 5");
+        }
+        return rating;
     }
 }

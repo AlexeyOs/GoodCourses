@@ -63,6 +63,27 @@ public class FeedbackFormTest {
         assertEquals("description", violations.iterator().next().getPropertyPath().toString());
     }
 
+    @Test
+    public void shouldAcceptBoundaryRatings() {
+        assertTrue(validate("Отзыв", 1).isEmpty());
+        assertTrue(validate("Отзыв", 5).isEmpty());
+    }
+
+    @Test
+    public void shouldRejectMissingRating() {
+        assertRatingInvalid(null);
+    }
+
+    @Test
+    public void shouldRejectRatingBelowRange() {
+        assertRatingInvalid(0);
+    }
+
+    @Test
+    public void shouldRejectRatingAboveRange() {
+        assertRatingInvalid(6);
+    }
+
     private void assertDescriptionInvalid(String description) {
         Set<ConstraintViolation<FeedbackForm>> violations = validate(description);
 
@@ -73,7 +94,20 @@ public class FeedbackFormTest {
     }
 
     private Set<ConstraintViolation<FeedbackForm>> validate(String description) {
-        return validator.validate(new FeedbackForm(description));
+        return validate(description, 5);
+    }
+
+    private Set<ConstraintViolation<FeedbackForm>> validate(String description, Integer rating) {
+        return validator.validate(new FeedbackForm(description, rating));
+    }
+
+    private void assertRatingInvalid(Integer rating) {
+        Set<ConstraintViolation<FeedbackForm>> violations = validate("Отзыв", rating);
+
+        assertTrue("Rating must be invalid", !violations.isEmpty());
+        for (ConstraintViolation<FeedbackForm> violation : violations) {
+            assertEquals("rating", violation.getPropertyPath().toString());
+        }
     }
 
     private String repeat(char value, int count) {

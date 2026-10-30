@@ -9,6 +9,7 @@ import net.os.goodcourses.form.FeedbackForm;
 import net.os.goodcourses.repository.storage.CourseRepository;
 import net.os.goodcourses.repository.storage.FeedBackRepository;
 import net.os.goodcourses.repository.storage.ProfileRepository;
+import net.os.goodcourses.repository.projection.CourseRatingProjection;
 import net.os.goodcourses.service.impl.FeedbackServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -95,11 +96,12 @@ public class FeedbackServiceImplTest {
         FeedBack created = feedbackService.create(
                 PROFILE_ID,
                 COURSE_ID,
-                new FeedbackForm("  Хороший курс  "));
+                new FeedbackForm("  Хороший курс  ", 5));
 
         assertSame(profile, created.getProfile());
         assertSame(course, created.getCourse());
         assertEquals("Хороший курс", created.getDescription());
+        assertEquals(Integer.valueOf(5), created.getRating());
         assertNotNull(created.getStartDate());
         assertTrue(created.getStartDate().getTime() >= beforeCreate);
         assertNull(created.getLastUpdate());
@@ -114,7 +116,7 @@ public class FeedbackServiceImplTest {
         when(feedBackRepository.existsByCourseIdAndProfileId(COURSE_ID, PROFILE_ID)).thenReturn(true);
 
         try {
-            feedbackService.create(PROFILE_ID, COURSE_ID, new FeedbackForm("Повторный отзыв"));
+            feedbackService.create(PROFILE_ID, COURSE_ID, new FeedbackForm("Повторный отзыв", 4));
             fail("DuplicateFeedbackException expected");
         } catch (DuplicateFeedbackException expected) {
             assertEquals("Вы уже оставили отзыв на этот курс", expected.getMessage());
@@ -133,7 +135,7 @@ public class FeedbackServiceImplTest {
                 .thenThrow(new DataIntegrityViolationException("uq_feedback_course_profile"));
 
         try {
-            feedbackService.create(PROFILE_ID, COURSE_ID, new FeedbackForm("Отзыв"));
+            feedbackService.create(PROFILE_ID, COURSE_ID, new FeedbackForm("Отзыв", 4));
             fail("DuplicateFeedbackException expected");
         } catch (DuplicateFeedbackException expected) {
             assertTrue(expected.getCause() instanceof DataIntegrityViolationException);
@@ -146,7 +148,7 @@ public class FeedbackServiceImplTest {
         when(profileRepository.findById(PROFILE_ID)).thenReturn(Optional.empty());
 
         try {
-            feedbackService.create(PROFILE_ID, COURSE_ID, new FeedbackForm("Отзыв"));
+            feedbackService.create(PROFILE_ID, COURSE_ID, new FeedbackForm("Отзыв", 4));
             fail("ResourceNotFoundException expected");
         } catch (ResourceNotFoundException expected) {
             assertEquals("Профиль не найден", expected.getMessage());
@@ -163,7 +165,7 @@ public class FeedbackServiceImplTest {
         when(courseRepository.findById(COURSE_ID)).thenReturn(Optional.empty());
 
         try {
-            feedbackService.create(PROFILE_ID, COURSE_ID, new FeedbackForm("Отзыв"));
+            feedbackService.create(PROFILE_ID, COURSE_ID, new FeedbackForm("Отзыв", 4));
             fail("ResourceNotFoundException expected");
         } catch (ResourceNotFoundException expected) {
             assertEquals("Курс не найден", expected.getMessage());
@@ -209,10 +211,11 @@ public class FeedbackServiceImplTest {
         FeedBack updated = feedbackService.update(
                 PROFILE_ID,
                 FEEDBACK_ID,
-                new FeedbackForm("  Обновлённый отзыв  "));
+                new FeedbackForm("  Обновлённый отзыв  ", 3));
 
         assertSame(feedback, updated);
         assertEquals("Обновлённый отзыв", updated.getDescription());
+        assertEquals(Integer.valueOf(3), updated.getRating());
         assertSame(originalStartDate, updated.getStartDate());
         assertNotNull(updated.getLastUpdate());
         assertTrue(updated.getLastUpdate().getTime() >= beforeUpdate);
@@ -228,7 +231,7 @@ public class FeedbackServiceImplTest {
             feedbackService.update(
                     OTHER_PROFILE_ID,
                     FEEDBACK_ID,
-                    new FeedbackForm("Чужое изменение"));
+                    new FeedbackForm("Чужое изменение", 1));
             fail("ResourceNotFoundException expected");
         } catch (ResourceNotFoundException expected) {
             assertEquals("Отзыв не найден", expected.getMessage());
@@ -270,7 +273,7 @@ public class FeedbackServiceImplTest {
                 .thenReturn(Optional.of(feedback));
 
         try {
-            feedbackService.update(PROFILE_ID, FEEDBACK_ID, new FeedbackForm("   "));
+            feedbackService.update(PROFILE_ID, FEEDBACK_ID, new FeedbackForm("   ", 5));
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException expected) {
             assertEquals("Текст отзыва не может быть пустым", expected.getMessage());
@@ -281,21 +284,74 @@ public class FeedbackServiceImplTest {
 
     @Test
     public void shouldRejectTooLongDescriptionAtServiceBoundary() {
-        when(feedBackRepository.existsByCourseIdAndProfileId(COURSE_ID, PROFILE_ID)).thenReturn(false);
-        when(profileRepository.findById(PROFILE_ID)).thenReturn(Optional.of(profile));
-        when(courseRepository.findById(COURSE_ID)).thenReturn(Optional.of(course));
-
         try {
             feedbackService.create(
                     PROFILE_ID,
                     COURSE_ID,
-                    new FeedbackForm(repeat('a', 2001)));
+                    new FeedbackForm(repeat('a', 2001), 5));
             fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException expected) {
             assertEquals("Отзыв не должен превышать 2000 символов", expected.getMessage());
         }
 
         verify(feedBackRepository, never()).saveAndFlush(any(FeedBack.class));
+    }
+
+    @Test
+    public void shouldRejectMissingRatingAtServiceBoundary() {
+        try {
+            feedbackService.create(PROFILE_ID, COURSE_ID, new FeedbackForm("Отзыв", null));
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException expected) {
+            assertEquals("Выберите оценку", expected.getMessage());
+        }
+
+        verify(feedBackRepository, never()).saveAndFlush(any(FeedBack.class));
+        verifyNoInteractions(profileRepository, courseRepository);
+    }
+
+    @Test
+    public void shouldRejectRatingOutsideRangeAtServiceBoundary() {
+        FeedBack feedback = feedbackWithDates();
+        when(feedBackRepository.findByIdAndProfileId(FEEDBACK_ID, PROFILE_ID))
+                .thenReturn(Optional.of(feedback));
+
+        try {
+            feedbackService.update(PROFILE_ID, FEEDBACK_ID, new FeedbackForm("Отзыв", 6));
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException expected) {
+            assertEquals("Оценка должна быть от 1 до 5", expected.getMessage());
+        }
+
+        verify(feedBackRepository, never()).save(any(FeedBack.class));
+    }
+
+    @Test
+    public void shouldBuildCourseRatingSummaryFromSingleRepositoryQuery() {
+        CourseRatingProjection projection = org.mockito.Mockito.mock(CourseRatingProjection.class);
+        when(projection.getAverage()).thenReturn(4.25d);
+        when(projection.getCount()).thenReturn(4L);
+        when(feedBackRepository.findRatingSummaryByCourseId(COURSE_ID)).thenReturn(projection);
+
+        net.os.goodcourses.model.CourseRatingSummary summary =
+                feedbackService.getCourseRatingSummary(COURSE_ID);
+
+        assertEquals(Double.valueOf(4.25d), summary.getAverage());
+        assertEquals(4L, summary.getCount());
+        assertTrue(summary.hasRatings());
+        verify(feedBackRepository).findRatingSummaryByCourseId(COURSE_ID);
+    }
+
+    @Test
+    public void shouldReturnEmptyCourseRatingSummaryWhenRepositoryHasNoProjection() {
+        when(feedBackRepository.findRatingSummaryByCourseId(COURSE_ID)).thenReturn(null);
+
+        net.os.goodcourses.model.CourseRatingSummary summary =
+                feedbackService.getCourseRatingSummary(COURSE_ID);
+
+        assertNull(summary.getAverage());
+        assertEquals(0L, summary.getCount());
+        assertTrue(!summary.hasRatings());
     }
 
     private FeedBack feedbackWithDates() {

@@ -46,7 +46,7 @@ public class MyReviewsController {
         FeedBack feedback = feedbackService.findOwned(
                 SecurityUtil.getCurrentIdProfile(), feedbackId);
         model.addAttribute("feedback", feedback);
-        model.addAttribute("feedbackForm", new FeedbackForm(feedback.getDescription()));
+        model.addAttribute("feedbackForm", new FeedbackForm(feedback.getDescription(), feedback.getRating()));
         return "edit/feedback";
     }
 
