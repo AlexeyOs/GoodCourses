@@ -120,7 +120,8 @@ CREATE TABLE public.feedback (
     rating integer,
     start_date timestamp without time zone NOT NULL,
     last_update timestamp without time zone,
-    CONSTRAINT uq_feedback_course_profile UNIQUE (course_id, profile_id)
+    CONSTRAINT uq_feedback_course_profile UNIQUE (course_id, profile_id),
+    CONSTRAINT chk_feedback_rating CHECK (rating IS NULL OR rating BETWEEN 1 AND 5)
 );
 
 

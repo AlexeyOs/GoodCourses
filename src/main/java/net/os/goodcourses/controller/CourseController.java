@@ -9,6 +9,7 @@ import net.os.goodcourses.repository.storage.ProfileRepository;
 import net.os.goodcourses.service.AddCourseService;
 import net.os.goodcourses.service.FindCourseService;
 import net.os.goodcourses.service.FindProfileService;
+import net.os.goodcourses.service.FeedbackService;
 import net.os.goodcourses.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,6 +39,9 @@ public class CourseController {
 
     @Autowired
     private ProfileRepository profileRepository;
+
+    @Autowired
+    private FeedbackService feedbackService;
 
     @RequestMapping(value = "/add/course", method = RequestMethod.GET)
     public String signUp() {
@@ -85,6 +89,7 @@ public class CourseController {
                 }
             }
             model.addAttribute("course", course.get());
+            model.addAttribute("ratingSummary", feedbackService.getCourseRatingSummary(course.get().getId()));
             return "course";
         } else {
             return "course_not_found";

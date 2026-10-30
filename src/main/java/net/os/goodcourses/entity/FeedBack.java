@@ -34,6 +34,9 @@ public class FeedBack extends AbstractEntity<Long> implements Serializable, Prof
     @Size(max = 2000)
     private String description;
 
+    @Column(name = "rating")
+    private Integer rating;
+
     @Column(name = "start_date", nullable = false)
     private Timestamp startDate;
 
@@ -68,6 +71,14 @@ public class FeedBack extends AbstractEntity<Long> implements Serializable, Prof
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
     public Timestamp getStartDate() {
