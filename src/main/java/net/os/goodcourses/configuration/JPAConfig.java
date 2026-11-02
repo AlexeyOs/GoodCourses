@@ -3,10 +3,6 @@ package net.os.goodcourses.configuration;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -116,62 +112,13 @@ public class JPAConfig {
 
     @Bean(initMethod = "migrate")
     public Flyway flyway() {
-        boolean baselineOnMigrate = Boolean.parseBoolean(
-                environment.getProperty("FLYWAY_BASELINE_ON_MIGRATE", "false"));
-        if (baselineOnMigrate) {
-            validateBaselineSchema(dataSource());
-        }
         return Flyway.configure()
                 .dataSource(dataSource())
                 .locations("classpath:db/migration")
-                .baselineOnMigrate(baselineOnMigrate)
+                .baselineOnMigrate(false)
                 .baselineVersion("1")
                 .validateOnMigrate(true)
                 .load();
-    }
-
-    private void validateBaselineSchema(DataSource source) {
-        try (Connection connection = source.getConnection()) {
-            if (count(connection,
-                    "SELECT COUNT(*) FROM information_schema.tables " +
-                            "WHERE table_schema='public' AND table_type='BASE TABLE' " +
-                            "AND table_name <> 'flyway_schema_history'") == 0) {
-                return;
-            }
-            requireCount(connection,
-                    "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='public' " +
-                            "AND table_name IN ('profile','course','feedback','skill','skill_category'," +
-                            "'course_profile','profile_restore','persistent_logins')",
-                    8, "required tables");
-            requireCount(connection,
-                    "SELECT COUNT(*) FROM information_schema.columns WHERE table_schema='public' AND " +
-                            "(table_name, column_name) IN (('profile','password'),('feedback','rating')," +
-                            "('feedback','profile_id'),('feedback','course_id'))",
-                    4, "required columns");
-            requireCount(connection,
-                    "SELECT COUNT(*) FROM pg_constraint c JOIN pg_namespace n " +
-                            "ON n.oid = c.connamespace WHERE n.nspname='public' AND conname IN " +
-                            "('uq_feedback_course_profile','chk_feedback_rating')",
-                    2, "issue #31/#54 constraints");
-        } catch (SQLException exception) {
-            throw new IllegalStateException("Unable to validate database schema before Flyway baseline", exception);
-        }
-    }
-
-    private void requireCount(Connection connection, String sql, int expected, String subject)
-            throws SQLException {
-        if (count(connection, sql) != expected) {
-            throw new IllegalStateException("Database schema does not match V1 baseline: " + subject);
-        }
-    }
-
-    private int count(Connection connection, String sql) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setQueryTimeout(5);
-            try (ResultSet result = statement.executeQuery()) {
-                return result.next() ? result.getInt(1) : 0;
-            }
-        }
     }
 
     private Properties hibernateProperties() {
