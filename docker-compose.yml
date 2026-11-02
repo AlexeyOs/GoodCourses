@@ -7,11 +7,15 @@ services:
       dockerfile: docker/postgresql/Dockerfile
     image: postgres:11
     environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: goodcourses
+      POSTGRES_USER: goodcourses
+      POSTGRES_PASSWORD: 1234
     container_name: postgresql-postgis-container
     ports:
     - 5432:5432
     restart: always
+    volumes:
+    - pg_data:/var/lib/postgresql/data
     networks:
     - eb
 

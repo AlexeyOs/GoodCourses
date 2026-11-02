@@ -24,7 +24,7 @@
     <c:if test = "${!fn:contains(requestScope['javax.servlet.forward.request_uri'], 'sign-in') &&
     !fn:contains(requestScope['javax.servlet.forward.request_uri'], 'sign-up')}">
         <li class="nav-item">
-            <a href="/sign-in" class="nav-link">Авторизоваться</a>
+            <a href="${pageContext.request.contextPath}/sign-in" class="nav-link">Авторизоваться</a>
         </li>
     </c:if>
 </c:if>
@@ -37,14 +37,17 @@
         <div class="b-popup" id="popup1" hidden>
             <c:if test="${profile == null}">
                 <div class="b-popup-content">
-                    <a href="/my-profile" >Перейти на страницу профиля</a>
+                    <a href="${pageContext.request.contextPath}/my-profile" >Перейти на страницу профиля</a>
                 </div>
             </c:if>
             <div class="b-popup-content">
                 <a href="${pageContext.request.contextPath}/my-reviews">Мои отзывы</a>
             </div>
             <div class="b-popup-content">
-                <a href="/sign-out" >Выйти</a>
+                <form action="${pageContext.request.contextPath}/sign-out" method="post">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-link p-0">Выйти</button>
+                </form>
             </div>
             <div class="b-popup-content">
                 <a href="javascript:PopUpHide()">Свернуть</a>

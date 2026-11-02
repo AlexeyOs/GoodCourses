@@ -13,7 +13,7 @@ import org.springframework.core.io.Resource;
  *
  */
 @Configuration
-@ComponentScan({ "net.os.goodcourses.service.impl",
+@ComponentScan({ "net.os.goodcourses.service",
 		"net.os.goodcourses.filter",
 		"net.os.goodcourses.component.impl"})
 public class ServiceConfig {

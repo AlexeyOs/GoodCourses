@@ -12,6 +12,7 @@
             <div class="card-body">
                 <hr />
                 <form:form action="${pageContext.request.contextPath}/add/feedback" method="post" modelAttribute="feedbackForm">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     <p><input type="hidden" name="courseId" value="${course.id}"/></p>
                     <div class="form-group">
                         <form:label path="rating">Оценка курса</form:label>

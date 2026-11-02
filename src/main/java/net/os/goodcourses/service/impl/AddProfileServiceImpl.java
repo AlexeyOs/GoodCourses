@@ -1,8 +1,10 @@
 package net.os.goodcourses.service.impl;
 
 import net.os.goodcourses.entity.Profile;
+import net.os.goodcourses.entity.PasswordState;
 import net.os.goodcourses.repository.storage.ProfileRepository;
 import net.os.goodcourses.service.AddProfileService;
+import net.os.goodcourses.service.PasswordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class AddProfileServiceImpl implements AddProfileService {
     @Autowired
     private ProfileRepository profileRepository;
 
+    @Autowired
+    private PasswordService passwordService;
+
     @Override
     public Profile createNewProfile(String firstName,
                                     String lastName,
@@ -27,7 +32,8 @@ public class AddProfileServiceImpl implements AddProfileService {
             profile.setLastName(lastName);
             profile.setUid(uid);
             profile.setEmail(mail);
-            profile.setPassword(password);
+            profile.setPassword(passwordService.encode(password));
+            profile.setPasswordState(PasswordState.ACTIVE);
             profileRepository.save(profile);
             return profile;
     }

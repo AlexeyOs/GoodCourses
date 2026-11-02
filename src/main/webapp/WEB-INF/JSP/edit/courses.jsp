@@ -7,6 +7,7 @@
 		<p class="text-muted">Отметьте курсы, которые хотите показывать в своём профиле.</p>
 		<hr />
 		<form action="${pageContext.request.contextPath}/edit/courses" method="post">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			<c:if test="${empty courses}">
 				<p>Доступных курсов пока нет.</p>
 			</c:if>

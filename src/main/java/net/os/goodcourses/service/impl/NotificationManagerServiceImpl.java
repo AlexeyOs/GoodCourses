@@ -27,7 +27,7 @@ public class NotificationManagerServiceImpl implements NotificationManagerServic
 
 	@Override
 	public void sendRestoreAccessLink(Profile profile, String restoreLink) {
-		LOGGER.debug("Restore link: {} for account {}", restoreLink, profile.getUid());
+		LOGGER.debug("Password recovery notification requested for account {}", profile.getUid());
 		Map<String, Object> model = new HashMap<>();
 		model.put("profile", profile);
 		model.put("restoreLink", restoreLink);

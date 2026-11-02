@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.os.goodcourses.entity.Profile;
+import net.os.goodcourses.entity.PasswordState;
 import net.os.goodcourses.model.CurrentProfile;
 import net.os.goodcourses.service.FindProfileService;
+import net.os.goodcourses.service.PasswordService;
 
 import java.util.Optional;
 
@@ -56,6 +58,10 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Profile profile = findProfile(username);
+		if (profile.getPasswordState() != PasswordState.ACTIVE ||
+				!PasswordService.isBcryptHash(profile.getPassword())) {
+			throw new UsernameNotFoundException("Local authentication is not available for this profile");
+		}
 		return new CurrentProfile(profile);
 	}
 

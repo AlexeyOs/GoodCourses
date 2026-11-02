@@ -17,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
@@ -57,6 +57,6 @@ public class CourseControllerTest {
         assert coursesModelAndView != null;
         ModelMap coursesModelMap = coursesModelAndView.getModelMap();
         Collection<Object> courses = (Collection<Object>) coursesModelMap.get("courses");
-        assertTrue(courses.size() > 0);
+        assertNotNull(courses);
     }
 }

@@ -24,11 +24,13 @@ import org.springframework.transaction.support.TransactionSynchronizationAdapter
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import net.os.goodcourses.entity.Profile;
+import net.os.goodcourses.entity.PasswordState;
 import net.os.goodcourses.entity.Skill;
 import net.os.goodcourses.entity.SkillCategory;
 import net.os.goodcourses.entity.Course;
 import net.os.goodcourses.form.SignUpForm;
 import net.os.goodcourses.service.EditProfileService;
+import net.os.goodcourses.service.PasswordService;
 import net.os.goodcourses.util.DataUtil;
 
 @Service
@@ -43,6 +45,9 @@ public class EditProfileServiceImpl implements EditProfileService {
 
 	@Autowired
 	private CourseRepository courseRepository;
+
+	@Autowired
+	private PasswordService passwordService;
 
 	@Value("${generate.uid.suffix.length}")
 	private int generateUidSuffixLength;
@@ -60,7 +65,8 @@ public class EditProfileServiceImpl implements EditProfileService {
 		profile.setUid(generateProfileUid(signUpForm));
 		profile.setFirstName(DataUtil.capitalizeName(signUpForm.getFirstName()));
 		profile.setLastName(DataUtil.capitalizeName(signUpForm.getLastName()));
-		profile.setPassword(signUpForm.getPassword());
+		profile.setPassword(passwordService.encode(signUpForm.getPassword()));
+		profile.setPasswordState(PasswordState.ACTIVE);
 		profile.setCompleted(false);
 		profileRepository.save(profile);
 		registerCreateIndexProfileIfTrancationSuccess(profile);
@@ -70,7 +76,8 @@ public class EditProfileServiceImpl implements EditProfileService {
 	@Override
 	@Transactional
 	public void updatePassword(Profile profile, String password) {
-		profile.setPassword(password);
+		profile.setPassword(passwordService.encode(password));
+		profile.setPasswordState(PasswordState.ACTIVE);
 		profileRepository.save(profile);
 	}
 

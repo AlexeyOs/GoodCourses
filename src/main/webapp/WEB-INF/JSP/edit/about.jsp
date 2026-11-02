@@ -6,6 +6,7 @@
         <h4 class="data-header">О себе</h4>
         <hr />
         <form:form action="${pageContext.request.contextPath}/edit/about" method="post" modelAttribute="aboutMeForm">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <div class="form-group">
                 <form:textarea path="aboutMe" cssClass="form-control" rows="10"
                                maxlength="5000" placeholder="Расскажите о себе, своих интересах и целях обучения" />

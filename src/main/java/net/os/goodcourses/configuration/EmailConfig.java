@@ -18,8 +18,9 @@ public class EmailConfig {
 	@Bean
 	public JavaMailSender javaMailSender(){
 		JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-		javaMailSender.setHost(environment.getRequiredProperty("email.smtp.server"));
-		if(environment.containsProperty("email.smtp.username")){
+		boolean enabled = Boolean.parseBoolean(environment.getProperty("email.enabled", "false"));
+		if (enabled) {
+			javaMailSender.setHost(environment.getRequiredProperty("email.smtp.server"));
 			javaMailSender.setUsername(environment.resolveRequiredPlaceholders(environment.getRequiredProperty("email.smtp.username")));
 			javaMailSender.setPassword(environment.resolveRequiredPlaceholders(environment.getRequiredProperty("email.smtp.password")));
 			javaMailSender.setPort(Integer.parseInt(environment.getRequiredProperty("email.smtp.port")));

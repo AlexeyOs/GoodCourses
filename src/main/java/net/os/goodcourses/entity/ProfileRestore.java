@@ -1,12 +1,14 @@
 package net.os.goodcourses.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -23,11 +25,15 @@ public class ProfileRestore extends AbstractEntity<Long> implements Serializable
 	private Long id;
 	
 	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@MapsId
 	@JoinColumn(name = "id", nullable = false)
 	private Profile profile;
 
-	@Column(nullable = false, unique = true, length = 100)
-	private String token;
+	@Column(name = "token_hash", nullable = false, unique = true, length = 64)
+	private String tokenHash;
+
+	@Column(name = "expires_at", nullable = false)
+	private Timestamp expiresAt;
 	
 	public ProfileRestore() {
 	}
@@ -48,11 +54,19 @@ public class ProfileRestore extends AbstractEntity<Long> implements Serializable
 		this.profile = profile;
 	}
 
-	public String getToken() {
-		return token;
+	public String getTokenHash() {
+		return tokenHash;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public void setTokenHash(String tokenHash) {
+		this.tokenHash = tokenHash;
+	}
+
+	public Timestamp getExpiresAt() {
+		return expiresAt;
+	}
+
+	public void setExpiresAt(Timestamp expiresAt) {
+		this.expiresAt = expiresAt;
 	}
 }

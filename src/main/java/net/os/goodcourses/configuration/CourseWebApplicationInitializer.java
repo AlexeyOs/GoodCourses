@@ -6,6 +6,7 @@ import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
+import javax.servlet.SessionCookieConfig;
 import javax.servlet.SessionTrackingMode;
 
 import org.sitemesh.builder.SiteMeshFilterBuilder;
@@ -33,11 +34,19 @@ public class CourseWebApplicationInitializer implements WebApplicationInitialize
 		WebApplicationContext ctx = createWebApplicationContext(container);
 
 		container.setSessionTrackingModes(EnumSet.of(SessionTrackingMode.COOKIE));
+		configureSessionCookie(container, ctx);
 		container.addListener(new ContextLoaderListener(ctx));
 		container.addListener(ctx.getBean(ApplicationListener.class));
 
 		registerFilters(container, ctx);
 		registerSpringMVCDispatcherServlet(container, ctx);
+	}
+
+	private void configureSessionCookie(ServletContext container, WebApplicationContext ctx) {
+		SessionCookieConfig cookie = container.getSessionCookieConfig();
+		cookie.setHttpOnly(true);
+		cookie.setSecure(Boolean.parseBoolean(
+				ctx.getEnvironment().getProperty("security.cookies.secure", "false")));
 	}
 
 	private WebApplicationContext createWebApplicationContext(ServletContext container) {

@@ -8,15 +8,12 @@ import net.os.goodcourses.util.SecurityUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
@@ -26,9 +23,6 @@ public class AuthController {
 
     private final FindProfileService findProfileService;
     private final AddProfileService addProfileService;
-    private final EditProfileService editProfileService;
-    private final NotificationManagerService notificationManagerService;
-    private final PersistentTokenRepository persistentTokenRepository;
     private final AuthService authService;
 
     @RequestMapping(value = "/sign-in")
@@ -95,33 +89,20 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/password-reset", method = RequestMethod.POST)
-    public String passwordReset(HttpServletRequest request,
-                                @RequestParam(value = "mailOrLogin") String mailOrLogin,
+    public String passwordReset(@RequestParam(value = "mailOrLogin") String mailOrLogin,
                                 Model model) {
-        return authService.passwordReset(request, mailOrLogin, model);
+        return authService.passwordReset(mailOrLogin, model);
     }
 
     @RequestMapping(value = "/password-reset-failed")
     public String passwordResetFailed(Model model) {
-        //TODO хардкод, убрать в конфиг
-        model.addAttribute("alertMsg", "Email в системе не зарегестрирован");
+        model.addAttribute("alertMsg", "Вам будет отправлено сообщение, проверьте почту");
         return "password-reset";
     }
 
     @RequestMapping(value = "/password-change", method = RequestMethod.GET)
-    public String passwordChange(@RequestParam(value = "token") String token,
-                                 @RequestParam(value = "profileId") String profileId,
-                                 Model model) {
-        PersistentRememberMeToken persistentRememberMeToken = persistentTokenRepository.getTokenForSeries(profileId);
-        if (token.equals(persistentRememberMeToken.getTokenValue())) {
-            model.addAttribute("token", token);
-            model.addAttribute("profileId", profileId);
-            return "password-change";
-        } else {
-            //TODO хардкод, убрать в конфиг
-            model.addAttribute("alertMsg","Некорректная ссылка, попробуйте заново отправить сообщение для сброса пароля");
-            return "password-reset";
-        }
+    public String passwordChange() {
+        return "password-change";
     }
 
     @RequestMapping(value = "/password-change", method = RequestMethod.POST)
@@ -129,17 +110,20 @@ public class AuthController {
                                  @RequestParam(value = "profileId") String profileId,
                                  @RequestParam(value = "password") String password,
                                  Model model) {
-        PersistentRememberMeToken persistentRememberMeToken = persistentTokenRepository.getTokenForSeries(profileId);
-        if (token.equals(persistentRememberMeToken.getTokenValue())) {
-            Optional<Profile> profile =  findProfileService.findById(Long.parseLong(profileId));
-            if (profile.isPresent()) {
-                editProfileService.updatePassword(profile.get(), password);
-                notificationManagerService.sendPasswordChanged(profile.get());
-            }
+        long parsedProfileId = parseProfileId(profileId);
+        if (parsedProfileId >= 0 && authService.changePassword(parsedProfileId, token, password)) {
             return "redirect:/sign-in";
         } else {
             model.addAttribute("alertMsg","Некорректная ссылка, попробуйте заново отправить сообщение для сброса пароля");
             return "password-reset";
+        }
+    }
+
+    private long parseProfileId(String profileId) {
+        try {
+            return Long.parseLong(profileId);
+        } catch (NumberFormatException exception) {
+            return -1;
         }
     }
 

@@ -11,7 +11,8 @@
 			<div class="col-xs-5 col-sm-4 col-md-2 text-center"><strong>Категория</strong></div>
 			<div class="col-xs-7 col-sm-8 col-md-10 text-center"><strong>Фреймворк и технология</strong></div>
 		</div>
-		<form:form action="/edit/skills" method="post" modelAttribute="skillForm">
+		<form:form action="${pageContext.request.contextPath}/edit/skills" method="post" modelAttribute="skillForm">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			<div id="ui-block-container">
 				<c:forEach var="skill" items="${skillForm.items }" varStatus="status">
 					<resume:edit-skill-block index="${status.index}" skill="${skill }" />

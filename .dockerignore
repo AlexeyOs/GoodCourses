@@ -1,0 +1,12 @@
+.git
+.github
+.idea
+.runtime
+.tools
+target
+*.log
+*.iml
+.env
+.env.*
+docs
+sql
