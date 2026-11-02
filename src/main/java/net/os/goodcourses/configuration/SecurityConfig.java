@@ -4,15 +4,17 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import net.os.goodcourses.Constants;
 
@@ -28,6 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 
+	@Value("${REMEMBER_ME_KEY}")
+	private String rememberMeKey;
+
 	@Bean
 	public PersistentTokenRepository persistentTokenRepository() {
 		JdbcTokenRepositoryImpl persistentTokenRepository = new JdbcTokenRepositoryImpl();
@@ -37,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
+		return new BCryptPasswordEncoder(12);
 	}
 	
 	@Override
@@ -48,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+			.antMatchers("/health/live", "/health/ready").permitAll()
 			.antMatchers("/my-profile",
 					"/profiles",
 					"/add",
@@ -67,14 +73,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.defaultSuccessUrl("/my-profile")
 			.failureUrl("/sign-in-failed");
 		http.logout()
-			.logoutUrl("/sign-out")
+			.logoutRequestMatcher(new AntPathRequestMatcher("/sign-out", "POST"))
 			.logoutSuccessUrl("/courses")
 			.invalidateHttpSession(true)
 			.deleteCookies("JSESSIONID");
 		http.rememberMe()
 			.rememberMeParameter("remember-me")
-			.key("resume-online")
+			.key(rememberMeKey)
 			.tokenRepository(persistentTokenRepository());
-		http.csrf().disable();
 	}
 }

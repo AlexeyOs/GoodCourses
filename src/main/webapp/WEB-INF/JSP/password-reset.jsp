@@ -13,7 +13,8 @@
         <i class="fa fa-sign-in"></i> Восстановление доступа в Ваш личный кабинет
     </div>
     <div class="card-body">
-        <form action="/password-reset" method="post">
+        <form action="${pageContext.request.contextPath}/password-reset" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <div class="form-group">
                 <label for="mailOrLogin">Email или login</label> <input id="mailOrLogin" type="mail" name="mailOrLogin" class="form-control" required>
             </div>

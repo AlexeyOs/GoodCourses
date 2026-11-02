@@ -4,6 +4,11 @@ target
 classes
 src/main/webapp/WEB-INF/lib/
 src/main/webapp/media/
+.runtime/
+.tools/
+.env
+.env.*
+!.env.example
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

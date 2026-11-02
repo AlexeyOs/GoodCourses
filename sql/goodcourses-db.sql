@@ -216,7 +216,8 @@ CREATE TABLE public.profile (
     large_photo character varying(255),
     small_photo character varying(255),
     info text,
-    password character varying(255) NOT NULL,
+    password character varying(255),
+    password_state character varying(20) NOT NULL,
     completed boolean NOT NULL,
     created timestamp(0) without time zone DEFAULT now() NOT NULL,
     skype character varying(80),
@@ -224,7 +225,11 @@ CREATE TABLE public.profile (
     facebook character varying(255),
     linkedin character varying(255),
     github character varying(255),
-    stackoverflow character varying(255)
+    stackoverflow character varying(255),
+    CONSTRAINT chk_profile_password_state CHECK (
+        (password_state = 'ACTIVE' AND password ~ '^\$2[aby]\$[0-9]{2}\$[./A-Za-z0-9]{53}$')
+        OR (password_state IN ('RESET_REQUIRED', 'EXTERNAL_ONLY') AND password IS NULL)
+    )
 );
 
 
@@ -236,7 +241,10 @@ ALTER TABLE public.profile OWNER TO goodcourses;
 
 CREATE TABLE public.profile_restore (
     id bigint NOT NULL,
-    token character varying(255) NOT NULL
+    token_hash character varying(64) NOT NULL,
+    expires_at timestamp without time zone NOT NULL,
+    CONSTRAINT uq_profile_restore_token_hash UNIQUE (token_hash),
+    CONSTRAINT chk_profile_restore_token_hash CHECK (token_hash ~ '^[0-9a-f]{64}$')
 );
 
 
@@ -340,7 +348,7 @@ COPY public.persistent_logins (username, series, token, last_used) FROM stdin;
 -- Data for Name: profile; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
-COPY public.profile (id, uid, first_name, last_name, birth_day, phone, email, country, city, objective, summary, large_photo, small_photo, info, password, completed, created, skype, vkontakte, facebook, linkedin, github, stackoverflow) FROM stdin;
+COPY public.profile (id, uid, first_name, last_name, birth_day, phone, email, country, city, objective, summary, large_photo, small_photo, info, password, password_state, completed, created, skype, vkontakte, facebook, linkedin, github, stackoverflow) FROM stdin;
 \.
 
 
@@ -348,7 +356,7 @@ COPY public.profile (id, uid, first_name, last_name, birth_day, phone, email, co
 -- Data for Name: profile_restore; Type: TABLE DATA; Schema: public; Owner: goodcourses
 --
 
-COPY public.profile_restore (id, token) FROM stdin;
+COPY public.profile_restore (id, token_hash, expires_at) FROM stdin;
 \.
 
 

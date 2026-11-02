@@ -1,12 +1,10 @@
 package net.os.goodcourses.service;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpServletRequest;
-
 public interface AuthService {
-    String passwordReset(HttpServletRequest request,
-                         @RequestParam(value = "mailOrLogin") String mailOrLogin,
-                         Model model);
+    String passwordReset(String mailOrLogin, Model model);
+
+    boolean isPasswordResetTokenValid(long profileId, String token);
+
+    boolean changePassword(long profileId, String token, String password);
 }

@@ -11,6 +11,7 @@
             <c:if test="${not empty feedback.course.author}"> — <c:out value="${feedback.course.author}" /></c:if>
         </p>
         <form:form action="${pageContext.request.contextPath}/my-reviews/${feedback.id}/edit" method="post" modelAttribute="feedbackForm">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <div class="form-group">
                 <form:label path="rating">Оценка курса</form:label>
                 <form:select path="rating" cssClass="form-control" required="required" aria-describedby="editRatingHelp">

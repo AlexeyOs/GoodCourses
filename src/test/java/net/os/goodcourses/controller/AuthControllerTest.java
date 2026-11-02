@@ -3,9 +3,7 @@ package net.os.goodcourses.controller;
 import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.service.AddProfileService;
 import net.os.goodcourses.service.AuthService;
-import net.os.goodcourses.service.EditProfileService;
 import net.os.goodcourses.service.FindProfileService;
-import net.os.goodcourses.service.NotificationManagerService;
 import net.os.goodcourses.util.SecurityUtil;
 import org.junit.After;
 import org.junit.Before;
@@ -14,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -41,9 +38,6 @@ public class AuthControllerTest {
 
     @Mock private FindProfileService findProfileService;
     @Mock private AddProfileService addProfileService;
-    @Mock private EditProfileService editProfileService;
-    @Mock private NotificationManagerService notificationManagerService;
-    @Mock private PersistentTokenRepository persistentTokenRepository;
     @Mock private AuthService authService;
 
     private MockMvc mockMvc;
@@ -51,8 +45,7 @@ public class AuthControllerTest {
     @Before
     public void setUp() {
         SecurityContextHolder.clearContext();
-        AuthController controller = new AuthController(findProfileService, addProfileService,
-                editProfileService, notificationManagerService, persistentTokenRepository, authService);
+        AuthController controller = new AuthController(findProfileService, addProfileService, authService);
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix("/WEB-INF/JSP/");
         viewResolver.setSuffix(".jsp");

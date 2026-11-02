@@ -8,10 +8,13 @@
         var data;
         data = new FormData();
         // data.append('file', $('#file')[0].files[0]);
-        var url = "/sign-up";
+        var url = "${pageContext.request.contextPath}/sign-up";
         $.ajax({
             type: "POST",
             url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+            },
             data: {
                 'first_name':$('#first_name').val(),
                 'last_name':$('#last_name').val(),
@@ -36,6 +39,7 @@
     </div>
     <div class="card-body">
         <form action="javascript:checkUser()" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <c:if test="${sessionScope.SPRING_SECURITY_LAST_EXCEPTION != null}">
                 <div class="alert alert-danger" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">

@@ -8,7 +8,8 @@
         Добавить курс
     </div>
     <div class="card-body">
-        <form:form action="/add/course" method="post">
+        <form:form action="${pageContext.request.contextPath}/add/course" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <div class="form-group">
                 <label for="platform">Платформа</label> <input id="platform" name="platform" class="form-control">
             </div>

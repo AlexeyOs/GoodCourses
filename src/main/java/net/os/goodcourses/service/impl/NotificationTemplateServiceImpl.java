@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.core.io.PathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import net.os.goodcourses.model.NotificationMessage;
@@ -29,6 +30,9 @@ public class NotificationTemplateServiceImpl implements NotificationTemplateServ
 	
 	@Autowired
 	private NotificationContentResolver notificationContentResolver;
+
+	@Autowired
+	private ResourceLoader resourceLoader;
 	
 	@Override
 	public NotificationMessage createNotificationMessage(String templateName, Object model) {
@@ -51,7 +55,11 @@ public class NotificationTemplateServiceImpl implements NotificationTemplateServ
 		DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
 		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
 		reader.setValidating(false);
-		reader.loadBeanDefinitions(new PathResource(notificationConfigPath));
+		Resource resource = resourceLoader.getResource(notificationConfigPath);
+		if (!resource.exists()) {
+			throw new CantCompleteClientRequestException("Notification template configuration not found");
+		}
+		reader.loadBeanDefinitions(resource);
 		return beanFactory.getBeansOfType(NotificationMessage.class);
 	}
 }

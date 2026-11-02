@@ -7,7 +7,8 @@
 		<i class="fa fa-sign-in"></i> Вход в Ваш личный кабинет
 	</div>
 	<div class="card-body">
-		<form action="/sign-in-handler" method="post">
+		<form action="${pageContext.request.contextPath}/sign-in-handler" method="post">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			<c:if test="${sessionScope.SPRING_SECURITY_LAST_EXCEPTION != null}">
 				<div class="alert alert-danger" role="alert">
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -28,10 +29,10 @@
 			</div>
 			<div class="form-group" style="display:table;width:100%;">
 				<button type="submit" class="btn btn-primary pull-left">Войти</button>
-				<a href="/sign-up" class="pull-right">Зарегистрироваться</a>
+				<a href="${pageContext.request.contextPath}/sign-up" class="pull-right">Зарегистрироваться</a>
 				<br/>
 				<br/>
-				<a href="/password-reset" class="pull-right">Восстановить доступ</a>
+				<a href="${pageContext.request.contextPath}/password-reset" class="pull-right">Восстановить доступ</a>
 			</div>
 			<%--TODO скрыта кнопка FACEBOOK, пока нельзя авторизоваться--%>
 			<%--<div class="form-group text-center">--%>

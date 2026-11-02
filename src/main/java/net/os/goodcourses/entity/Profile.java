@@ -63,8 +63,12 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	@Column(nullable = false, length = 100)
 	private String uid;
 
-	@Column(nullable = false, length = 100)
+	@Column(length = 100)
 	private String password;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "password_state", nullable = false, length = 20)
+	private PasswordState passwordState;
 
 	@Column(nullable = false)
 	private boolean completed;
@@ -217,6 +221,14 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public PasswordState getPasswordState() {
+		return passwordState;
+	}
+
+	public void setPasswordState(PasswordState passwordState) {
+		this.passwordState = passwordState;
 	}
 
 	public boolean isCompleted() {

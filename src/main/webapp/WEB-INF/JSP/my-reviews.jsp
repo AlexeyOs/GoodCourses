@@ -47,6 +47,7 @@
                                 <a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/course/${review.course.id}">Перейти к курсу</a>
                                 <a class="btn btn-primary" href="${pageContext.request.contextPath}/my-reviews/${review.id}/edit">Редактировать</a>
                                 <form class="d-inline" action="${pageContext.request.contextPath}/my-reviews/${review.id}/delete" method="post" onsubmit="return confirm('Удалить этот отзыв?');">
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                     <button class="btn btn-danger" type="submit">Удалить</button>
                                 </form>
                             </div>
