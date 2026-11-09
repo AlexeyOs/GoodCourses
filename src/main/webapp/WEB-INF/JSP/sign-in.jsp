@@ -32,7 +32,14 @@
 				<a href="${pageContext.request.contextPath}/sign-up" class="pull-right">Зарегистрироваться</a>
 				<br/>
 				<br/>
-				<a href="${pageContext.request.contextPath}/password-reset" class="pull-right">Восстановить доступ</a>
+				<c:choose>
+					<c:when test="${passwordResetEnabled}">
+						<a href="${pageContext.request.contextPath}/password-reset" class="pull-right">Восстановить доступ</a>
+					</c:when>
+					<c:otherwise>
+						<span class="text-muted pull-right">Восстановление пароля временно недоступно.</span>
+					</c:otherwise>
+				</c:choose>
 			</div>
 			<%--TODO скрыта кнопка FACEBOOK, пока нельзя авторизоваться--%>
 			<%--<div class="form-group text-center">--%>

@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.mock.env.MockEnvironment;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -41,11 +42,13 @@ public class AuthControllerTest {
     @Mock private AuthService authService;
 
     private MockMvc mockMvc;
+    private MockEnvironment environment;
 
     @Before
     public void setUp() {
         SecurityContextHolder.clearContext();
-        AuthController controller = new AuthController(findProfileService, addProfileService, authService);
+        environment = new MockEnvironment().withProperty("email.enabled", "false");
+        AuthController controller = new AuthController(findProfileService, addProfileService, authService, environment);
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix("/WEB-INF/JSP/");
         viewResolver.setSuffix(".jsp");
@@ -63,7 +66,45 @@ public class AuthControllerTest {
     public void guestShouldSeeSignInPage() throws Exception {
         mockMvc.perform(get("/sign-in"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("sign-in"));
+                .andExpect(view().name("sign-in"))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.model()
+                        .attribute("passwordResetEnabled", false));
+    }
+
+    @Test
+    public void passwordResetShouldNotCreateTokenWhenEmailIsDisabled() throws Exception {
+        mockMvc.perform(get("/password-reset"))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/sign-in"));
+
+        mockMvc.perform(post("/password-reset").param("mailOrLogin", "alex"))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/sign-in"));
+
+        verifyNoInteractions(authService);
+    }
+
+    @Test
+    public void passwordResetShouldBeAvailableWhenEmailIsEnabled() throws Exception {
+        AuthController controller = new AuthController(
+                findProfileService,
+                addProfileService,
+                authService,
+                new MockEnvironment().withProperty("email.enabled", "true"));
+        InternalResourceViewResolver enabledViewResolver = new InternalResourceViewResolver();
+        enabledViewResolver.setPrefix("/WEB-INF/JSP/");
+        enabledViewResolver.setSuffix(".jsp");
+        MockMvc enabledMockMvc = standaloneSetup(controller)
+                .setViewResolvers(enabledViewResolver)
+                .build();
+
+        enabledMockMvc.perform(get("/sign-in"))
+                .andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.model()
+                        .attribute("passwordResetEnabled", true));
+        enabledMockMvc.perform(get("/password-reset"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("password-reset"));
     }
 
     @Test

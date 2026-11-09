@@ -35,7 +35,7 @@ public class EmailConfig {
 		p.setProperty("mail.smtp.auth", "true");
 		p.setProperty("mail.smtp.starttls.enable", "true");
 		p.setProperty("mail.smtp.socketFactory.fallback", "false");
-		p.setProperty("mail.debug", "true");
+		p.setProperty("mail.debug", environment.getProperty("email.debug", "false"));
 		p.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		p.setProperty("mail.store.protocol", "pop3");
 		p.setProperty("mail.transport.protocol", "smtp");

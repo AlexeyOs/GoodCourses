@@ -8,6 +8,7 @@ import net.os.goodcourses.util.SecurityUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,13 +25,15 @@ public class AuthController {
     private final FindProfileService findProfileService;
     private final AddProfileService addProfileService;
     private final AuthService authService;
+    private final Environment environment;
 
     @RequestMapping(value = "/sign-in")
-    public String signIn() {
+    public String signIn(Model model) {
         CurrentProfile currentProfile = SecurityUtil.getCurrentProfile();
         if (currentProfile != null) {
             return "redirect:/" + currentProfile.getUsername();
         } else {
+            model.addAttribute("passwordResetEnabled", isPasswordResetEnabled());
             return "sign-in";
         }
     }
@@ -53,10 +56,11 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/sign-in-failed")
-    public String signInFailed(HttpSession session) {
+    public String signInFailed(HttpSession session, Model model) {
         if (session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION") == null) {
             return "redirect:/sign-in";
         }
+        model.addAttribute("passwordResetEnabled", isPasswordResetEnabled());
         return "sign-in";
     }
 
@@ -80,6 +84,9 @@ public class AuthController {
 
     @RequestMapping(value = "/password-reset", method = RequestMethod.GET)
     public String passwordReset() {
+        if (!isPasswordResetEnabled()) {
+            return "redirect:/sign-in";
+        }
         CurrentProfile currentProfile = SecurityUtil.getCurrentProfile();
         if (currentProfile != null) {
             return "redirect:/" + currentProfile.getUsername();
@@ -91,11 +98,17 @@ public class AuthController {
     @RequestMapping(value = "/password-reset", method = RequestMethod.POST)
     public String passwordReset(@RequestParam(value = "mailOrLogin") String mailOrLogin,
                                 Model model) {
+        if (!isPasswordResetEnabled()) {
+            return "redirect:/sign-in";
+        }
         return authService.passwordReset(mailOrLogin, model);
     }
 
     @RequestMapping(value = "/password-reset-failed")
     public String passwordResetFailed(Model model) {
+        if (!isPasswordResetEnabled()) {
+            return "redirect:/sign-in";
+        }
         model.addAttribute("alertMsg", "Вам будет отправлено сообщение, проверьте почту");
         return "password-reset";
     }
@@ -125,6 +138,10 @@ public class AuthController {
         } catch (NumberFormatException exception) {
             return -1;
         }
+    }
+
+    private boolean isPasswordResetEnabled() {
+        return Boolean.parseBoolean(environment.getProperty("email.enabled", "false"));
     }
 
 }
