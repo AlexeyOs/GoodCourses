@@ -12,6 +12,8 @@
 
 Инструкция по локальному запуску: [docs/local-deployment.md](docs/local-deployment.md)
 
+Развёртывание публичного hobby-стенда на Koyeb и Neon: [docs/production-deployment.md](docs/production-deployment.md)
+
 # ENG
 This project involves the creation of a platform for feedback on training courses in IT topics.
 If you have a desire to participate in the project, you can write to alexeyosetsky@gmail.com

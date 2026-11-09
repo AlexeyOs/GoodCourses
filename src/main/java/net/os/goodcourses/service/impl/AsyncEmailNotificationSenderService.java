@@ -34,9 +34,16 @@ public class AsyncEmailNotificationSenderService implements NotificationSenderSe
 	
 	@Value("${email.sendTryCount}")
 	private int tryCount;
+
+	@Value("${email.enabled:false}")
+	private boolean enabled;
 	
 	@Override
 	public void sendNotification(NotificationMessage message) {
+		if (!enabled) {
+			LOGGER.info("Email notifications are disabled");
+			return;
+		}
 		executorService.submit(new EmailItem(message, tryCount));
 	}
 
@@ -61,7 +68,7 @@ public class AsyncEmailNotificationSenderService implements NotificationSenderSe
 		@Override
 		public void run() {
 			try {
-				LOGGER.debug("Send a new email to {}", notificationMessage.getDestinationAddress());
+				LOGGER.debug("Sending email notification");
 				MimeMessageHelper message = new MimeMessageHelper(javaMailSender.createMimeMessage(), false);
 				message.setSubject(notificationMessage.getSubject());
 				message.setTo(new InternetAddress(notificationMessage.getDestinationAddress(), notificationMessage.getDestinationName()));
@@ -69,15 +76,15 @@ public class AsyncEmailNotificationSenderService implements NotificationSenderSe
 				message.setText(notificationMessage.getContent());
 				MimeMailMessage msg = new MimeMailMessage(message);
 				javaMailSender.send(msg.getMimeMessage());
-				LOGGER.debug("Email to {} successful sent", notificationMessage.getDestinationAddress());
+				LOGGER.debug("Email notification sent successfully");
 			} catch (Exception e) {
-				LOGGER.error("Can't send email to " + notificationMessage.getDestinationAddress() + ": " + e.getMessage(), e);
+				LOGGER.warn("Email notification attempt failed: {}", e.getClass().getSimpleName());
 				tryCount--;
 				if (tryCount > 0) {
-					LOGGER.debug("Decrement tryCount and try again to send email: tryCount={}, destinationEmail={}", tryCount, notificationMessage.getDestinationAddress());
+					LOGGER.debug("Retrying email notification: remainingAttempts={}", tryCount);
 					executorService.submit(this);
 				} else {
-					LOGGER.error("Email not sent to " + notificationMessage.getDestinationAddress());
+					LOGGER.error("Email notification was not sent after all attempts");
 				}
 			}
 		}

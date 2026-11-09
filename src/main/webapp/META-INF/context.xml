@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
     <CookieProcessor sameSiteCookies="lax" />
-    <Valve className="org.apache.catalina.valves.RemoteIpValve"
-           protocolHeader="X-Forwarded-Proto"
-           protocolHeaderHttpsValue="https"
-           remoteIpHeader="X-Forwarded-For" />
 </Context>

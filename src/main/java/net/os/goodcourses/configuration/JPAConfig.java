@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,8 +113,26 @@ public class JPAConfig {
 
     @Bean(initMethod = "migrate")
     public Flyway flyway() {
-        return Flyway.configure()
-                .dataSource(dataSource())
+        return configureFlyway(
+                System.getenv("MIGRATION_DATABASE_URL"),
+                environment.getProperty("configProfile"),
+                dataSource());
+    }
+
+    static Flyway configureFlyway(String migrationDatabaseUrl, String configProfile, DataSource runtimeDataSource) {
+        FluentConfiguration configuration = Flyway.configure();
+        if (migrationDatabaseUrl != null && !migrationDatabaseUrl.trim().isEmpty()) {
+            DatabaseConnection migrationConnection = parseDatabaseUrl(migrationDatabaseUrl);
+            configuration.dataSource(
+                    migrationConnection.jdbcUrl,
+                    migrationConnection.username,
+                    migrationConnection.password);
+        } else if ("production".equals(configProfile)) {
+            throw new IllegalStateException("MIGRATION_DATABASE_URL is required for the production profile");
+        } else {
+            configuration.dataSource(runtimeDataSource);
+        }
+        return configuration
                 .locations("classpath:db/migration")
                 .baselineOnMigrate(false)
                 .baselineVersion("1")

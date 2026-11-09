@@ -2,10 +2,10 @@ FROM maven:3.9.13-eclipse-temurin-8 AS build
 
 WORKDIR /workspace
 COPY pom.xml ./
-RUN mvn -B -Pheroku dependency:go-offline
+RUN mvn -B -Pproduction dependency:go-offline
 
 COPY src ./src
-RUN mvn -B -Pheroku clean package -DskipTests
+RUN mvn -B -Pproduction clean package -DskipTests
 
 FROM tomcat:9.0.123-jre8-temurin-jammy
 
@@ -25,6 +25,6 @@ USER tomcat-app
 EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=45s --retries=3 \
-    CMD curl --fail --silent --show-error "http://127.0.0.1:${PORT:-8080}/health/ready" || exit 1
+    CMD curl --fail --silent --show-error "http://127.0.0.1:${PORT:-8080}/health/live" || exit 1
 
 ENTRYPOINT ["/usr/local/bin/goodcourses-entrypoint"]
