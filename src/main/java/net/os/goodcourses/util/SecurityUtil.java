@@ -48,8 +48,12 @@ public final class SecurityUtil {
 
 	public static void authentificate(Profile profile, HttpServletRequest request, HttpServletResponse response) {
 		CurrentProfile currentProfile = new CurrentProfile(profile);
-		Authentication authentication = new UsernamePasswordAuthenticationToken(
-				currentProfile, currentProfile.getPassword(), currentProfile.getAuthorities());
+		currentProfile.eraseCredentials();
+		Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(
+				currentProfile, null, currentProfile.getAuthorities());
+		if (request.getSession(false) != null) {
+			request.changeSessionId();
+		}
 		SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
 		securityContext.setAuthentication(authentication);
 		SecurityContextHolder.setContext(securityContext);

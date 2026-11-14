@@ -2,8 +2,8 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <%@ taglib uri = "jakarta.tags.functions" prefix = "fn" %>
 
-<c:if test = "${!fn:contains(requestScope['jakarta.servlet.forward.request_uri'], 'courses')}">
+<c:if test = "${!fn:contains(requestScope.REQUEST_URL, 'courses')}">
     <li class="nav-item">
-        <a href="/courses" class="nav-link active">Список курсов</a>
+        <a href="${pageContext.request.contextPath}/courses" class="nav-link active">Список курсов</a>
     </li>
 </c:if>
