@@ -53,11 +53,20 @@ jobs:
       - name: Check image dependencies without network access
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
-          mkdir -p "$RUNNER_TEMP/trivy" "$RUNNER_TEMP/gc-scan"
+          mkdir -p "$RUNNER_TEMP/trivy" "$RUNNER_TEMP/gc-scan/war"
           for flag in --download-db-only --download-java-db-only; do
             docker run --rm -v "$RUNNER_TEMP/trivy:/cache" "$TRIVY_IMAGE" \
               image --cache-dir /cache --no-progress "$flag"
           done
+          container=$(docker create goodcourses:ci)
+          trap 'docker rm "$container" >/dev/null' EXIT
+          docker cp "$container:/usr/local/tomcat/webapps/ROOT.war" "$RUNNER_TEMP/gc-scan/ROOT.war"
+          unzip -q "$RUNNER_TEMP/gc-scan/ROOT.war" 'WEB-INF/lib/*.jar' -d "$RUNNER_TEMP/gc-scan/war"
+          test -n "$(find "$RUNNER_TEMP/gc-scan/war" -name 'spring-security-web-*.jar' -print -quit)"
+          docker run --rm --network none -v "$RUNNER_TEMP/trivy:/cache" \
+            -v "$RUNNER_TEMP/gc-scan/war:/input:ro" "$TRIVY_IMAGE" fs \
+            --cache-dir /cache --offline-scan --skip-db-update --skip-java-db-update \
+            --no-progress --scanners vuln --severity HIGH,CRITICAL --exit-code 1 /input
           docker image save -o "$RUNNER_TEMP/gc-scan/goodcourses.tar" goodcourses:ci
           docker run --rm --network none -v "$RUNNER_TEMP/trivy:/cache" \
             -v "$RUNNER_TEMP/gc-scan:/input:ro" "$TRIVY_IMAGE" image \
