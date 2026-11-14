@@ -7,12 +7,15 @@ db="$base-db"
 app="$base-app"
 ca="$base-ca"
 cleanup() {
+    local status=$?
+    if (( status != 0 )); then
+        docker logs --tail 150 "$app" >&2 || true
+    fi
     docker rm -f "$app" "$db" >/dev/null 2>&1 || true
     docker volume rm "$ca" >/dev/null 2>&1 || true
     docker network rm "$base" >/dev/null 2>&1 || true
 }
 trap cleanup EXIT
-trap 'docker logs --tail 120 "$app" >&2 || true' ERR
 
 docker network create --internal "$base" >/dev/null
 docker volume create "$ca" >/dev/null
@@ -61,7 +64,10 @@ expect_status() {
     shift
     actual=$(request -o /dev/null -w '%{http_code}' "$@")
     printf 'HTTP %s (expected %s): %s\n' "$actual" "$expected" "${*: -1}"
-    [[ $actual == "$expected" ]]
+    if [[ $actual != "$expected" ]]; then
+        request -D - -o /dev/null "${*: -1}" | grep -Ei '^HTTP/|^Location:' || true
+        return 1
+    fi
 }
 start=$SECONDS
 for attempt in {1..120}; do
