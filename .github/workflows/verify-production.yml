@@ -27,7 +27,6 @@ jobs:
           --health-cmd "pg_isready -U goodcourses -d goodcourses"
           --health-interval 5s --health-timeout 3s --health-retries 12
     env:
-      TEST_DATABASE_URL: jdbc:postgresql://127.0.0.1:${{ job.services.postgres.ports[5432] }}/goodcourses
       TEST_DATABASE_USERNAME: goodcourses
       TEST_DATABASE_PASSWORD: ci-test-only
       TRIVY_IMAGE: ghcr.io/aquasecurity/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb
@@ -36,6 +35,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Test with PostgreSQL 16
+        env:
+          TEST_DATABASE_URL: jdbc:postgresql://127.0.0.1:${{ job.services.postgres.ports[5432] }}/goodcourses
         run: |
           export JAVA_HOME="$JAVA_HOME_21_X64"
           export PATH="$JAVA_HOME/bin:$PATH"
