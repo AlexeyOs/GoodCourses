@@ -1,0 +1,57 @@
+name: Verify production image
+
+on:
+  push:
+    branches: [master, 'codex/render-neon-security']
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: goodcourses
+          POSTGRES_USER: goodcourses
+          POSTGRES_PASSWORD: ci-test-only
+        ports:
+          - 5432/tcp
+        options: >-
+          --health-cmd "pg_isready -U goodcourses -d goodcourses"
+          --health-interval 5s --health-timeout 3s --health-retries 12
+    env:
+      TEST_DATABASE_URL: jdbc:postgresql://127.0.0.1:${{ job.services.postgres.ports[5432] }}/goodcourses
+      TEST_DATABASE_USERNAME: goodcourses
+      TEST_DATABASE_PASSWORD: ci-test-only
+      TRIVY_IMAGE: ghcr.io/aquasecurity/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Test with PostgreSQL 16
+        run: |
+          export JAVA_HOME="$JAVA_HOME_21_X64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          mvn -B -ntp -Pwindows clean test
+      - name: Build production image
+        run: docker build -t goodcourses:ci -f docker/tomcat/Dockerfile .
+      - name: Check image dependencies without network access
+        run: |
+          mkdir -p "$RUNNER_TEMP/trivy" "$RUNNER_TEMP/gc-scan"
+          for flag in --download-db-only --download-java-db-only; do
+            docker run --rm -v "$RUNNER_TEMP/trivy:/cache" "$TRIVY_IMAGE" \
+              image --cache-dir /cache --no-progress "$flag"
+          done
+          docker image save -o "$RUNNER_TEMP/gc-scan/goodcourses.tar" goodcourses:ci
+          docker run --rm --network none -v "$RUNNER_TEMP/trivy:/cache" \
+            -v "$RUNNER_TEMP/gc-scan:/input:ro" "$TRIVY_IMAGE" image \
+            --cache-dir /cache --input /input/goodcourses.tar --offline-scan \
+            --skip-db-update --skip-java-db-update --no-progress --scanners vuln \
+            --severity HIGH,CRITICAL --exit-code 1
