@@ -84,8 +84,9 @@ public class CourseWebApplicationInitializer implements WebApplicationInitialize
 			@Override
 			protected void applyCustomConfiguration(SiteMeshFilterBuilder builder) {
 				builder
-						.addDecoratorPath("/*", 		 "/WEB-INF/template/page-template.jsp")
-						.addDecoratorPath("/fragment/*", "/WEB-INF/template/fragment-template.jsp");
+						.setDecoratorPrefix("/WEB-INF/template/")
+						.addDecoratorPath("/*", "page-template.jsp")
+						.addDecoratorPath("/fragment/*", "fragment-template.jsp");
 			}
 		};
 	}
