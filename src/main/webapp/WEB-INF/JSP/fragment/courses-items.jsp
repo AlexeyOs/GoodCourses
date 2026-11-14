@@ -4,10 +4,10 @@
 <c:forEach var="course" items="${courses }">
     <div class="card">
         <div class="card-header">
-            <p>${course.platform}</p>
+            <p><c:out value="${course.platform}" /></p>
         </div>
         <div class="card-body">
-            <p>Предмет: ${course.subjectOfStudy}</p>
+            <p>Предмет: <c:out value="${course.subjectOfStudy}" /></p>
             <button  onclick="window.location.href='/course/${course.id}'" class="btn btn-primary pull-right">Подробнее</button>
         </div>
     </div>

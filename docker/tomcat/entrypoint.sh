@@ -36,7 +36,8 @@ validate_positive_integer "$TOMCAT_MAX_THREADS_VALUE" "TOMCAT_MAX_THREADS"
 validate_positive_integer "$TOMCAT_ACCEPT_COUNT_VALUE" "TOMCAT_ACCEPT_COUNT"
 
 if [ -z "${JAVA_TOOL_OPTIONS+x}" ]; then
-    export JAVA_TOOL_OPTIONS="-Xms64m -Xmx256m -XX:MaxMetaspaceSize=96m -Xss512k -XX:+UseSerialGC"
+    # Spring, Hibernate and the first JSP compilation need more metaspace than Java 8 did.
+    export JAVA_TOOL_OPTIONS="-Xms48m -Xmx176m -XX:MaxMetaspaceSize=176m -XX:ReservedCodeCacheSize=48m -XX:MaxDirectMemorySize=32m -XX:TieredStopAtLevel=1 -Xss512k -XX:+UseSerialGC"
 fi
 
 SERVER_XML="/usr/local/tomcat/conf/server.xml"

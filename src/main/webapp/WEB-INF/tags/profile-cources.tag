@@ -15,8 +15,8 @@
 		<div class="card-body">
 			<c:forEach var="course" items="${profile.courses}">
 			<div class="timeline-heading">
-				<h4 class="timeline-title"><a href="${pageContext.request.contextPath}/course/${course.id}">${course.subjectOfStudy}</a></h4>
-				<p>${course.platform}<c:if test="${not empty course.author}"> — ${course.author}</c:if></p>
+				<h4 class="timeline-title"><a href="${pageContext.request.contextPath}/course/${course.id}"><c:out value="${course.subjectOfStudy}" /></a></h4>
+				<p><c:out value="${course.platform}" /><c:if test="${not empty course.author}"> — <c:out value="${course.author}" /></c:if></p>
 				<p>
 					<small class="dates"><i class="fa fa-calendar"></i> <strong>Finish Date:</strong> <strong class="label label-danger">${course.finishDate}</strong> </small>
 				</p>

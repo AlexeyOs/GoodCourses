@@ -57,8 +57,16 @@ public class CourseController {
         //TODO добавить пользователя в сущность курса
 //        long uid = SecurityUtil.getCurrentIdProfile();
 //        Profile profile = profileRepository.findOne(uid);
-        model.addAttribute("alertMsg", "Данные успешно добавлены");
-        addCourseService.createNewCourse(platform, author, subjectOfStudy, link);
+        try {
+            addCourseService.createNewCourse(platform, author, subjectOfStudy, link);
+        } catch (IllegalArgumentException invalidLink) {
+            model.addAttribute("courseLinkError", invalidLink.getMessage());
+            model.addAttribute("platform", platform);
+            model.addAttribute("author", author);
+            model.addAttribute("subjectOfStudy", subjectOfStudy);
+            model.addAttribute("link", link);
+            return "add/course";
+        }
         return "redirect:/courses";
     }
 
@@ -97,7 +105,7 @@ public class CourseController {
     }
 
     @RequestMapping(value = { "/courses" })
-    public String courseAll(@RequestParam(defaultValue = "0") Integer pageNum,
+    public String courseAll(@RequestParam(name = "pageNum", defaultValue = "0") Integer pageNum,
                             Model model) {
         Page<Course> courses = findCourseService.findByVisible(
                 true,

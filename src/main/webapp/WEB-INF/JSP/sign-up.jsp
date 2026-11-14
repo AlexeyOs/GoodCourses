@@ -45,7 +45,7 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                        ${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message }
+                        <c:out value="${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}" />
                     <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session" />
                 </div>
             </c:if>

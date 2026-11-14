@@ -15,7 +15,7 @@
 				<div class="form-check" style="margin-bottom: 12px;">
 					<label>
 						<input type="checkbox" name="courseIds" value="${course.id}" ${selectedCourseIds.contains(course.id) ? 'checked="checked"' : ''}>
-						<strong>${course.subjectOfStudy}</strong> — ${course.platform}<c:if test="${not empty course.author}">, ${course.author}</c:if>
+						<strong><c:out value="${course.subjectOfStudy}" /></strong> — <c:out value="${course.platform}" /><c:if test="${not empty course.author}">, <c:out value="${course.author}" /></c:if>
 					</label>
 				</div>
 			</c:forEach>

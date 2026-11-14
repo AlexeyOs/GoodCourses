@@ -1,9 +1,10 @@
 <%@ tag pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
 <div class="card">
 	<a href="/edit"><img class="img-responsive photo" src="${profile.largePhoto}" alt="photo"></a>
 	<h1 class="text-center">
-		<a style="color: black;" href="/edit">${profile.fullName}</a>
+		<a style="color: black;" href="/edit"><c:out value="${profile.fullName}" /></a>
 	</h1>
 	<h6 class="text-center">
 		<strong>${profile.city}</strong>
