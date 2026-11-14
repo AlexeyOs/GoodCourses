@@ -20,7 +20,7 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -42,9 +42,12 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void testRedirectOnMainPageCourses() throws Exception {
+    public void testRendersCourseCatalogView() throws Exception {
         this.mockMvc.perform(get("/courses"))
-                .andExpect(forwardedUrl("/WEB-INF/JSP/courses.jsp"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("courses"))
+                .andExpect(result -> org.junit.jupiter.api.Assertions.assertTrue(
+                        result.getResponse().getIncludedUrls().contains("/WEB-INF/JSP/courses.jsp")));
     }
 
     @Test
