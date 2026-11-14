@@ -42,8 +42,12 @@ jobs:
           export PATH="$JAVA_HOME/bin:$PATH"
           mvn -B -ntp -Pwindows clean test
       - name: Build production image
+        id: build
         run: docker build -t goodcourses:ci -f docker/tomcat/Dockerfile .
+      - name: Smoke-test Tomcat with a disposable TLS database
+        run: bash scripts/smoke-production.sh goodcourses:ci
       - name: Check image dependencies without network access
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           mkdir -p "$RUNNER_TEMP/trivy" "$RUNNER_TEMP/gc-scan"
           for flag in --download-db-only --download-java-db-only; do
