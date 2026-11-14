@@ -6,29 +6,29 @@ import net.os.goodcourses.form.SignUpForm;
 import net.os.goodcourses.repository.storage.ProfileRepository;
 import net.os.goodcourses.service.impl.AddProfileServiceImpl;
 import net.os.goodcourses.service.impl.EditProfileServiceImpl;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PasswordProfileServiceTest {
     @Mock
     private ProfileRepository profileRepository;
 
     private PasswordService passwordService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         passwordService = new PasswordService(new BCryptPasswordEncoder(4));
         when(profileRepository.save(any(Profile.class)))

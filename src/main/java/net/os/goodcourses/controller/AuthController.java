@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
@@ -43,10 +45,11 @@ public class AuthController {
                          @RequestParam(value = "last_name") String lastName,
                          @RequestParam(value = "uid") String uid,
                          @RequestParam(value = "mail") String mail,
-                         @RequestParam(value = "password") String password) {
+                         @RequestParam(value = "password") String password,
+                         HttpServletRequest request, HttpServletResponse response) {
         if (findProfileService.findByUid(uid).equals(Optional.empty())) {
             Profile profile = addProfileService.createNewProfile(firstName, lastName, uid, mail, password);
-            SecurityUtil.authentificate(profile);
+            SecurityUtil.authentificate(profile, request, response);
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/" + profile.getUid());
             return new ResponseEntity<>(headers, HttpStatus.FOUND);

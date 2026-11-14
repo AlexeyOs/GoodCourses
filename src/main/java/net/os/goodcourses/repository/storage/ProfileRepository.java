@@ -6,16 +6,14 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import net.os.goodcourses.entity.Profile;
 
 /**
  *
  */
-public interface ProfileRepository extends PagingAndSortingRepository<Profile, Long> {
-
-	Optional<Profile> findById(long id);
+public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
 	Optional<Profile> findByUid(String uid);
 

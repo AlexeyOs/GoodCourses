@@ -3,7 +3,7 @@ package net.os.goodcourses.util;
 import java.util.Random;
 
 import net.os.goodcourses.form.SignUpForm;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.text.WordUtils;
 
 /**
  *

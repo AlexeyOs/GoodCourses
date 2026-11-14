@@ -2,12 +2,13 @@ package net.os.goodcourses.configuration;
 
 import java.util.EnumSet;
 
-import javax.servlet.Filter;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import javax.servlet.SessionCookieConfig;
-import javax.servlet.SessionTrackingMode;
+import jakarta.servlet.Filter;
+import jakarta.servlet.MultipartConfigElement;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRegistration;
+import jakarta.servlet.SessionCookieConfig;
+import jakarta.servlet.SessionTrackingMode;
 
 import org.sitemesh.builder.SiteMeshFilterBuilder;
 import org.sitemesh.config.ConfigurableSiteMeshFilter;
@@ -74,6 +75,7 @@ public class CourseWebApplicationInitializer implements WebApplicationInitialize
 	private void registerSpringMVCDispatcherServlet(ServletContext container, WebApplicationContext ctx) {
 		ServletRegistration.Dynamic servlet = container.addServlet("dispatcher", new DispatcherServlet(ctx));
 		servlet.setLoadOnStartup(1);
+		servlet.setMultipartConfig(new MultipartConfigElement("", 1_048_576L, 2_097_152L, 0));
 		servlet.addMapping("/");
 	}
 

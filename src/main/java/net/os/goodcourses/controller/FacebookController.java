@@ -1,6 +1,6 @@
 package net.os.goodcourses.controller;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,6 +22,8 @@ import net.os.goodcourses.service.SocialService;
 import net.os.goodcourses.util.SecurityUtil;
 
 import java.util.Optional;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class FacebookController {
@@ -55,7 +57,8 @@ public class FacebookController {
 	}
 	
 	@RequestMapping(value = {"/fromFb"}, method = RequestMethod.GET)
-	public String fromFb(@RequestParam(value = "code", required = false) String code) {
+	public String fromFb(@RequestParam(value = "code", required = false) String code,
+			HttpServletRequest request, HttpServletResponse response) {
 		if (StringUtils.isBlank(code)) {
 			return "redirect:/sign-in";
 		}
@@ -65,7 +68,7 @@ public class FacebookController {
 		User user = client.fetchObject("me", User.class, Parameter.with("fields", "name,email,first_name,last_name"));
 		Optional<Profile> p = facebookSocialService.loginViaSocialNetwork(user);
 		if (p.isPresent()) {
-			SecurityUtil.authentificate(p.get());
+			SecurityUtil.authentificate(p.get(), request, response);
 			return "redirect:/" + p.get().getUid();
 		} else {
 			return "redirect:/sign-in";

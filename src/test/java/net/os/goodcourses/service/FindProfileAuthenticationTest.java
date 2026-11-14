@@ -5,11 +5,11 @@ import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.repository.storage.ProfileRepository;
 import net.os.goodcourses.service.impl.FindProfileServiceImpl;
 import net.os.goodcourses.model.CurrentProfile;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,11 +17,11 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FindProfileAuthenticationTest {
     @Mock
     private ProfileRepository profileRepository;
@@ -29,7 +29,7 @@ public class FindProfileAuthenticationTest {
     private FindProfileServiceImpl service;
     private PasswordService passwordService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         passwordService = new PasswordService(new BCryptPasswordEncoder(4));
         service = new FindProfileServiceImpl();

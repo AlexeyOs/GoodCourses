@@ -3,7 +3,7 @@ package net.os.goodcourses.service.impl;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import net.os.goodcourses.component.NotificationContentResolver;
 import net.os.goodcourses.exception.CantCompleteClientRequestException;

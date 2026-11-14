@@ -1,25 +1,25 @@
 package net.os.goodcourses.form;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FeedbackFormTest {
 
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
 
-    @BeforeClass
+    @BeforeAll
     public static void createValidator() {
         validatorFactory = Validation.byDefaultProvider()
                 .configure()
@@ -28,7 +28,7 @@ public class FeedbackFormTest {
         validator = validatorFactory.getValidator();
     }
 
-    @AfterClass
+    @AfterAll
     public static void closeValidator() {
         validatorFactory.close();
     }
@@ -87,7 +87,7 @@ public class FeedbackFormTest {
     private void assertDescriptionInvalid(String description) {
         Set<ConstraintViolation<FeedbackForm>> violations = validate(description);
 
-        assertTrue("Description must be invalid", !violations.isEmpty());
+        assertTrue(!violations.isEmpty(), "Description must be invalid");
         for (ConstraintViolation<FeedbackForm> violation : violations) {
             assertEquals("description", violation.getPropertyPath().toString());
         }
@@ -104,7 +104,7 @@ public class FeedbackFormTest {
     private void assertRatingInvalid(Integer rating) {
         Set<ConstraintViolation<FeedbackForm>> violations = validate("Отзыв", rating);
 
-        assertTrue("Rating must be invalid", !violations.isEmpty());
+        assertTrue(!violations.isEmpty(), "Rating must be invalid");
         for (ConstraintViolation<FeedbackForm> violation : violations) {
             assertEquals("rating", violation.getPropertyPath().toString());
         }

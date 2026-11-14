@@ -1,21 +1,17 @@
-version: '3.3'
-
 services:
   db_postgre:
-    build:
-      context:  .
-      dockerfile: docker/postgresql/Dockerfile
-    image: postgres:11
+    image: postgres:16
     environment:
       POSTGRES_DB: goodcourses
       POSTGRES_USER: goodcourses
-      POSTGRES_PASSWORD: 1234
-    container_name: postgresql-postgis-container
-    ports:
-    - 5432:5432
-    restart: always
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-goodcourses-local-only}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U goodcourses -d goodcourses"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
     volumes:
-    - pg_data:/var/lib/postgresql/data
+    - pg16_data:/var/lib/postgresql/data
     networks:
     - eb
 
@@ -23,18 +19,23 @@ services:
     build:
       context:  .
       dockerfile: docker/tomcat/Dockerfile
-    image: tomcat-eb:v.9
-    container_name: tomcat-eb-container
+      args:
+        BUILD_PROFILE: docker
+    environment:
+      REMEMBER_ME_KEY: ${REMEMBER_ME_KEY:-goodcourses-local-development-only}
+      DB_PASSWORD: ${DB_PASSWORD:-goodcourses-local-only}
+      APP_HOST: http://localhost:8888
     ports:
-    - 8888:8080
+    - "127.0.0.1:8888:8080"
     restart: on-failure
     depends_on:
-    - db_postgre
+      db_postgre:
+        condition: service_healthy
     networks:
     - eb
 
 volumes:
-  pg_data:
+  pg16_data:
 
 networks:
   eb:

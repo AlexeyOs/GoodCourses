@@ -4,12 +4,12 @@ import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.entity.ProfileRestore;
 import net.os.goodcourses.repository.storage.ProfileRestoreRepository;
 import net.os.goodcourses.service.impl.AuthServiceImpl;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
@@ -19,16 +19,16 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AuthServiceImplTest {
     private static final long PROFILE_ID = 42L;
     private static final String EXTERNAL_RESPONSE = "Вам будет отправлено сообщение, проверьте почту";
@@ -41,7 +41,7 @@ public class AuthServiceImplTest {
     private AuthServiceImpl authService;
     private Profile profile;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         authService = new AuthServiceImpl(findProfileService, editProfileService,
                 notificationManagerService, profileRestoreRepository,

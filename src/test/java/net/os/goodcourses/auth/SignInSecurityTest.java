@@ -3,9 +3,9 @@ package net.os.goodcourses.auth;
 import net.os.goodcourses.configuration.SecurityConfig;
 import net.os.goodcourses.entity.Profile;
 import net.os.goodcourses.model.CurrentProfile;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,12 +39,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = SignInSecurityTest.TestConfiguration.class)
 @TestPropertySource(properties = "REMEMBER_ME_KEY=integration-test-remember-me-key")
@@ -56,7 +55,7 @@ public class SignInSecurityTest {
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         reset(userDetailsService);
         mockMvc = webAppContextSetup(context)
@@ -96,7 +95,7 @@ public class SignInSecurityTest {
     public void shouldRedirectGuestFromProtectedUrlToSignIn() throws Exception {
         mockMvc.perform(get("/my-profile"))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrlPattern("**/sign-in"))
+                .andExpect(redirectedUrl("/sign-in"))
                 .andExpect(unauthenticated());
     }
 

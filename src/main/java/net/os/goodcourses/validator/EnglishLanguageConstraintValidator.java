@@ -1,7 +1,7 @@
 package net.os.goodcourses.validator;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 import net.os.goodcourses.annotation.constraints.EnglishLanguage;
 

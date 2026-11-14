@@ -2,7 +2,7 @@ package net.os.goodcourses.service.impl;
 
 import java.util.concurrent.ExecutorService;
 
-import javax.mail.internet.InternetAddress;
+import jakarta.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

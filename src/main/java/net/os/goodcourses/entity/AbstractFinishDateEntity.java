@@ -2,9 +2,9 @@ package net.os.goodcourses.entity;
 
 import java.sql.Date;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 
 import org.joda.time.DateTime;
 

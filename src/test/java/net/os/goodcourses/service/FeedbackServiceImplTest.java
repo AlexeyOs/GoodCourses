@@ -11,11 +11,11 @@ import net.os.goodcourses.repository.storage.FeedBackRepository;
 import net.os.goodcourses.repository.storage.ProfileRepository;
 import net.os.goodcourses.repository.projection.CourseRatingProjection;
 import net.os.goodcourses.service.impl.FeedbackServiceImpl;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -26,19 +26,19 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FeedbackServiceImplTest {
 
     private static final long PROFILE_ID = 10L;
@@ -59,7 +59,7 @@ public class FeedbackServiceImplTest {
     private Profile profile;
     private Course course;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         feedbackService = new FeedbackServiceImpl(
                 feedBackRepository,

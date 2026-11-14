@@ -5,22 +5,24 @@ import net.os.goodcourses.service.AddProfileService;
 import net.os.goodcourses.service.AuthService;
 import net.os.goodcourses.service.FindProfileService;
 import net.os.goodcourses.util.SecurityUtil;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.mock.env.MockEnvironment;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -34,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AuthControllerTest {
 
     @Mock private FindProfileService findProfileService;
@@ -44,7 +46,7 @@ public class AuthControllerTest {
     private MockMvc mockMvc;
     private MockEnvironment environment;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         SecurityContextHolder.clearContext();
         environment = new MockEnvironment().withProperty("email.enabled", "false");
@@ -57,7 +59,7 @@ public class AuthControllerTest {
                 .build();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         SecurityContextHolder.clearContext();
     }
@@ -109,7 +111,7 @@ public class AuthControllerTest {
 
     @Test
     public void authenticatedUserShouldBeRedirectedFromSignInToOwnProfile() throws Exception {
-        SecurityUtil.authentificate(profile(7L, "alex", "secret"));
+        authenticate(profile(7L, "alex", "secret"));
 
         mockMvc.perform(get("/sign-in"))
                 .andExpect(status().isFound())
@@ -126,7 +128,7 @@ public class AuthControllerTest {
 
     @Test
     public void authenticatedUserShouldBeRedirectedFromSignUpToOwnProfile() throws Exception {
-        SecurityUtil.authentificate(profile(7L, "alex", "secret"));
+        authenticate(profile(7L, "alex", "secret"));
 
         mockMvc.perform(get("/sign-up"))
                 .andExpect(status().isFound())
@@ -194,5 +196,9 @@ public class AuthControllerTest {
         profile.setUid(uid);
         profile.setPassword(password);
         return profile;
+    }
+
+    private void authenticate(Profile profile) {
+        SecurityUtil.authentificate(profile, new MockHttpServletRequest(), new MockHttpServletResponse());
     }
 }

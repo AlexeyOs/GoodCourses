@@ -2,13 +2,13 @@ package net.os.goodcourses.form;
 
 import net.os.goodcourses.entity.Profile;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AboutMeFormTest {
 

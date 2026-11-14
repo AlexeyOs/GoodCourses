@@ -1,14 +1,15 @@
 package net.os.goodcourses.configuration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 import javax.sql.DataSource;
 
 import org.flywaydb.core.Flyway;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JPAConfigTest {
 
@@ -26,21 +27,22 @@ public class JPAConfigTest {
                 connection.getJdbcUrl());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void rejectsDatabaseUrlWithoutServerIdentityVerification() {
-        JPAConfig.parseDatabaseUrl(
-                "postgresql://user:password@db.example.neon.tech/goodcourses?sslmode=require");
+        assertThrows(IllegalArgumentException.class, () -> JPAConfig.parseDatabaseUrl(
+                "postgresql://user:password@db.example.neon.tech/goodcourses?sslmode=require"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void rejectsUnexpectedScheme() {
-        JPAConfig.parseDatabaseUrl(
-                "http://user:password@db.example.neon.tech/goodcourses?sslmode=verify-full");
+        assertThrows(IllegalArgumentException.class, () -> JPAConfig.parseDatabaseUrl(
+                "http://user:password@db.example.neon.tech/goodcourses?sslmode=verify-full"));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void productionRequiresSeparateMigrationDatabaseUrl() {
-        JPAConfig.configureFlyway(null, "production", mock(DataSource.class));
+        assertThrows(IllegalStateException.class,
+                () -> JPAConfig.configureFlyway(null, "production", mock(DataSource.class)));
     }
 
     @Test

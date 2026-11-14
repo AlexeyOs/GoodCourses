@@ -34,6 +34,8 @@ Flyway запускается при старте приложения.
 - `DATABASE_URL` — runtime-роль с `CONNECT`, `USAGE` схемы и DML/sequence-правами без `CREATE`, `ALTER` и `DROP`;
 - `MIGRATION_DATABASE_URL` — прямой Neon endpoint миграционной роли, владеющей объектами и выполняющей Flyway DDL.
 
+В обоих случаях используйте формат `postgresql://` без префикса `jdbc:`. Если в строке Neon указано `sslmode=require`, замените его на `sslmode=verify-full` и добавьте `sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory`, чтобы pgJDBC проверял сертификат по доверенным центрам JVM. Сохраните URL-кодирование учётных данных и остальные параметры Neon. Для Flyway выключите Connection pooling при копировании URL. Перед публикацией проверьте обе строки из финального контейнера.
+
 Права runtime-роли выдаются миграционной ролью через `ALTER DEFAULT PRIVILEGES` для будущих таблиц и sequence. После первого запуска у runtime-роли явно отзываются права на `flyway_schema_history`. Названия ролей и пароли не сохраняются в SQL-файлах репозитория. Проверка прав выполняется отдельными подключениями: runtime-роль должна читать и изменять бизнес-таблицы, но получать отказ на `CREATE TABLE` и изменение Flyway history.
 
 - Пустая БД получает `V1`, затем последующие миграции.
@@ -92,12 +94,20 @@ Koyeb использует `/health/live` как platform health-check, чтоб
 1. Создать Web Service из GitHub-репозитория.
 2. Выбрать сборку через `docker/tomcat/Dockerfile` с context из корня репозитория.
 3. Выбрать регион Frankfurt, один instance типа `free` и публичный route `/`.
-4. Добавить значения из `.env.example`; реальные `DATABASE_URL`, `MIGRATION_DATABASE_URL` и `REMEMBER_ME_KEY` создать как Secrets.
+4. Создать Koyeb Secrets для `DATABASE_URL`, `MIGRATION_DATABASE_URL` и `REMEMBER_ME_KEY` и явно привязать каждый к одноимённой переменной окружения сервиса. Если используется текстовый редактор Koyeb, значение ссылки выглядит как `{{ secret.DATABASE_URL }}`. `APP_HOST` можно задать как `https://{{ KOYEB_PUBLIC_DOMAIN }}`. Не передавать секреты аргументами Docker-сборки.
 5. Настроить HTTP health-check `/health/live`, timeout 5 секунд, interval 30 секунд и initial grace period не меньше фактически измеренного холодного старта плюс 30 секунд.
 6. После запуска вручную проверить `/health/ready` и основные пользовательские сценарии.
 7. Проверить Usage and billing: Starter, один бесплатный Web Service, без Koyeb Database, Volume, Worker и платных экземпляров.
 
 Первый выпуск выполняется из ветки развёртывания. Автоматическое обновление из `master` включается только после успешного restart/redeploy теста и проверки сохранности контрольной записи в Neon.
+
+### Альтернатива: Render Free + Neon Free
+
+1. В [Render](https://dashboard.render.com/) создать Web Service из проверенной ветки GoodCourses: Docker, путь `docker/tomcat/Dockerfile`, контекст из корня репозитория, регион Frankfurt, план Free. На первый выпуск отключить Auto-Deploy.
+2. Задать переменные из раздела 2 в настройках сервиса. `APP_HOST` — фактический URL `https://…onrender.com`; `PORT` предоставляет Render. Секреты не использовать при сборке образа.
+3. Указать `/health/live` в Health Check Path. После выпуска отдельно проверить `/health/ready`, каталог и повторный запуск.
+4. Для пробного стенда использовать пустую БД Neon и `SMTP_ENABLED=false`: [Render Free блокирует стандартные SMTP-порты](https://render.com/docs/free#other-limitations). Не импортировать профили `RESET_REQUIRED`, пока нет проверенного восстановления пароля.
+5. Не добавлять платёжный метод, если цель — исключить списания за превышение лимитов. Не использовать временную Render Postgres вместо Neon: [бесплатная БД Render истекает через 30 дней](https://render.com/docs/free#30-day-limit).
 
 ## 8. Откат
 

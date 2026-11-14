@@ -1,6 +1,6 @@
 package net.os.goodcourses.form;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 
 public class AboutMeForm {
 

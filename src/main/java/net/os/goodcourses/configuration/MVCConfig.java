@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -24,12 +24,13 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @EnableSpringDataWebSupport
 @ComponentScan({"net.os.goodcourses.controller"})
-public class MVCConfig extends WebMvcConfigurerAdapter {
+public class MVCConfig implements WebMvcConfigurer {
 
 	@Bean
 	public ViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setViewClass(JstlView.class);
+		viewResolver.setAlwaysInclude(true);
 		viewResolver.setPrefix("/WEB-INF/JSP/");
 		viewResolver.setSuffix(".jsp");
 		return viewResolver;
@@ -43,9 +44,8 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public CommonsMultipartResolver multipartResolver() {
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-		return multipartResolver;
+	public StandardServletMultipartResolver multipartResolver() {
+		return new StandardServletMultipartResolver();
 	}
 
 	@Bean

@@ -143,7 +143,7 @@ public class JPAConfig {
     private Properties hibernateProperties() {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
-        properties.put("javax.persistence.validation.mode", "none");
+        properties.put("jakarta.persistence.validation.mode", "none");
         return properties;
     }
 

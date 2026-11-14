@@ -1,122 +1,102 @@
 # Локальный запуск GoodCourses
 
-Инструкция описывает запуск приложения на своём компьютере без Docker:
-PostgreSQL + сборка Maven + запуск WAR через `webapp-runner` (так же, как на Heroku).
+Инструкция описывает запуск приложения без Docker: PostgreSQL, сборка WAR через Maven и развёртывание в Apache Tomcat 11.
 
 ## 1. Что нужно установить
 
 | Инструмент | Версия | Комментарий |
 |---|---|---|
-| JDK | 11 | Проект компилируется под Java 8 (`source/target 1.8`), проверено на JDK 11 |
-| Maven | 3.6+ | Проверено на 3.8.8 |
-| PostgreSQL | 11 | Дамп схемы снят с 11.1 |
+| JDK | 21 | Используйте полноценный JDK, а не только JRE |
+| Maven | 3.9+ | Maven должен запускаться на JDK 21 |
+| PostgreSQL | 16+ | Та же основная версия рекомендуется для локальной и production-среды |
+| Apache Tomcat | 11 | Контейнер Jakarta Servlet 6.1 |
 
-Убедитесь, что команды доступны:
+Убедитесь, что команды и переменная `CATALINA_HOME` настроены:
 
-```bash
+```powershell
 java -version
 mvn -v
 psql --version
+$env:CATALINA_HOME
 ```
 
-## 2. База данных
+## 2. Новая база данных
 
-Приложение ожидает базу `goodcourses` на `localhost:5432`
-с пользователем `goodcourses` / паролем `1234` (см. `src/main/resources/windows.properties`).
+Профиль `windows` подключается к базе `goodcourses` на `localhost:5432`. Пароль берётся из переменной `DB_PASSWORD`, а если она не задана, используется локальное значение `1234`.
 
-Создайте пользователя и базу (от имени суперпользователя `postgres`):
+Создайте роль и **пустую** базу от имени администратора PostgreSQL:
 
-```bash
+```powershell
 psql -U postgres -h localhost -c "CREATE ROLE goodcourses LOGIN PASSWORD '1234';"
 psql -U postgres -h localhost -c "CREATE DATABASE goodcourses OWNER goodcourses;"
 ```
 
-Загрузите схему:
+Не загружайте `sql/goodcourses-db.sql` и не создавайте таблицы вручную. При первом старте приложение само применит к пустой базе все версионированные миграции из `src/main/resources/db/migration`. Flyway также проверяет уже применённые миграции при последующих стартах.
 
-```bash
-psql -U goodcourses -h localhost -d goodcourses -f sql/goodcourses-db.sql
-```
+Для повторной проверки сценария чистой установки создайте новую пустую базу с владельцем `goodcourses`. Не удаляйте данные из рабочей или общей базы ради такой проверки.
 
-`sql/goodcourses-db.sql` создаёт таблицы и заполняет только справочник `skill_category`.
-Курсы, профили и отзывы создаются генератором тестовых данных (шаг 5).
+## 3. Локальная конфигурация
 
-## 3. Сборка
+Проверьте `src/main/resources/windows.properties`:
 
-Профиль конфигурации выбирается Maven-профилем. По умолчанию активен `heroku`,
-он ищет базу на хосте `db_postgre`, поэтому для локального запуска используйте профиль `windows`
-(несмотря на название, он подходит для любой ОС — в нём `localhost`):
+- `db.url` должен указывать на локальную базу;
+- `notification.config.path` указывает на ресурс внутри WAR; локальный путь не нужен.
 
-```bash
-mvn -P windows clean package -DskipTests
-```
+Не коммитьте свой локальный абсолютный путь или пароль.
 
-Результат: `target/GoodCourses.war` и `target/dependency/webapp-runner.jar`.
-
-> **Важно.** Сборка перезаписывает `src/main/resources/application.properties`
-> (туда записывается выбранный профиль). Не коммитьте этот файл, верните его так:
-> `git checkout src/main/resources/application.properties`
-
-### Путь к шаблонам уведомлений
-
-При старте приложение читает файл шаблонов писем по **абсолютному** пути из
-`notification.config.path` в `src/main/resources/windows.properties`.
-Если путь не существует, приложение не запустится. Укажите путь к своей копии репозитория, например:
-
-```properties
-notification.config.path=C:/work/GoodCourses/src/main/webapp/WEB-INF/notifications/notifications.xml
-```
-
-После изменения пересоберите проект. Это локальная настройка — не коммитьте её.
-
-## 4. Запуск
-
-Приложению нужны переменные окружения с секретами. Для локального запуска подойдут любые значения —
-сайт заработает, но отправка писем и вход через Facebook работать не будут.
-
-| Переменная | Назначение |
-|---|---|
-| `SMTP_USER_NAME`, `SMTP_PASSWORD` | Учётная запись SMTP для отправки писем |
-| `FACEBOOK_SECRET` | Секрет приложения Facebook для входа через соцсеть |
-
-Bash (Linux, macOS, Git Bash):
-
-```bash
-export SMTP_USER_NAME=local SMTP_PASSWORD=local FACEBOOK_SECRET=local
-java -jar target/dependency/webapp-runner.jar --port 8080 target/GoodCourses.war
-```
-
-PowerShell:
+Перед запуском задайте локальные значения секретов:
 
 ```powershell
-$env:SMTP_USER_NAME="local"; $env:SMTP_PASSWORD="local"; $env:FACEBOOK_SECRET="local"
-java -jar target/dependency/webapp-runner.jar --port 8080 target/GoodCourses.war
+$env:DB_PASSWORD="1234"
+$env:REMEMBER_ME_KEY="goodcourses-local-development-only"
 ```
 
-Приложение готово, когда в логе появится `Starting ProtocolHandler ["http-nio-8080"]`.
-Откройте http://localhost:8080 — должна открыться страница со списком курсов.
+В локальном режиме SMTP выключен по умолчанию. Для production используйте отдельный случайный ключ, не это тестовое значение.
 
-## 5. Тестовые данные (необязательно)
+## 4. Сборка WAR
 
-Без данных список курсов будет пустым. Заполнить базу можно генератором
-`src/test/java/net/os/goodcourses/testenv/TestDataGenerator.java`.
+Соберите приложение с Maven-профилем `windows`:
 
-> **Внимание.** Генератор **удаляет** все профили, курсы, отзывы и навыки из базы
-> и очищает папку `src/main/webapp/media`, затем создаёт данные заново.
-
-1. В `TestDataGenerator.java` укажите в `MEDIA_DIR` абсолютный путь к папке
-   `src/main/webapp/media` своей копии репозитория (локальная правка, не коммитьте её).
-2. Запустите генератор из корня репозитория (база должна быть запущена):
-
-```bash
-mvn -P windows test-compile exec:java -Dexec.mainClass="net.os.goodcourses.testenv.TestDataGenerator" -Dexec.classpathScope="test"
+```powershell
+mvn -Pwindows clean package -DskipTests
 ```
+
+Результат сборки — `target/GoodCourses.war`. Профиль `windows` создаёт только WAR: `webapp-runner` больше не упаковывается и для локального запуска не используется.
+
+## 5. Развёртывание в Tomcat 11
+
+Приложение использует ссылки от корня сайта, поэтому для локального запуска разворачивайте WAR как корневой контекст. На чистом экземпляре Tomcat скопируйте артефакт под именем `ROOT.war`:
+
+```powershell
+Copy-Item -LiteralPath "target/GoodCourses.war" -Destination "$env:CATALINA_HOME/webapps/ROOT.war"
+& "$env:CATALINA_HOME/bin/catalina.bat" run
+```
+
+Перед копированием убедитесь, что в `webapps` нет другого приложения `ROOT.war` или каталога `ROOT`, который нужно сохранить. Для повторного развёртывания остановите Tomcat и замените только ранее установленный артефакт GoodCourses.
+
+Во время запуска Flyway применит миграции, после чего Spring создаст persistence-контекст. Дождитесь сообщения Tomcat об успешном запуске сервера и проверьте логи на ошибки миграций и инициализации приложения.
+
+Откройте [http://localhost:8080/](http://localhost:8080/). Начальная страница должна перенаправить на каталог курсов.
+
+Для остановки режима `catalina.bat run` нажмите `Ctrl+C`.
+
+## 6. Что проверить
+
+После первого запуска на чистой базе:
+
+1. В журнале Flyway нет ошибок, а в базе появилась таблица истории миграций.
+2. Открываются главная страница, каталог курсов и страницы входа/регистрации.
+3. Можно зарегистрировать пользователя и войти в систему.
+4. После перезапуска Tomcat Flyway валидирует схему и не применяет миграции повторно.
 
 ## Частые ошибки
 
-| Симптом в логе | Причина | Решение |
+| Симптом | Причина | Решение |
 |---|---|---|
-| `Could not resolve placeholder 'SMTP_USER_NAME'` | Не заданы переменные окружения | Шаг 4 |
-| Ошибка подключения к БД, в тексте `db_postgre` | Сборка без `-P windows` | Шаг 3 |
-| `Connection refused` к `localhost:5432` | Не запущен PostgreSQL | Шаг 2 |
-| Ошибка загрузки, в тексте `notifications.xml` | Неверный `notification.config.path` | Шаг 3 |
-| `Address already in use` | Порт 8080 занят | Запустите с другим `--port` и откройте соответствующий адрес |
+| Maven или Tomcat сообщает о неподдерживаемой версии классов | Используется не JDK 21 | Проверьте `java -version`, `mvn -v` и `JAVA_HOME` |
+| Tomcat не разворачивает приложение из-за `javax.*` | Используется старый WAR или Tomcat 9/10 | Пересоберите проект и используйте Tomcat 11 |
+| Ошибка подключения к `localhost:5432` | PostgreSQL не запущен, база не создана или неверен пароль | Проверьте PostgreSQL, шаг 2 и `DB_PASSWORD` |
+| Flyway сообщает, что схема непустая и не содержит истории | База была создана legacy SQL-скриптом | Используйте новую пустую базу; не выполняйте `sql/goodcourses-db.sql` |
+| Ошибка загрузки `notifications.xml` | Неверный `notification.config.path` | Верните `classpath:notifications/notifications.xml` и пересоберите WAR |
+| HTTP 404 по адресу `/` | WAR развёрнут не как корневой контекст | Разверните его как `webapps/ROOT.war` |
+| Порт 8080 занят | Другой процесс уже слушает порт | Освободите порт или настройте другой порт в Tomcat |

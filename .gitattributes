@@ -1,0 +1,2 @@
+docker/tomcat/entrypoint.sh text eol=lf
+src/main/webapp/static/js/jquery.js text eol=lf

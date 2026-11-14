@@ -2,10 +2,15 @@ package net.os.goodcourses.util;
 
 import java.util.UUID;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import net.os.goodcourses.entity.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 import net.os.goodcourses.model.CurrentProfile;
 
@@ -13,6 +18,15 @@ import net.os.goodcourses.model.CurrentProfile;
  *
  */
 public final class SecurityUtil {
+	private static final SecurityContextRepository SECURITY_CONTEXT_REPOSITORY =
+			new HttpSessionSecurityContextRepository();
+
+	private SecurityUtil() {
+	}
+
+	public static SecurityContextRepository securityContextRepository() {
+		return SECURITY_CONTEXT_REPOSITORY;
+	}
 
 	public static CurrentProfile getCurrentProfile() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -32,11 +46,14 @@ public final class SecurityUtil {
 		return currentProfile != null ? currentProfile.getId() : null;
 	}
 
-	public static void authentificate(Profile profile) {
+	public static void authentificate(Profile profile, HttpServletRequest request, HttpServletResponse response) {
 		CurrentProfile currentProfile = new CurrentProfile(profile);
 		Authentication authentication = new UsernamePasswordAuthenticationToken(
 				currentProfile, currentProfile.getPassword(), currentProfile.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+		securityContext.setAuthentication(authentication);
+		SecurityContextHolder.setContext(securityContext);
+		SECURITY_CONTEXT_REPOSITORY.saveContext(securityContext, request, response);
 	}
 
 	public static boolean isCurrentProfileAuthentificated() {

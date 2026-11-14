@@ -1,12 +1,12 @@
 package net.os.goodcourses.entity;
 
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import org.hibernate.validator.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "feedback", uniqueConstraints = @UniqueConstraint(

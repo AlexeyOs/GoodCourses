@@ -1,13 +1,14 @@
-FROM maven:3.9.13-eclipse-temurin-8 AS build
+# syntax=docker/dockerfile:1
+FROM maven:3.9.13-eclipse-temurin-21@sha256:850d3575de1cf32ee99e6da31acd943242113ee9b7d320564784a30b2f9b0a42 AS build
 
 WORKDIR /workspace
+ARG BUILD_PROFILE=production
 COPY pom.xml ./
-RUN mvn -B -Pproduction dependency:go-offline
-
 COPY src ./src
-RUN mvn -B -Pproduction clean package -DskipTests
+RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp "-P${BUILD_PROFILE}" clean package -DskipTests \
+    && grep -Fxq "configProfile=${BUILD_PROFILE}" target/classes/application.properties
 
-FROM tomcat:9.0.123-jre8-temurin-jammy
+FROM tomcat:11.0-jre21-temurin-noble@sha256:29383617e4ad5fb3724b9c198b1622cb5034d29d9d4d65e00ec817be59d07529
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends curl \
@@ -19,7 +20,8 @@ RUN apt-get update \
 
 COPY --from=build --chown=tomcat-app:tomcat-app /workspace/target/GoodCourses.war /usr/local/tomcat/webapps/ROOT.war
 COPY --chown=tomcat-app:tomcat-app docker/tomcat/entrypoint.sh /usr/local/bin/goodcourses-entrypoint
-RUN chmod 0755 /usr/local/bin/goodcourses-entrypoint
+RUN sed -i 's/\r$//' /usr/local/bin/goodcourses-entrypoint \
+    && chmod 0755 /usr/local/bin/goodcourses-entrypoint
 
 USER tomcat-app
 EXPOSE 8080

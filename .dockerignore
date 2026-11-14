@@ -4,6 +4,7 @@
 .runtime
 .tools
 target
+src/main/webapp/WEB-INF/lib
 *.log
 *.iml
 .env
