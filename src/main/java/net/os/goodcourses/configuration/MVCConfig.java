@@ -31,6 +31,8 @@ public class MVCConfig implements WebMvcConfigurer {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 		viewResolver.setViewClass(JstlView.class);
 		viewResolver.setAlwaysInclude(true);
+		// An included JSP cannot override the enclosing response's content type.
+		viewResolver.setContentType("text/html;charset=UTF-8");
 		viewResolver.setPrefix("/WEB-INF/JSP/");
 		viewResolver.setSuffix(".jsp");
 		return viewResolver;
