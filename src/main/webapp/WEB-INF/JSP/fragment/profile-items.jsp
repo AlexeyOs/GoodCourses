@@ -10,7 +10,7 @@
 			<div class="media-body search-result-item">
 				<a href="/<c:out value="${profile.uid}" />" class="btn btn-primary pull-right">Детали</a>
 				<h4 class="media-heading">
-					<a href="/<c:out value="${profile.uid}" />">${profile.id}) <c:out value="${profile.fullName}" />, ${profile.age }</a>
+					<a href="/<c:out value="${profile.uid}" />">${profile.id}) <c:out value="${profile.fullName}" /></a>
 				</h4>
 				<c:if test="${not empty profile.aboutMe}">
 					<p><c:out value="${profile.aboutMe}" /></p>

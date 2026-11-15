@@ -49,7 +49,7 @@
                     <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session" />
                 </div>
             </c:if>
-            <div class="help-block">Вы можете использовать Ваши UID или Email или Phone в качестве логина</div>
+            <div class="help-block">Вы можете использовать UID или Email в качестве логина</div>
             <div class="form-group">
                 <label for="first_name">Имя</label> <input id="first_name" name="first_name" class="form-control" placeholder="Иван" required autofocus>
             </div>

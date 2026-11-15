@@ -1,15 +1,12 @@
 package net.os.goodcourses.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
 
-import org.joda.time.LocalDate;
-import org.joda.time.Years;
 /**
  *
  */
@@ -23,9 +20,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROFILE_ID_GENERATOR")
 	@Column(unique = true, nullable = false)
 	private Long id;
-
-	@Column(name = "birth_day")
-	private Date birthDay;
 
 	@Column
 	private String city;
@@ -47,9 +41,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	@Column(name = "small_photo", length = 255)
 	private String smallPhoto;
-
-	@Column(length = 20)
-	private String phone;
 
 	@Column(length = 100)
 	private String email;
@@ -96,9 +87,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 		this.courses = courses;
 	}
 
-	@Embedded
-	private Contacts contacts;
-
 	public Profile() {
 	}
 
@@ -108,14 +96,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Date getBirthDay() {
-		return this.birthDay;
-	}
-
-	public void setBirthDay(Date birthDay) {
-		this.birthDay = birthDay;
 	}
 
 	public String getCity() {
@@ -199,14 +179,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 		this.smallPhoto = smallPhoto;
 	}
 
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -253,14 +225,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 	}
 
 	@Transient
-	public int getAge() {
-		LocalDate birthdate = new LocalDate(birthDay);
-		LocalDate now = new LocalDate();
-		Years age = Years.yearsBetween(birthdate, now);
-		return age.getYears();
-	}
-
-	@Transient
 	public String getProfilePhoto() {
 		if (largePhoto != null) {
 			return largePhoto;
@@ -282,18 +246,6 @@ public class Profile extends AbstractEntity<Long> implements Serializable {
 
 	public void setInfo(String info) {
 		this.info = info;
-	}
-
-	// https://hibernate.atlassian.net/browse/HHH-7610
-	public Contacts getContacts() {
-		if (contacts == null) {
-			contacts = new Contacts();
-		}
-		return contacts;
-	}
-
-	public void setContacts(Contacts contacts) {
-		this.contacts = contacts;
 	}
 
 	private void updateListSetProfile(List<? extends ProfileEntity> list) {

@@ -19,8 +19,6 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
 	Optional<Profile> findByEmail(String email);
 
-	Optional<Profile> findByPhone(String phone);
-	
 	int countByUid(String uid);
 	
 	Page<Profile> findAllByCompletedTrue(Pageable pageable);

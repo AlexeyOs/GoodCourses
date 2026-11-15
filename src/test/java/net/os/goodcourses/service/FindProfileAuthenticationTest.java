@@ -48,6 +48,17 @@ public class FindProfileAuthenticationTest {
     }
 
     @Test
+    public void shouldLoadActiveProfileByEmailWhenUidDoesNotMatch() {
+        Profile profile = profile(PasswordState.ACTIVE, passwordService.encode("Secret-123"));
+        when(profileRepository.findByUid("alex@example.com")).thenReturn(Optional.empty());
+        when(profileRepository.findByEmail("alex@example.com")).thenReturn(Optional.of(profile));
+
+        UserDetails user = service.loadUserByUsername("alex@example.com");
+
+        assertEquals("alex", user.getUsername());
+    }
+
+    @Test
     public void shouldRejectProfileThatRequiresPasswordReset() {
         Profile profile = profile(PasswordState.RESET_REQUIRED, null);
         when(profileRepository.findByUid("alex")).thenReturn(Optional.of(profile));

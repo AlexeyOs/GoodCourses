@@ -93,7 +93,6 @@ public class TestDataGenerator {
 
 	private static final Random r = new Random();
 	private static int idProfile = 0;
-	private static Date birthDay = null;
 
 	public static void main(String[] args) throws Exception {
 		clearMedia();
@@ -208,11 +207,9 @@ public class TestDataGenerator {
 
 	private static Date randomFinishEducation() {
 		Calendar cl = Calendar.getInstance();
-		cl.setTimeInMillis(birthDay.getTime());
 		cl.set(Calendar.DAY_OF_MONTH, 30);
 		cl.set(Calendar.MONTH, Calendar.JUNE);
-		int year = cl.get(Calendar.YEAR) + 21;
-		cl.set(Calendar.YEAR, year + r.nextInt(3));
+		cl.set(Calendar.YEAR, cl.get(Calendar.YEAR) - 8 + r.nextInt(11));
 		return new Date(cl.getTimeInMillis());
 	}
 
@@ -250,18 +247,18 @@ public class TestDataGenerator {
 	}
 
 	private static void insertProfileData(Connection c, Profile profile, ProfileConfig profileConfig) throws SQLException, IOException {
-		PreparedStatement ps = c.prepareStatement("insert into profile values (nextval('profile_seq'),?,?,?,?,?,?,?,?,?,?,?,?,?,?,true,?,?,?,?,?,?,?)");
+		PreparedStatement ps = c.prepareStatement("insert into profile "
+				+ "(id, uid, first_name, last_name, email, country, city, objective, summary, large_photo, "
+				+ "small_photo, info, password, completed, created, password_state) "
+				+ "values (nextval('profile_seq'),?,?,?,?,?,?,?,?,?,?,?,?,true,?,'ACTIVE')");
 		ps.setString(1, (profile.firstName + "-" + profile.lastName).toLowerCase());
 		ps.setString(2, profile.firstName);
 		ps.setString(3, profile.lastName);
-		birthDay = randomBirthDate();
-		ps.setDate(4, birthDay);
-		ps.setString(5, generatePhone());
-		ps.setString(6, (profile.firstName + "-" + profile.lastName).toLowerCase() + "@gmail.com");
-		ps.setString(7, COUTRY);
-		ps.setString(8, CITIES[r.nextInt(CITIES.length)]);
-		ps.setString(9, profileConfig.objective);
-		ps.setString(10, profileConfig.summary);
+		ps.setString(4, (profile.firstName + "-" + profile.lastName).toLowerCase() + "@gmail.com");
+		ps.setString(5, COUTRY);
+		ps.setString(6, CITIES[r.nextInt(CITIES.length)]);
+		ps.setString(7, profileConfig.objective);
+		ps.setString(8, profileConfig.summary);
 
 		String uid = UUID.randomUUID().toString() + ".jpg";
 		File photo = new File(MEDIA_DIR + "/avatar/" + uid);
@@ -270,51 +267,19 @@ public class TestDataGenerator {
 		}
 		Files.copy(Paths.get(profile.photo), Paths.get(photo.getAbsolutePath()));
 
-		ps.setString(11, "/media/avatar/" + uid);
+		ps.setString(9, "/media/avatar/" + uid);
 
 		String smallUid = uid.replace(".jpg", "-sm.jpg");
 		Thumbnails.of(photo).size(110, 110).toFile(new File(MEDIA_DIR + "/avatar/" + smallUid));
 
-		ps.setString(12, "/media/avatar/" + smallUid);
+		ps.setString(10, "/media/avatar/" + smallUid);
 		if (r.nextBoolean()) {
-			ps.setString(13, getInfo());
+			ps.setString(11, getInfo());
 		} else {
-			ps.setNull(13, Types.VARCHAR);
+			ps.setNull(11, Types.VARCHAR);
 		}
-		ps.setString(14, PASSWORD_HASH);
-
-		ps.setTimestamp(15, new Timestamp(System.currentTimeMillis()));
-
-		if (r.nextBoolean()) {
-			ps.setString(16, (profile.firstName + "-" + profile.lastName).toLowerCase());
-		} else {
-			ps.setNull(16, Types.VARCHAR);
-		}
-		if (r.nextBoolean()) {
-			ps.setString(17, "https://vk.com/" + (profile.firstName + "-" + profile.lastName).toLowerCase());
-		} else {
-			ps.setNull(17, Types.VARCHAR);
-		}
-		if (r.nextBoolean()) {
-			ps.setString(18, "https://facebook.com/" + (profile.firstName + "-" + profile.lastName).toLowerCase());
-		} else {
-			ps.setNull(18, Types.VARCHAR);
-		}
-		if (r.nextBoolean()) {
-			ps.setString(19, "https://linkedin.com/" + (profile.firstName + "-" + profile.lastName).toLowerCase());
-		} else {
-			ps.setNull(19, Types.VARCHAR);
-		}
-		if (r.nextBoolean()) {
-			ps.setString(20, "https://github.com/" + (profile.firstName + "-" + profile.lastName).toLowerCase());
-		} else {
-			ps.setNull(20, Types.VARCHAR);
-		}
-		if (r.nextBoolean()) {
-			ps.setString(21, "https://stackoverflow.com/" + (profile.firstName + "-" + profile.lastName).toLowerCase());
-		} else {
-			ps.setNull(21, Types.VARCHAR);
-		}
+		ps.setString(12, PASSWORD_HASH);
+		ps.setTimestamp(13, new Timestamp(System.currentTimeMillis()));
 
 		ps.executeUpdate();
 		ps.close();
@@ -332,24 +297,6 @@ public class TestDataGenerator {
 		}
 		ps.executeBatch();
 		ps.close();
-	}
-
-	private static String generatePhone() {
-		StringBuilder phone = new StringBuilder("+38050");
-		for (int i = 0; i < 7; i++) {
-			int code = '1' + r.nextInt(9);
-			phone.append(((char) code));
-		}
-		return phone.toString();
-	}
-
-	private static Date randomBirthDate() {
-		Calendar cl = Calendar.getInstance();
-		cl.set(Calendar.DAY_OF_MONTH, r.nextInt(30));
-		cl.set(Calendar.MONTH, r.nextInt(12));
-		int year = cl.get(Calendar.YEAR) - 30;
-		cl.set(Calendar.YEAR, year + r.nextInt(10));
-		return new Date(cl.getTimeInMillis());
 	}
 
 	private static List<ProfileConfig> getProfileConfigs() {

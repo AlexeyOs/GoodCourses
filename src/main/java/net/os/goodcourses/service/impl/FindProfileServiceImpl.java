@@ -76,9 +76,6 @@ public class FindProfileServiceImpl implements FindProfileService, UserDetailsSe
 		Optional<Profile> profile = profileRepository.findByUid(anyUnigueId);
 		if (!profile.isPresent()) {
 			profile = profileRepository.findByEmail(anyUnigueId);
-			if (!profile.isPresent()) {
-				profile = profileRepository.findByPhone(anyUnigueId);
-			}
 		}
 		if (profile.isPresent()) {
             return profile.get();

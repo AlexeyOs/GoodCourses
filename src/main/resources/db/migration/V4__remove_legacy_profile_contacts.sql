@@ -1,0 +1,9 @@
+ALTER TABLE profile
+    DROP COLUMN birth_day,
+    DROP COLUMN phone,
+    DROP COLUMN skype,
+    DROP COLUMN vkontakte,
+    DROP COLUMN facebook,
+    DROP COLUMN linkedin,
+    DROP COLUMN github,
+    DROP COLUMN stackoverflow;

@@ -81,6 +81,12 @@ printf 'Cold start: %ss\n' "$((SECONDS - start))"
 for route in /health/live /health/ready /courses /sign-in /sign-up /static/js/jquery.js; do
     expect_status 200 "$base_url$route"
 done
+legacy_columns=$(docker exec "$db" psql -Atq -v ON_ERROR_STOP=1 -U postgres -d goodcourses -c "
+    SELECT count(*) FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'profile'
+      AND column_name IN ('birth_day', 'phone', 'skype', 'vkontakte', 'facebook', 'linkedin', 'github', 'stackoverflow')")
+test "$legacy_columns" = 0
+
 sign_in_response=$(request -fi "$base_url/sign-in")
 if ! grep -Eiq '^Content-Type:[[:space:]]*text/html;[[:space:]]*charset=UTF-8([[:space:];]|$)' <<<"$sign_in_response" ||
     ! grep -Fq 'Вход в Ваш личный кабинет' <<<"$sign_in_response"; then
@@ -101,6 +107,23 @@ expect_status 302 -b "$cookie" -c "$cookie" --data-urlencode "_csrf=$csrf" \
     --data-urlencode uid=smokefixture --data-urlencode mail=smoke@example.invalid \
     --data-urlencode password=FixtureSmoke2026 "$base_url/sign-up"
 expect_status 200 -b "$cookie" "$base_url/my-reviews"
+
+profile_response=$(request -f "$base_url/smokefixture")
+if ! grep -Fq 'Smoke Test' <<<"$profile_response" ||
+    ! grep -Fq 'smoke@example.invalid' <<<"$profile_response" ||
+    grep -Eiq 'Age:|Birthday:|href="tel:|fa-(phone|skype|vk|facebook|linkedin|github|stack-overflow)([[:space:]"]|$)' <<<"$profile_response"; then
+    printf 'Public profile must show the name and email without legacy contacts or age\n' >&2
+    exit 1
+fi
+if grep -Eq 'href="/edit(/[^"]*)?"' <<<"$profile_response"; then
+    printf 'Public profile must not link to edit pages\n' >&2
+    exit 1
+fi
+owner_profile_response=$(request -f -b "$cookie" "$base_url/smokefixture")
+if ! grep -Fq 'href="/edit/skills"' <<<"$owner_profile_response"; then
+    printf 'Profile owner must still have edit controls\n' >&2
+    exit 1
+fi
 
 cookie=/tmp/goodcourses-sign-in.cookie
 csrf=$(request -f -c "$cookie" "$base_url/sign-in" | csrf_token)
