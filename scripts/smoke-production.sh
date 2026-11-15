@@ -81,6 +81,12 @@ printf 'Cold start: %ss\n' "$((SECONDS - start))"
 for route in /health/live /health/ready /courses /sign-in /sign-up /static/js/jquery.js; do
     expect_status 200 "$base_url$route"
 done
+sign_in_response=$(request -fi "$base_url/sign-in")
+if ! grep -Eiq '^Content-Type:[[:space:]]*text/html;[[:space:]]*charset=UTF-8([[:space:];]|$)' <<<"$sign_in_response" ||
+    ! grep -Fq 'Вход в Ваш личный кабинет' <<<"$sign_in_response"; then
+    printf 'Expected UTF-8 HTML and Cyrillic sign-in heading\n' >&2
+    exit 1
+fi
 expect_status 302 "$base_url/my-reviews"
 expect_status 403 -X POST "$base_url/sign-up"
 

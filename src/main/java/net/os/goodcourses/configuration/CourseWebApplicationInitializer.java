@@ -1,5 +1,6 @@
 package net.os.goodcourses.configuration;
 
+import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
 
 import jakarta.servlet.Filter;
@@ -32,6 +33,9 @@ public class CourseWebApplicationInitializer implements WebApplicationInitialize
 
 	@Override
 	public void onStartup(ServletContext container) throws ServletException {
+		container.setRequestCharacterEncoding(StandardCharsets.UTF_8.name());
+		container.setResponseCharacterEncoding(StandardCharsets.UTF_8.name());
+
 		WebApplicationContext ctx = createWebApplicationContext(container);
 
 		container.setSessionTrackingModes(EnumSet.of(SessionTrackingMode.COOKIE));
@@ -60,7 +64,7 @@ public class CourseWebApplicationInitializer implements WebApplicationInitialize
 
 	private void registerFilters(ServletContext container, WebApplicationContext ctx) {
 		registerFilter(container, ctx.getBean(CourseFilter.class));
-		registerFilter(container, new CharacterEncodingFilter("UTF-8", true));
+		registerFilter(container, new CharacterEncodingFilter(StandardCharsets.UTF_8.name(), true));
 		registerFilter(container, new OpenEntityManagerInViewFilter());
 		registerFilter(container, new RequestContextFilter());
 		registerFilter(container, new DelegatingFilterProxy("springSecurityFilterChain"), "springSecurityFilterChain");
