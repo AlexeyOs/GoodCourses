@@ -2,7 +2,15 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
 <div class="card">
-	<img class="img-responsive photo" src="${profile.largePhoto}" alt="photo">
+	<c:choose>
+		<c:when test="${not empty profile.largePhoto}">
+			<c:set var="photoUrl" value="${profile.largePhoto}" />
+		</c:when>
+		<c:otherwise>
+			<c:set var="photoUrl" value="${pageContext.request.contextPath}/static/img/profile-placeholder.png" />
+		</c:otherwise>
+	</c:choose>
+	<img class="img-responsive photo" src="<c:out value='${photoUrl}' />" alt="photo">
 	<h1 class="text-center">
 		<c:out value="${profile.fullName}" />
 	</h1>
